@@ -4,9 +4,10 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" value="{{ csrf_token() }}"/>
+        <link rel="icon" type="image/jpg" href="{{URL::asset('/storage/icons/icon.jpg')}}"/>
         <style type="text/css">
       </style>
-        <title>Evidevi</title>
+        <title>EatInMore</title>
     </head>
     <body>
         <div id="app">

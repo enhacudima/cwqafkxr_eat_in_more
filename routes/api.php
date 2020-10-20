@@ -21,6 +21,10 @@ Route::get('/clear-cache-all', function() {
 });
 
 Route::get('getCountry','ProvinceStatesController@getCountry');
+Route::get('getCountryStates','CountryStatesController@getCountryStates');
+Route::get('getExperiences','ExperiencesController@getExperiences');
+Route::get('getTimeType','TimeTypeController@getTimeType');
+Route::get('getTimeCurrency','CurrencyController@getCurrency');
 
 Route::group(['namespace' => 'Auth'], function() {
 	Route::post('register', 'RegisterController@register');
@@ -29,13 +33,24 @@ Route::group(['namespace' => 'Auth'], function() {
 	Route::post('login', 'AuthController@login');
 });
 
-Route::group(['middleware' => 'auth.api'], function() {
+
+Route::group(['namespace' => 'Auth','middleware' => ['auth.api']], function() {
     Route::get('logout', 'AuthController@logout'); 
-	Route::post('details', 'AuthController@details');
 });
 
-/*
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+
+Route::group(['namespace' => 'Helpers','middleware' => ['auth.api','CheckStatus']], function() {
+	Route::post('filePicture','FilesController@filePicture');
+	Route::post('fileOtherFormat','FilesController@fileOtherFormat');
+
 });
-*/
+
+Route::group(['namespace' => 'Chefe','middleware' => ['auth.api','CheckStatus','UserType']], function() {
+	Route::post('create/cv','CVController@createCV');
+	Route::get('getCVData/{id}','CVController@getCVData');
+
+});
+
+Route::group(['namespace' => 'Chefe','middleware' => ['auth.api','CheckStatus','UserType','CheckChefe']], function() {
+
+});

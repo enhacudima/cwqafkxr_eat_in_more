@@ -6,6 +6,7 @@ import UserEdit from './components/Auth/UserEdit.vue';
 import ForgotPassword from './components/Auth/ForgotPassword.vue';
 import RegisterResult from './components/Auth/RegisterResult.vue';
 import VerifyResult from './components/Auth/VerifyResult.vue';
+import CreateChefe from './components/Chefe/CV.vue';
 
 export const routes = [
     {
@@ -45,6 +46,16 @@ export const routes = [
         name: 'home',
         path: '/home',
         component: Home,
+        props: true,
+        meta: {
+            antMasterLayout: true,
+            auth: true,
+        },
+    },
+    {
+        name: 'chefe/new',
+        path: '/chefeNew',
+        component: CreateChefe,
         props: true,
         meta: {
             antMasterLayout: true,

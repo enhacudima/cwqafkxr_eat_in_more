@@ -1,5 +1,6 @@
 <template>
-  <a-form layout="horizontal" :form="form" @submit="handleSubmit" style="text-align: center;">
+
+  <a-form  layout="horizontal" :form="form" @submit="handleSubmit" style="text-align: center;" >
 
     <a-form-item  :validate-status="nameError() ? 'error' : ''" :help="nameError() || ''">
       <a-input
@@ -8,6 +9,7 @@
           { rules: [{ required: true, message: 'Please input your name!' }] },
         ]"
         placeholder="Name"
+        allow-clear
       >
         <a-icon slot="prefix" type="user" style="color:rgba(0,0,0,.25)" />
       </a-input>
@@ -20,6 +22,7 @@
           { rules: [{ required: true, message: 'Please input your Last name!' }] },
         ]"
         placeholder="Last Name"
+        allow-clear
       >
         <a-icon slot="prefix" type="user" style="color:rgba(0,0,0,.25)" />
       </a-input>
@@ -37,45 +40,21 @@
       </a-input>
     </a-form-item>
 
-    <a-form-item  :validate-status="countryError() ? 'error' : ''" :help="countryError() || ''">
+    <a-form-item  :validate-status="typeError() ? 'error' : ''" :help="typeError() || ''">
       <a-select
         v-decorator="[
-          'country',
-          { rules: [{ required: true, message: 'Please input your Country!' }] },
+          'type',
+          { rules: [{ required: true, message: 'Please input your user type!' }] },
         ]"
-        placeholder="Select Country"
-        @change="filterStates($event)"
+        placeholder="Select User type"
       >
-        <a-select-option v-for="country in countrys"  v-bind:value="country" :key="country" >
-          {{ country }}
+        <a-select-option value="2">
+            Client
+        </a-select-option>
+        <a-select-option value="3">
+            Chefe
         </a-select-option>
       </a-select>
-    </a-form-item>
-
-    <a-form-item  :validate-status="provinceError() ? 'error' : ''" :help="provinceError() || ''">
-      <a-select
-        v-decorator="[
-          'province',
-          { rules: [{ required: true, message: 'Please input your province!' }] },
-        ]"
-        placeholder="Select State/Province"
-      >
-        <a-select-option v-for="state in selectedProvinceStates" v-bind:value="state.id"  :key="state.id">
-          {{state.state_name}}
-        </a-select-option>
-      </a-select>
-    </a-form-item>
-
-    <a-form-item  :validate-status="postalCodeError() ? 'error' : ''" :help="postalCodeError() || ''">
-      <a-input
-        v-decorator="[
-          'postalCode',
-          { rules: [{ required: true, message: 'Please input your Date of Brith!' }] },
-        ]"
-        type="number"
-        placeholder="Postal Code"
-      >
-      </a-input>
     </a-form-item>
 
     <a-form-item :validate-status="phone1Error() ? 'error' : ''" :help="phone1Error() || ''">
@@ -85,39 +64,22 @@
         rules: [{ required: true, message: 'Please input your phone number 1!' }],
       },
     ]"
-        placeholder="84******"
+        placeholder="84*******"
         type="number"
+        allow-clear
         >
             <a-select slot="addonBefore"
-                      v-decorator="['prefix_phone_1', { initialValue: 'Mobile' }]"
+                      placeholder="(ZA) +278"
+                      v-decorator="['prefix_phone_1', 
+                      {
+                        rules: [{ required: true, message: 'Please input your phone number 1!' }],
+                      }
+                      ]"
                       style="width: 125px">
-                <a-select-option value="Mobile">
-                    Mobile
+                <a-select-option v-for="country in countrys"  v-bind:value="country.id" :key="country.id" >
+                  ({{ country.internet.toUpperCase()}}) +{{ country.phone }}
                 </a-select-option>
-                <a-select-option value="Home">
-                    Home
-                </a-select-option>
-                <a-select-option value="Work">
-                    Work
-                </a-select-option>
-                <a-select-option value="Work Fax">
-                    Work Fax
-                </a-select-option>
-                <a-select-option value="Work Mobile">
-                    Work Mobile
-                </a-select-option>
-                <a-select-option value="Work Pager">
-                    Work Pager
-                </a-select-option>
-                <a-select-option value="Assistent">
-                    Assistent
-                </a-select-option>
-                <a-select-option value="Home Fax">
-                    Home Fax
-                </a-select-option>
-                <a-select-option value="Other">
-                    Other
-                </a-select-option>
+
             </a-select>
         </a-input>
     </a-form-item>
@@ -129,27 +91,24 @@
           { rules: [{ required: true, message: 'Please input your email!' }] },
         ]"
         placeholder="Email"
+        allow-clear
       >
         <a-icon slot="prefix" type="global" style="color:rgba(0,0,0,.25)" />
       </a-input>
     </a-form-item>
 
-    <a-form-item  :validate-status="userNameError() ? 'error' : ''" :help="userNameError() || ''">
-      <a-input
-        v-decorator="[
-          'userName',
-          { rules: [{ required: true, message: 'Please input your username!' }] },
-        ]"
-        placeholder="Username"
-      >
-        <a-icon slot="prefix" type="user" style="color:rgba(0,0,0,.25)" />
-      </a-input>
-    </a-form-item>
-    <a-form-item :validate-status="passwordError() ? 'error' : ''" :help="passwordError() || ''">
+    <a-form-item :validate-status="passwordError() ? 'error' : ''" :help="passwordError() || ''" has-feedback>
       <a-input
         v-decorator="[
           'password',
-          { rules: [{ required: true, message: 'Please input your Password!' }] },
+          { rules: [{ 
+            required: true,
+            message: 'Please input your Password!' }, 
+            {
+             validator: validateToNextPassword, 
+            },
+
+            ] },
         ]"
         type="password"
         placeholder="Password"
@@ -158,28 +117,46 @@
         <a-icon slot="prefix" type="lock" style="color:rgba(0,0,0,.25)" />
       </a-input>
     </a-form-item>
-    <a-form-item :validate-status="password_confirmationError() ? 'error' : ''" :help="password_confirmationError() || ''">
+    <a-form-item :validate-status="password_confirmationError() ? 'error' : ''" :help="password_confirmationError() || ''" has-feedback>
       <a-input
         v-decorator="[
           'password_confirmation',
-          { rules: [{ required: true, message: 'Please Confirm your Password!' }] },
+          { rules: [{ 
+            required: true,
+            message: 'Please Confirm your Password!' }, 
+            {
+             validator: compareToFirstPassword, 
+            },
+
+            ] },
         ]"
         type="password"
+        @blur="handleConfirmBlur"
         placeholder="confirm Password"
         allow-clear
       >
         <a-icon slot="prefix" type="lock" style="color:rgba(0,0,0,.25)" />
       </a-input>
     </a-form-item>
+
+    <a-form-item :validate-status="terms_conditionsError() ? 'error' : ''" :help="terms_conditionsError() || ''">
+      <a-checkbox 
+        v-decorator="[
+          'terms_conditions',
+          { valuePropName: 'checked',
+            rules: [{ required: true, message: 'Please agree with terms and conditions!' }]
+           },
+        ]"
+      >
+        I agree with <a href="#">terms and conditions.</a>
+
+      </a-checkbox>
+    </a-form-item>
+
     <a-form-item>
-      <a-button icon="check-circle"  type="default" html-type="submit" :disabled="hasErrors(form.getFieldsError())" :style="{ marginRight:  '2%'}">
-         Save
+      <a-button icon="check-circle"  type="primary" html-type="submit" :disabled="hasErrors(form.getFieldsError())" :style="{ marginRight:  '2%'}">
+          Done
       </a-button >
-      <router-link to="/login" class="nav-item nav-link">
-      <a-button icon="close-circle" type="default" >
-          Cancel
-        </a-button>
-      </router-link>
     </a-form-item>
   </a-form>
 </template>
@@ -205,6 +182,25 @@ export default {
     });
   },
   methods: {
+    handleConfirmBlur(e) {
+      const value = e.target.value;
+      this.confirmDirty = this.confirmDirty || !!value;
+    },
+    compareToFirstPassword(rule, value, callback) {
+      const form = this.form;
+      if (value && value !== form.getFieldValue('password')) {
+        callback('Two passwords that you enter is inconsistent!');
+      } else {
+        callback();
+      }
+    },
+    validateToNextPassword(rule, value, callback) {
+      const form = this.form;
+      if (value && this.confirmDirty) {
+        form.validateFields(['confirm'], { force: true });
+      }
+      callback();
+    },
     filterStates(event){
      this.form.setFields({
                           "province": {
@@ -234,6 +230,10 @@ export default {
       const { getFieldError, isFieldTouched } = this.form;
       return isFieldTouched('email') && getFieldError('email');
     },
+    typeError() {
+      const { getFieldError, isFieldTouched } = this.form;
+      return isFieldTouched('type') && getFieldError('type');
+    },
     countryError() {
       const { getFieldError, isFieldTouched } = this.form;
       return isFieldTouched('country') && getFieldError('country');
@@ -242,10 +242,10 @@ export default {
       const { getFieldError, isFieldTouched } = this.form;
       return isFieldTouched('province') && getFieldError('province');
     },
-    postalCodeError() {
+   /* postalCodeError() {
       const { getFieldError, isFieldTouched } = this.form;
       return isFieldTouched('postalCode') && getFieldError('postalCode');
-    },
+    },*/
     dataBrithError() {
       const { getFieldError, isFieldTouched } = this.form;
       return isFieldTouched('dataBrith') && getFieldError('dataBrith');
@@ -254,14 +254,18 @@ export default {
       const { getFieldError, isFieldTouched } = this.form;
       return isFieldTouched('phone1') && getFieldError('phone1');
     },
-    userNameError() {
+    /*userNameError() {
       const { getFieldError, isFieldTouched } = this.form;
       return isFieldTouched('userName') && getFieldError('userName');
-    },
+    },*/
     // Only show error after a field is touched.
     password_confirmationError() {
       const { getFieldError, isFieldTouched } = this.form;
       return isFieldTouched('password_confirmation') && getFieldError('password_confirmation');
+    },
+    terms_conditionsError() {
+      const { getFieldError, isFieldTouched } = this.form;
+      return isFieldTouched('terms_conditions') && getFieldError('terms_conditions');
     },
     passwordError() {
       const { getFieldError, isFieldTouched } = this.form;
@@ -278,7 +282,7 @@ export default {
     },
   sendData(data) {
       axios
-      .post("register", { data: { userDate: data} })
+      .post("register", { data: { userData: data} })
       .then(response => {
           this.allerros = [];
           this.sucess = true;
@@ -320,8 +324,8 @@ export default {
   },
   mounted() {
   axios
-      .get('getCountry')
-      .then(response => (this.countrys = response.data.country,this.provinceStates=response.data.all));
+      .get('getCountryStates')
+      .then(response => (this.countrys = response.data));
   },
   computed: {
     filteredClients() {

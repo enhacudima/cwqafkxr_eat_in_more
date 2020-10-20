@@ -29,7 +29,7 @@ Vue.use(VueRouter);
 Vue.use(VueAxios, axios);
 Vue.use(Vuex);
 
-axios.defaults.baseURL = 'https://greenisle.co.za/laravel-passport-vue-sap/public/api';
+axios.defaults.baseURL = 'http://localhost/laravel-passport-vue-sap/public/api';
 
 const router = new VueRouter({
     mode: 'history',

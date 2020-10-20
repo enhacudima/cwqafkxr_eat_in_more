@@ -1,0 +1,125 @@
+<?php
+namespace App\Http\Controllers\Helpers;
+
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
+use App\Files;
+use Auth;
+use Storage;
+use Illuminate\Support\Str;
+
+class FilesController extends Controller
+{
+	public $key;
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
+    public function filePicture(Request $request)
+    {
+    	$validator = Validator::make($request->all(), [
+            'picture' => 'required|mimes:jpeg,jpg,png|max:5000', 
+        ],
+
+        [
+        	
+        ]
+    	);
+        if ($validator->fails()) { 
+            return response()->json(['errors'=>$validator->errors()->all()], 422);            
+        }
+        $file_info=$this->getFile($request->file('picture'));
+        return response()->json($file_info, 200); 
+
+    }
+
+    public function fileOtherFormat(Request $request)
+    {
+    	$validator = Validator::make($myRequest->all(), [
+            'file' => 'required|mimes:pdf|max:5000', 
+        ],
+        [
+        	
+        ]
+    	);
+
+        if ($validator->fails()) { 
+            return response()->json(['errors'=>$validator->errors()->all()], 422);            
+        }
+        $file_info=$this->getFile($request->file('file'));
+        return response()->json($file_info, 200); 
+    }
+
+
+
+    public function getFile($file)
+    {	
+    	$this->key=Str::random(10).time().Auth::user()->id;
+    	return $this->saveFile($file);
+
+    }
+
+        protected function saveFile($file)
+    {
+        $fileName = $this->createFilename($file);
+        // Group files by mime type
+        $mime = str_replace('/', '-', $file->getMimeType());
+        // Group files by the date (week
+        $dateFolder = date("Y-m-W");
+        // Build the file path
+        $filePath = "public/uploads/{$mime}/{$dateFolder}/";
+        $filePathTable = "uploads/{$mime}/{$dateFolder}/";
+        $finalPath = storage_path("app/".$filePath);
+        // move the file name
+        $file->move($finalPath, $fileName);
+
+        $last_id=$this->storeToTable($filePathTable,$fileName,$mime);
+        return [
+            'path' => $filePath,
+            'name' => $fileName,
+            'mime_type' => $mime,
+            'file_id' =>$last_id
+        ];
+    }
+
+    protected function createFilename($file)
+    {
+        $extension = $file->getClientOriginalExtension();
+        $filename = str_replace(".".$extension, "", $file->getClientOriginalName()); // Filename without extension
+        // Add timestamp hash to name of the file
+        $filename .= "_" . md5(time()) . "." . $extension;
+        return $filename;
+    }
+
+    protected function storeToTable($path,$name,$mime_type)
+    {
+        $last_id=Files::create([
+            "path" => $path,
+            "name" => $name,
+            "mime_type" => $mime_type,
+            "key" => $this->key,
+            "user_id" =>Auth::user()->id
+        ]);
+
+        return $last_id->id;
+    }
+
+    public function useFile($file_id, $table, $status)
+    {
+    	$data=Files::find($file_id);
+
+	    if (isset($data)) {	
+	    	$data->table = $table;
+	    	$data->status = $status;
+	    	$data->save();
+    	}
+
+    	return "not_found";
+
+    }
+}

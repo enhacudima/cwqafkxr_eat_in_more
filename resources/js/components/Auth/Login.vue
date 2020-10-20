@@ -11,7 +11,7 @@
           'userName',
           { rules: [{ required: true, message: 'Please input your username!' }] },
         ]"
-        placeholder="Username"
+        placeholder="Email"
       >
         <a-icon slot="prefix" type="user" style="color: rgba(0,0,0,.25)" />
       </a-input>
@@ -30,6 +30,7 @@
     </a-form-item>
     <a-form-item>
       <a-checkbox
+        class="login-form-Remember"
         v-decorator="[
           'remember',
           {
@@ -61,8 +62,12 @@ export default {
       testError:'',
       country:'',
       user_id:'',
+      verMessage:'',
+      verUrl:'',
       allerros:'',
       sucess:'',
+      verDescription: '',
+      verButtonMessage: '',
     };
   },
   beforeCreate() {
@@ -105,6 +110,10 @@ export default {
                                   }
                                 });
                 this.user_id=err.response.data.id;
+                this.verDescription=err.response.data.description;
+                this.verMessage=err.response.data.message;
+                this.verUrl=err.response.data.url;
+                this.verButtonMessage=err.response.data.button;
 
                 this.openVerifyNotification();
             }
@@ -165,16 +174,16 @@ export default {
     },
     closeNotification(key){  
         axios
-        .post('email/resend', { data: { id: this.user_id} })
+        .post(this.verUrl, { data: { id: this.user_id} })
         .then(response => {
             this.allerros = [];
             this.sucess = true;
             if (response.data.errors) {
-                response.data.errors.forEach(error => { this.openNotification('error', 'Error on resend', error);});
+                response.data.errors.forEach(error => { this.openNotification('error', 'Action Button Error', error);});
                 
             } else {
                 
-                this.openNotification('success', 'Resend', 'You have been resend link successfully');
+                this.openNotification('success', this.verMessage, 'Action Button successfully');
             }
         })
       .catch((error) => {
@@ -183,9 +192,9 @@ export default {
         var status=error.response.status;
             if (status == 422){
             errors=error.response.data.errors;
-            errors.forEach(error => { this.openNotification('error', 'Error on resend', error);});
+            errors.forEach(error => { this.openNotification('error', 'Action Button Error', error);});
           }else{
-            this.openNotification('error','Error on resend',error.response.data['error']);
+            this.openNotification('error','Action Button Error',error.response.data['error']);
           }
       });
 
@@ -194,10 +203,10 @@ export default {
     openVerifyNotification() {
       const key = `open${Date.now()}`;
       this.$notification.open({
-        message: 'Email verification',
+        message: this.verMessage,
         placement:'bottomRight',
         description:
-          'You can click resend to verify your email.',
+           this.verDescription,
         btn: h => {
           return h(
             'a-button',
@@ -210,7 +219,7 @@ export default {
                 click: () => this.closeNotification(key),
               },
             },
-            'Resend',
+            this.verButtonMessage,
           );
         },
         key,
@@ -229,6 +238,9 @@ export default {
 }
 #components-form-demo-normal-login .login-form-forgot {
   float: right;
+}
+#components-form-demo-normal-login .login-form-Remember {
+  float: left ;
 }
 #components-form-demo-normal-login .login-form-button {
   width: 100%;
