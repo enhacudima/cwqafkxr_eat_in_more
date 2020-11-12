@@ -52,7 +52,7 @@
             Client
         </a-select-option>
         <a-select-option value="3">
-            Chefe
+            Chef
         </a-select-option>
       </a-select>
     </a-form-item>

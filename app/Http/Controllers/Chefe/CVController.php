@@ -71,4 +71,14 @@ class CVController extends Controller
     return response()->json($data, 200); 
 
     }
+
+
+    public function getAllCVData()
+    {
+
+    	$data =  CV::with('picture','users','cvExperiences')->get();
+
+    return response()->json($data, 200); 
+
+    }
 }

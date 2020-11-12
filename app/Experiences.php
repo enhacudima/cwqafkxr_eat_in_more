@@ -19,8 +19,13 @@ class Experiences extends Model
     ];
 
 
-        public function users()
+        public function experiencesUsers()
     {
         return $this->belongsTo('App\User','user_id','id');
+    }
+
+        public function experiencesSync()
+    {
+        return $this->hasMany('App\ExperiencesSync','id','experiences_id');
     }
 }

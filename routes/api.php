@@ -16,6 +16,11 @@ use Illuminate\Support\Facades\Route;
 Route::get('/clear-cache-all', function() {
 
     Artisan::call('cache:clear');
+    Artisan::call('view:clear');
+    Artisan::call('config:clear');
+    Artisan::call('config:cache');
+    Artisan::call('route:clear');
+
     dd("Cache Clear All");
 
 });
@@ -25,6 +30,7 @@ Route::get('getCountryStates','CountryStatesController@getCountryStates');
 Route::get('getExperiences','ExperiencesController@getExperiences');
 Route::get('getTimeType','TimeTypeController@getTimeType');
 Route::get('getTimeCurrency','CurrencyController@getCurrency');
+Route::get('getCommonTiming','CommonTimingController@getCommonTiming');
 
 Route::group(['namespace' => 'Auth'], function() {
 	Route::post('register', 'RegisterController@register');
@@ -39,10 +45,11 @@ Route::group(['namespace' => 'Auth','middleware' => ['auth.api']], function() {
 });
 
 
-Route::group(['namespace' => 'Helpers','middleware' => ['auth.api','CheckStatus']], function() {
+Route::group(['namespace' => 'Helpers','middleware' => []], function() {
 	Route::post('filePicture','FilesController@filePicture');
 	Route::post('fileOtherFormat','FilesController@fileOtherFormat');
-
+	Route::post('createComments','CommentsController@createComments');
+	Route::get('getComments/{table}/{source_id}','CommentsController@getComments');
 });
 
 Route::group(['namespace' => 'Chefe','middleware' => ['auth.api','CheckStatus','UserType']], function() {
@@ -51,6 +58,26 @@ Route::group(['namespace' => 'Chefe','middleware' => ['auth.api','CheckStatus','
 
 });
 
+
+Route::group(['namespace' => 'Meal','middleware' => ['auth.api','CheckStatus','UserType']], function() {
+	
+
+});
+
 Route::group(['namespace' => 'Chefe','middleware' => ['auth.api','CheckStatus','UserType','CheckChefe']], function() {
+
+});
+
+//move to middleware 
+
+
+Route::group(['namespace' => 'Chefe','middleware' => []], function() {
+	Route::get('getAllCVData','CVController@getAllCVData');
+
+});
+
+
+Route::group(['namespace' => 'Meal','middleware' => []], function() {
+	Route::get('GetMeals','GetMealController@getAllMeals');
 
 });

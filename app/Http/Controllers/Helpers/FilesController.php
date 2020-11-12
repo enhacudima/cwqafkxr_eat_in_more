@@ -20,6 +20,41 @@ class FilesController extends Controller
         $this->middleware('auth');
     }
 
+    public function filePictureReturn(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'file' => 'required|mimes:jpeg,jpg,png|max:5000', 
+        ],
+
+        [
+            
+        ]
+        );
+        if ($validator->fails()) { 
+            return response()->json(['errors'=>$validator->errors()->all()], 422);            
+        }
+        $file_info=$this->getFile($request->file('picture'));
+        return $file_info; 
+
+    }
+
+    public function fileOtherFormatReturn(Request $request)
+    {
+        $validator = Validator::make($myRequest->all(), [
+            'file' => 'required|mimes:pdf|max:5000', 
+        ],
+        [
+            
+        ]
+        );
+
+        if ($validator->fails()) { 
+            return response()->json(['errors'=>$validator->errors()->all()], 422);            
+        }
+        $file_info=$this->getFile($request->file('file'));
+        return $file_info; 
+    }
+
     public function filePicture(Request $request)
     {
     	$validator = Validator::make($request->all(), [

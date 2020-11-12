@@ -7,6 +7,7 @@ import ForgotPassword from './components/Auth/ForgotPassword.vue';
 import RegisterResult from './components/Auth/RegisterResult.vue';
 import VerifyResult from './components/Auth/VerifyResult.vue';
 import CreateChefe from './components/Chefe/CV.vue';
+import MealNew from './components/Meal/MealNew';
 
 export const routes = [
     {
@@ -61,7 +62,17 @@ export const routes = [
             antMasterLayout: true,
             auth: true,
         },
-    }
+    },
+    {
+        name: 'meal/new',
+        path: '/mealNew',
+        component: MealNew,
+        props: true,
+        meta: {
+            antMasterLayout: true,
+            auth: true,
+        },
+    },
 ];
 
 

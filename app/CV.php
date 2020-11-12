@@ -28,4 +28,10 @@ class CV extends Model
     {
         return $this->belongsTo('App\Files','picture','id');
     }
+
+
+    public function cvExperiences()
+    {
+        return $this->belongsTo('App\Experiences','experience','id');
+    }
 }

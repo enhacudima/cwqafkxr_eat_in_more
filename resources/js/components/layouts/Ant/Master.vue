@@ -6,7 +6,7 @@
       @collapse="onCollapse"
       @breakpoint="onBreakpoint"
     >
-       <img  v-bind:src="'storage/icons/icon.jpg'" class="logo" alt="Icon" />
+      <img  v-bind:src="'storage/icons/icon.jpg'" class="logo" alt="Icon" />
       <a-menu theme="dark" mode="inline" :default-selected-keys="['1']" :default-open-keys="['sub1']">
           <a-sub-menu key="sub1">
             <span slot="title"><a-icon type="user" />Profile</span>
@@ -26,9 +26,11 @@
             </a-menu-item>
           </a-sub-menu>
           <a-sub-menu key="sub2">
-            <span slot="title"><a-icon type="laptop" />subnav 2</span>
-            <a-menu-item key="5">
-              option5
+            <span slot="title"><a-icon type="laptop" />Meals</span>
+            <a-menu-item key="5">     
+              <router-link to="/mealNew" >
+                New
+              </router-link> 
             </a-menu-item>
             <a-menu-item key="6">
               option6
@@ -69,9 +71,6 @@
           <slot/>
         </div>
       </a-layout-content>
-      <a-layout-footer style="textAlign: center">
-        EatInMore ©2020 {{userTypeName}} Version
-      </a-layout-footer>
     </a-layout>
   </a-layout>
 </template>
@@ -102,7 +101,7 @@ export default {
     }else if (this.userType == 2 ) {
       this.userTypeName = "Client"
     }else if(this.userType == 3){
-      this.userTypeName = "Chefe"
+      this.userTypeName = "Chef"
     }else{
       this.userTypeName = "No category"
     }

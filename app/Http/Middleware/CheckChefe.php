@@ -25,6 +25,7 @@ class CheckChefe
         if(Auth::check() && Auth::user()->type == '3'){
 
             $chefe = CV::where('user_id',Auth::user()->id)->first();
+            
             if(!isset($chefe)){
                 return response()->json(['error'=>'Please create your cv','id'=>Auth::user()->id,'description' => 'You can create your cv.' ,'message'=>'Chefe CV', 'url' => 'email/resend', 'button' => 'Create CV' ], 403);
             }
