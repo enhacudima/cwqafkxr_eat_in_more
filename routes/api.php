@@ -81,3 +81,16 @@ Route::group(['namespace' => 'Meal','middleware' => []], function() {
 	Route::get('GetMeals','GetMealController@getAllMeals');
 
 });
+
+
+Route::group(['namespace' => 'Cuisines','middleware' => []], function() {
+	Route::get('getCuisines','CuisinesController@getCuisines');
+
+});
+
+
+Route::group(['namespace' => 'Kitchen','middleware' => []], function() {
+	Route::post('createKitchen','KitchenController@createKitchen');
+	Route::get('getKitchen/{user_id}','KitchenController@getKitchen');
+
+});
