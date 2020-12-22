@@ -94,3 +94,9 @@ Route::group(['namespace' => 'Kitchen','middleware' => []], function() {
 	Route::get('getKitchen/{user_id}','KitchenController@getKitchen');
 
 });
+
+
+Route::group(['namespace' => 'Booking','middleware' => []], function() {
+	Route::post('createBooking','BookingController@createBooking');
+
+});

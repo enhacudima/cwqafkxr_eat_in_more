@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 class CvChefeV extends Model
 {
     
-    //
     protected $table = 'cv_chefe_v';
 
     public $primaryKey = 'id';

@@ -16,7 +16,7 @@ class CuisinesController extends Controller
     public function getCuisines()
     {
 
-    	$data =  Cuisines::with('pictureCuisines',)
+    	$data =  Cuisines::with('pictureCuisines')
                             ->get();
 
     return response()->json($data, 200); 
