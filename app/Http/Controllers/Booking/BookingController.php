@@ -12,6 +12,7 @@ use Illuminate\Validation\Rule;
 use App\Http\Controllers\Helpers\SelectChefController;
 use Carbon\Carbon;
 use App\Meals;
+use App\BookingSyncMeal;
 
 class BookingController extends Controller
 {
@@ -39,21 +40,19 @@ class BookingController extends Controller
 
         $meals=$request->data['meals'];
         //
-        $this->getMealData($meals,$bookingRequest->cook_start_date, $bookingRequest->Cook_start_time);
+        $mealsRequest=$this->getMealData($meals,$bookingRequest->cook_start_date, $bookingRequest->Cook_start_time);
 
 
-
-    if ($validatorMeals->fails()) { 
-                return response()->json(['errors'=>$validatorMeals->errors()->all()], 422);            
-    } 
+ 
     if ($validatorBooking->fails()) { 
                 return response()->json(['errors'=>$validatorBooking->errors()->all()], 422);            
     }      
     
     $select_chef = new SelectChefController();
-    $best_chef = $select_chef->choice(['meals'=>$mealsRequest['meal_id'], 'chefs'=>$mealsRequest['chef_id']]);
-
-
+    $best_chef = $select_chef->choice(['meals'=>$mealsRequest['meal_id'], 'chefs'=>$mealsRequest['chefs_user_id']]);
+    $best_chef = $best_chef['best_chef'];
+    $user_id = $bookingRequest['user_id'];
+    $key = md5(time());
 
     $booking=Booking::create([
         'location_x' => $bookingRequest['location_x'],
@@ -62,14 +61,36 @@ class BookingController extends Controller
         'cook_start_date' =>$bookingRequest['cook_start_date'],
         'Cook_start_time' =>$bookingRequest['Cook_start_time'],
         'kitchen_id' =>$bookingRequest['kitchen_id'],
-        'key' => md5(time()),
-        'user_id' => $bookingRequest['user_id'],
-        'chef_id' => $best_chef['best_chef'],
+        'key' => $key,
+        'user_id' => $user_id,
+        'chef_id' => $best_chef,
     ]);
-    
+    foreach ($mealsRequest['meal_id'] as $key => $meal_id) {
+        $this->createBookingMeal($mealsRequest,$key,$best_chef,$user_id,$booking->id,$booking->key);
+    }
 
 
     return response()->json(['success'=>'Added new records.'], 200); 
+    }
+
+    public function createBookingMeal($mealsRequest,$key,$best_chef,$user_id,$booking_id,$booking_key)
+    {
+
+        $booking=BookingSyncMeal::create([
+            'meal_id' => $mealsRequest['meal_id'][$key],
+            'quantity' =>  $mealsRequest['quantity'][$key],
+            'chef_id' =>  $mealsRequest['chefs_id'][$key],
+            'chefs_user_id' =>  $mealsRequest['chefs_user_id'][$key],
+            'meal_key' => null,
+            'meal_fixed_price' => null,
+            'meal_price_id' => null,
+            'meal_price_currency_id' => null,
+            'user_id' => $user_id,
+            'booking_id' => $booking_id,
+            'booking_key' => $booking_key,
+            'key' => $booking_key,
+        ]);
+
     }
 
 
@@ -102,7 +123,8 @@ class BookingController extends Controller
         }
         $meals['chefs_id']=$arry_chefs;
         $meals['chefs_user_id']=$arry_chefs_user;
-        dd($meals);
+        //dd($meals);
+        return $meals;
 
     }
 
@@ -115,16 +137,15 @@ class BookingController extends Controller
         $validatorMeals = Validator::make($mealsRequest->all(), [
             'meal_id.*' => 'required|numeric|exists:meals,id',
             'quantity.*' => 'required|numeric', 
-            /*'chef_id.*' => 'required|numeric|exists:users,id',
-            'meal_key.*' => 'required|string|exists:meals,key',
-            'meal_fixed_price.*' => 'required|numeric',
-            'meal_price_id.*' => 'required|numeric|exists:meal_prices,id',
-            'meal_price_currency_id.*' => 'required|numeric|exists:currency,id',*/
         ],
-        [
-        
+        [ 
         ]
         );
+
+
+        if ($validatorMeals->fails()) { 
+                    return response()->json(['errors'=>$validatorMeals->errors()->all()], 422);            
+        }
     }
 
     public function getEndDate($start_date, $start_time,$time_to)
