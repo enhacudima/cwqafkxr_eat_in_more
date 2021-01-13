@@ -2,6 +2,28 @@
 
   <a-form  :form="form" @submit="handleSubmit" :label-col="{ span: 5 }" :wrapper-col="{ span: 12 }" >
   <a-row> 
+    <a-form-item label="Picture">
+      <div class="dropbox">
+    <a-upload
+      name="picture"
+      list-type="picture-card"
+      class="avatar-uploader"
+      :show-upload-list="false"
+      action="/cwqafkxr_eat_in_more/public/api/filePicture"
+      :before-upload="beforeUpload"
+      @change="handleChange"
+    >
+      <img v-if="imageUrl" :src="imageUrl" alt="avatar" class="picture_avatar" />
+      <div v-else>
+        <a-icon :type="loading ? 'loading' : 'plus'" />
+        <div class="ant-upload-text">
+          Upload
+        </div>
+      </div>
+    </a-upload>
+
+      </div>
+    </a-form-item>
 
     <a-form-item label="Name" :validate-status="nameError() ? 'error' : ''" :help="nameError() || ''">
       <a-input
@@ -148,9 +170,8 @@
       <template v-for="tag in tags">
         <a-checkable-tag
           :key="tag.id"
-          :checked="selectedTags.indexOf(tag) > -1"
-          @change="checked => handletagChange(tag, checked)"
-          
+          :checked="selectedTags.indexOf(tag.id) > -1"
+          @change="checked => handletagChange(tag.id, checked)"  
         >
           {{ tag.name }}
         </a-checkable-tag>
@@ -304,7 +325,7 @@ export default {
     },
   sendData(data) {
       axios
-      .post("create/meal", { data: { mealData: data, tags:this.selectedTags} })
+      .post("create/meal", { data: { mealData: data, tags:this.selectedTags, fileData:this.fileInfo} })
       .then(response => {
           this.allerros = [];
           this.sucess = true;
@@ -368,7 +389,7 @@ export default {
 
   axios
       .get('getCVData/'+this.userID)
-      .then(response => (this.chefeCV = response.data,this.imageUrl = 'storage/'+response.data.picture.path+response.data.picture.name));
+      .then(response => (this.chefeCV = response.data));
   },
 };
 </script>

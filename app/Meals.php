@@ -45,6 +45,11 @@ class Meals extends Model
     {
         return $this->hasMany('App\Files','source_id','id')->where('files.table','meals');
     }
+    
+    public function mealFile()
+    {
+        return $this->belongsTo('App\Files','id','source_id')->where('files.table','meals');
+    }
 
     	public function mealChefs()
     {

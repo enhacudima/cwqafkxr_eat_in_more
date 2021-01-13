@@ -92,14 +92,12 @@
             :cols="columuns"
         >
             <v-card
-                class="pa-2"
-                v-for="(mealD) in meal.meal_files"
-                :key="index"
-            
+                class="pa-2"            
             >
                 <v-img
-                    :src="'storage/'+mealD.path+mealD.name"
-                    :lazy-src="'storage/'+mealD.path+mealD.name"
+                    v-if="meal.meal_file"
+                    :src="'storage/'+meal.meal_file.path+meal.meal_file.name"
+                    :lazy-src="'storage/'+meal.meal_file.path+meal.meal_file.name"
                     aspect-ratio="1"
                     class="white--text align-end"
                     gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"

@@ -17,7 +17,7 @@ class FilesController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth:api');
+        //$this->middleware('auth');
     }
 
     public function filePictureReturn(Request $request)
@@ -95,7 +95,7 @@ class FilesController extends Controller
 
     public function getFile($file)
     {	
-    	$this->key=Str::random(10).time().Auth::user()->id;
+    	$this->key=md5(time());
     	return $this->saveFile($file);
 
     }
@@ -139,18 +139,19 @@ class FilesController extends Controller
             "name" => $name,
             "mime_type" => $mime_type,
             "key" => $this->key,
-            "user_id" =>Auth::user()->id
+            //"user_id" =>Auth::user()->id
         ]);
 
         return $last_id->id;
     }
 
-    public function useFile($file_id, $table, $status)
+    public function useFile($file_id,$source_id, $table, $status)
     {
     	$data=Files::find($file_id);
 
 	    if (isset($data)) {	
-	    	$data->table = $table;
+            $data->table = $table;
+            $data->source_id=$source_id;
 	    	$data->status = $status;
 	    	$data->save();
     	}
