@@ -1,38 +1,77 @@
 <template>
-  <div id="components-layout-demo-basic">
-    <a-layout >
-      <a-layout-content>
-        <a-col :span="12" :offset="6">
-          <p class="height-100">
-           <h1>EatInMore</h1> 
-          </p>
-          <img  v-bind:src="'storage/icons/icon.jpg'" class="picture_avatar_welcome" alt="Icon" />
-        </a-col>
+  <v-app id="inspire">
+    <v-navigation-drawer
+      v-model="drawer"
+      app
+      class="pt-4"
+      color="grey lighten-3"
+      mini-variant
+    >
+      <v-avatar
+        v-for="n in 6"
+        :key="n"
+        :color="`grey ${n === 1 ? 'darken' : 'lighten'}-1`"
+        :size="n === 1 ? 36 : 20"
+        class="d-block text-center mx-auto mb-9"
+      ></v-avatar>
+    </v-navigation-drawer>
 
+    <v-main>
 
-          
-      </a-layout-content>
-      <a-layout-footer>
+    <v-card
+      elevation="2"
+      loading
+    ></v-card>
 
-        <nav class="navbar navbar-expand-lg navbar-light">
-            <div class="collapse navbar-collapse">
-                <div class="navbar-nav">
-                    <router-link to="/register" class="nav-item nav-link">Register | </router-link>
-                    <router-link to="/login" class="nav-item nav-link">Login</router-link>
-                </div>
-            </div>
-        </nav> 
-      </a-layout-footer>
-    </a-layout>
+  <v-card
+    :loading="loading"
+    class="mx-auto my-12"
+    max-width="200"
+    contain
+  >
+    <template slot="progress">
+      <v-progress-linear
+        color="deep-purple"
+        height="10"
+        indeterminate
+      ></v-progress-linear>
+    </template>
 
-  </div>
+    <v-img
+      height="250"
+      src="storage/icons/icon.jpg"
+    ></v-img>
+
+    <v-card-title>EatInMore</v-card-title>
+
+    <v-divider class="mx-4"></v-divider>
+
+    <v-card-actions>
+      <router-link to="/register" class="nav-item nav-link">
+      <v-btn
+        color="deep-purple lighten-2"
+        text
+        
+      >
+        Login or Register
+      </v-btn>
+      </router-link>
+    </v-card-actions>
+  </v-card>
+    </v-main>
+  </v-app>
 </template>
+
+<script>
+  export default {
+    data: () => ({ drawer: null }),
+  }
+</script>
+
 
 <style>
 #components-layout-demo-basic {
   text-align: center;     
-
-
 }
 #components-layout-demo-basic .ant-layout-header,
 #components-layout-demo-basic .ant-layout-footer {
@@ -42,7 +81,6 @@
   line-height: 1.5;
 }
 #components-layout-demo-basic .ant-layout-content {
-
   min-height: 120px;
   line-height: 120px;
   margin-top: 10vh;
@@ -51,12 +89,9 @@
   height: 100vh;
 }
 #components-layout-demo-basic > .ant-layout:last-child {
-
 }
-
 .picture_avatar_welcome {
   width: 200px;
   height: 250px;
 }
-
 </style>

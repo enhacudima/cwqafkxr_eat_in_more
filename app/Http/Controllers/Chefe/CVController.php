@@ -13,7 +13,13 @@ use Illuminate\Validation\Rule;
 
 class CVController extends Controller
 {
-    
+       
+    public function __construct()
+    {
+        $this->middleware('auth:api');
+        
+    }
+
     public function createCV(Request $request)
     { 
     	$cvDate=$request->data['cvDate'];

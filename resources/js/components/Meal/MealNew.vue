@@ -1,61 +1,39 @@
 <template>
 
   <a-form  :form="form" @submit="handleSubmit" :label-col="{ span: 5 }" :wrapper-col="{ span: 12 }" >
-  <a-row>  
-    <a-form-item label="Picture">
-      <div class="dropbox">
-    <a-upload
-      name="picture"
-      list-type="picture-card"
-      class="avatar-uploader"
-      :show-upload-list="false"
-      action="/laravel-passport-vue-sap/public/api/filePicture"
-      :before-upload="beforeUpload"
-      @change="handleChange"
-    >
-      <img v-if="imageUrl" :src="imageUrl" alt="picture" class="picture_avatar" />
-      <div v-else>
-        <a-icon :type="loading ? 'loading' : 'plus'" />
-        <div class="ant-upload-text">
-          Upload
-        </div>
-      </div>
-    </a-upload>
+  <a-row> 
 
-      </div>
-    </a-form-item>
-
-    <a-form-item label="Name" :validate-status="titleError() ? 'error' : ''" :help="titleError() || ''">
+    <a-form-item label="Name" :validate-status="nameError() ? 'error' : ''" :help="nameError() || ''">
       <a-input
         v-decorator="[
-          'title',
-          {initialValue:chefeCV.title, rules: [{ required: true, message: 'Please input your title!' }] },
+          'name',
+          { rules: [{ required: true, message: 'Please input meal name!' }] },
         ]"
-        placeholder="Title"
+        placeholder="Name"
         allow-clear
       >
       </a-input>
     </a-form-item>
 
-    <a-form-item label="Alias" :validate-status="titleError() ? 'error' : ''" :help="titleError() || ''">
+    <a-form-item label="Alias" :validate-status="aliasError() ? 'error' : ''" :help="aliasError() || ''">
       <a-input
         v-decorator="[
-          'title',
-          {initialValue:chefeCV.title, rules: [{ required: true, message: 'Please input your title!' }] },
+          'alias',
+          { rules: [{ required: true, message: 'Please input meal alias!' }] },
         ]"
-        placeholder="Title"
+        placeholder="Alias"
         allow-clear
       >
       </a-input>
     </a-form-item>
 
-    <a-form-item label="Details" :validate-status="summaryError() ? 'error' : ''" :help="summaryError() || ''">
+    <a-form-item label="Details" :validate-status="detailsError() ? 'error' : ''" :help="detailsError() || ''">
       <a-textarea 
         placeholder="Details about the meal" 
         :rows="2"
         v-decorator="[
-          'summary',
-          {initialValue:chefeCV.summary, rules: [{ required: true, message: 'Please input your summary discription!' }] },
+          'details',
+          { rules: [{ required: true, message: 'Please input meal details!' }] },
         ]" 
 
         allow-clear
@@ -63,11 +41,28 @@
       />
     </a-form-item>
 
+    <a-form-item label="Cuisine" :validate-status="cuisineError() ? 'error' : ''" :help="cuisineError() || ''">
+      <a-select
+        show-search
+        option-filter-prop="children"
+        :filter-option="filterOption"
+        v-decorator="[
+          'cuisine',
+          { rules: [{ required: true, message: 'Please input Cuisine!' }] },
+        ]"
+        placeholder="Select Cuisine"
+      >
+        <a-select-option v-for="cuisine in cuisines"  v-bind:value="cuisine.id" :key="cuisine.id" >
+          {{ cuisine.name }}
+        </a-select-option>
+      </a-select>
+    </a-form-item>
+
     <a-form-item label="Experience" :validate-status="experienceError() ? 'error' : ''" :help="experienceError() || ''">
       <a-select
         v-decorator="[
           'experience',
-          {initialValue:chefeCV.experience, rules: [{ required: true, message: 'Please input your experience!' }] },
+          { rules: [{ required: true, message: 'Please input your experience!' }] },
         ]"
         placeholder="Select Experience"
       >
@@ -77,13 +72,13 @@
       </a-select>
     </a-form-item>
 
-    <a-form-item label="Common Timing" :validate-status="experienceError() ? 'error' : ''" :help="experienceError() || ''">
+    <a-form-item label="Common Timing" :validate-status="commonTimingError() ? 'error' : ''" :help="commonTimingError() || ''">
       <a-select
         v-decorator="[
-          'experience',
-          {initialValue:chefeCV.experience, rules: [{ required: true, message: 'Please input your experience!' }] },
+          'commonTiming',
+          { rules: [{ required: true, message: 'Please input Common Timing!' }] },
         ]"
-        placeholder="Select Experience"
+        placeholder="Select Common Timing"
       >
         <a-select-option v-for="commonTiming in commonTimings"  v-bind:value="commonTiming.id" :key="commonTiming.id" >
           {{ commonTiming.common_timing }}
@@ -92,7 +87,7 @@
     </a-form-item>
 
 
-    <a-form-item label="Time"  >
+    <a-form-item label="Time to Cook"  :validate-status="timeError() ? 'error' : ''" :help="timeError() || ''">
      <a-time-picker :minute-step="15" :second-step="10"
       v-decorator="[
       'time',
@@ -104,7 +99,7 @@
     </a-form-item>
 
 
-    <a-form-item label="People"  >
+    <a-form-item label="People" :validate-status="peopleError() ? 'error' : ''" :help="peopleError() || ''" >
 
     <a-row>
       <a-col :span="12">
@@ -112,30 +107,38 @@
 
          />
       </a-col>
-      <a-col :span="4">
-        <a-input-number v-model="inputValue1" :min="1" :max="50" style="marginLeft: 16px" 
-   
+      <a-col :span="4" >
+        <a-input-number  :min="1" :max="1000" style="marginLeft: 16px" 
+
+      v-decorator="[
+      'people',
+          {
+            initialValue:inputValue1, rules: [{required: true, message: 'Please input a number of people!' }],
+          },
+        ]"
+
         />
       </a-col>
     </a-row>
+
     </a-form-item>
 
 
 
-    <a-form-item label="Ingredients">
+    <a-form-item label="Ingredients" :validate-status="ingredientsError() ? 'error' : ''" :help="ingredientsError() || ''" >
       <template>
-        <a-select mode="tags" style="width: 100%" placeholder="Select Ingredients" @change="handleingreChange"
+        <a-select mode="multiple" style="width: 100%" placeholder="Select ingredients and Allergies" @change="handleingreChange"
 
           v-decorator="[
           'ingredients',
               {
-                rules: [{ required: true, message: 'Please input Ingredients !' }],
+                rules: [{ required: true, message: 'Please input ingredients!' }],
               },
             ]"
-          />
+          >
         
-          <a-select-option v-for="i in 25" :key="(i + 9).toString(36) + i">
-            {{ (i + 9).toString(36) + i }}
+          <a-select-option v-for="ingredient in ingredients" v-bind:value="ingredient.id" :key="ingredient.id">
+            {{ingredient.name}} - {{ingredient.description}}
           </a-select-option>
         </a-select>
       </template>
@@ -144,11 +147,12 @@
     <a-form-item label="Tags">
       <template v-for="tag in tags">
         <a-checkable-tag
-          :key="tag"
+          :key="tag.id"
           :checked="selectedTags.indexOf(tag) > -1"
           @change="checked => handletagChange(tag, checked)"
+          
         >
-          {{ tag }}
+          {{ tag.name }}
         </a-checkable-tag>
       </template>
     </a-form-item>
@@ -156,10 +160,7 @@
     <a-form-item >
       <a-col :xs="{ span: 24, offset: 0}" :lg="{ span: 20, offset: 10}"> 
           <a-button icon="check-circle"  type="primary" html-type="submit" :disabled="hasErrors(form.getFieldsError())" >
-              Save
-          </a-button >
-          <a-button icon="plus"  type="primary" >
-              Price
+              Save Meal
           </a-button >
       </a-col>
     </a-form-item>
@@ -194,8 +195,10 @@ export default {
       chefeCV: '',
       commonTimings: '',
       currencys: '',
-      tags: ['Beef', 'Tomato Sauce', 'eggs'],
+      tags: [],
       selectedTags: [],
+      cuisines:null,
+      ingredients:null,
     };
   },
   mounted() {
@@ -205,6 +208,11 @@ export default {
     });
   },
   methods: {
+    filterOption(input, option) {
+      return (
+        option.componentOptions.children[0].text.toLowerCase().indexOf(input.toLowerCase()) >= 0
+      );
+    },
     handleingreChange(value) {
       console.log(`selected ${value}`);
     },
@@ -247,17 +255,43 @@ export default {
     },
 
     // Only show error after a field is touched.
-    titleError() {
+    nameError() {
       const { getFieldError, isFieldTouched } = this.form;
-      return isFieldTouched('title') && getFieldError('title');
+      return isFieldTouched('name') && getFieldError('name');
     },
-    summaryError() {
+    
+    aliasError() {
       const { getFieldError, isFieldTouched } = this.form;
-      return isFieldTouched('summary') && getFieldError('summary');
+      return isFieldTouched('alias') && getFieldError('alias');
+    },
+
+    detailsError() {
+      const { getFieldError, isFieldTouched } = this.form;
+      return isFieldTouched('details') && getFieldError('details');
     },
     experienceError() {
       const { getFieldError, isFieldTouched } = this.form;
       return isFieldTouched('experience') && getFieldError('experience');
+    },
+    timeError() {
+      const { getFieldError, isFieldTouched } = this.form;
+      return isFieldTouched('time') && getFieldError('time');
+    },
+    peopleError() {
+      const { getFieldError, isFieldTouched } = this.form;
+      return isFieldTouched('people') && getFieldError('people');
+    },
+    commonTimingError() {
+      const { getFieldError, isFieldTouched } = this.form;
+      return isFieldTouched('commonTiming') && getFieldError('commonTiming');
+    },
+    ingredientsError() {
+      const { getFieldError, isFieldTouched } = this.form;
+      return isFieldTouched('ingredients') && getFieldError('ingredients');
+    },
+    cuisineError() {
+      const { getFieldError, isFieldTouched } = this.form;
+      return isFieldTouched('cuisine') && getFieldError('cuisine');
     },
     handleSubmit(e) {
       e.preventDefault();
@@ -270,7 +304,7 @@ export default {
     },
   sendData(data) {
       axios
-      .post("create/cv", { data: { cvDate: data, fileData:this.fileInfo} })
+      .post("create/meal", { data: { mealData: data, tags:this.selectedTags} })
       .then(response => {
           this.allerros = [];
           this.sucess = true;
@@ -322,6 +356,15 @@ export default {
   axios
       .get('getTimeCurrency')
       .then(response => (this.currencys = response.data));
+  axios
+      .get('getCuisines')
+      .then(response => (this.cuisines = response.data)); 
+  axios
+      .get('getIngredients')
+      .then(response => (this.ingredients = response.data)); 
+  axios
+      .get('getTags/2')
+      .then(response => (this.tags = response.data));
 
   axios
       .get('getCVData/'+this.userID)
@@ -348,7 +391,6 @@ export default {
   width: 200px;
   height: 200px;
 }
-<style scoped>
 .code-box-demo .ant-slider {
   margin-bottom: 16px;
 }

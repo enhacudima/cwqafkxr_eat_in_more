@@ -12,7 +12,7 @@ class Meals extends Model
 
     public $primaryKey = 'id';
 
-    public $timestamps=false;
+    public $timestamps=true;
 
 
 
@@ -43,7 +43,7 @@ class Meals extends Model
 
     	public function mealFiles()
     {
-        return $this->hasMany('App\Files','source_id','id');
+        return $this->hasMany('App\Files','source_id','id')->where('files.table','meals');
     }
 
     	public function mealChefs()

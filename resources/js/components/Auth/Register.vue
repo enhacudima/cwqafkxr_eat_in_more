@@ -1,341 +1,121 @@
 <template>
-
-  <a-form  layout="horizontal" :form="form" @submit="handleSubmit" style="text-align: center;" >
-
-    <a-form-item  :validate-status="nameError() ? 'error' : ''" :help="nameError() || ''">
-      <a-input
-        v-decorator="[
-          'name',
-          { rules: [{ required: true, message: 'Please input your name!' }] },
-        ]"
-        placeholder="Name"
-        allow-clear
-      >
-        <a-icon slot="prefix" type="user" style="color:rgba(0,0,0,.25)" />
-      </a-input>
-    </a-form-item>
-
-    <a-form-item  :validate-status="lastNameError() ? 'error' : ''" :help="lastNameError() || ''">
-      <a-input
-        v-decorator="[
-          'lastName',
-          { rules: [{ required: true, message: 'Please input your Last name!' }] },
-        ]"
-        placeholder="Last Name"
-        allow-clear
-      >
-        <a-icon slot="prefix" type="user" style="color:rgba(0,0,0,.25)" />
-      </a-input>
-    </a-form-item>
-
-    <a-form-item  :validate-status="dataBrithError() ? 'error' : ''" :help="dataBrithError() || ''">
-      <a-input
-        v-decorator="[
-          'dataBrith',
-          { rules: [{ required: true, message: 'Please input your Date of Brith!' }] },
-        ]"
-        type="date"
-        placeholder="Date of Brith"
-      >
-      </a-input>
-    </a-form-item>
-
-    <a-form-item  :validate-status="typeError() ? 'error' : ''" :help="typeError() || ''">
-      <a-select
-        v-decorator="[
-          'type',
-          { rules: [{ required: true, message: 'Please input your user type!' }] },
-        ]"
-        placeholder="Select User type"
-      >
-        <a-select-option value="2">
-            Client
-        </a-select-option>
-        <a-select-option value="3">
-            Chef
-        </a-select-option>
-      </a-select>
-    </a-form-item>
-
-    <a-form-item :validate-status="phone1Error() ? 'error' : ''" :help="phone1Error() || ''">
-        <a-input v-decorator="[
-      'phone1',
-      {
-        rules: [{ required: true, message: 'Please input your phone number 1!' }],
-      },
-    ]"
-        placeholder="84*******"
-        type="number"
-        allow-clear
-        >
-            <a-select slot="addonBefore"
-                      placeholder="(ZA) +278"
-                      v-decorator="['prefix_phone_1', 
-                      {
-                        rules: [{ required: true, message: 'Please input your phone number 1!' }],
-                      }
-                      ]"
-                      style="width: 125px">
-                <a-select-option v-for="country in countrys"  v-bind:value="country.id" :key="country.id" >
-                  ({{ country.internet.toUpperCase()}}) +{{ country.phone }}
-                </a-select-option>
-
-            </a-select>
-        </a-input>
-    </a-form-item>
-
-    <a-form-item  :validate-status="emailError() ? 'error' : ''" :help="emailError() || ''">
-      <a-input
-        v-decorator="[
-          'email',
-          { rules: [{ required: true, message: 'Please input your email!' }] },
-        ]"
-        placeholder="Email"
-        allow-clear
-      >
-        <a-icon slot="prefix" type="global" style="color:rgba(0,0,0,.25)" />
-      </a-input>
-    </a-form-item>
-
-    <a-form-item :validate-status="passwordError() ? 'error' : ''" :help="passwordError() || ''" has-feedback>
-      <a-input
-        v-decorator="[
-          'password',
-          { rules: [{ 
-            required: true,
-            message: 'Please input your Password!' }, 
-            {
-             validator: validateToNextPassword, 
-            },
-
-            ] },
-        ]"
-        type="password"
-        placeholder="Password"
-        allow-clear
-      >
-        <a-icon slot="prefix" type="lock" style="color:rgba(0,0,0,.25)" />
-      </a-input>
-    </a-form-item>
-    <a-form-item :validate-status="password_confirmationError() ? 'error' : ''" :help="password_confirmationError() || ''" has-feedback>
-      <a-input
-        v-decorator="[
-          'password_confirmation',
-          { rules: [{ 
-            required: true,
-            message: 'Please Confirm your Password!' }, 
-            {
-             validator: compareToFirstPassword, 
-            },
-
-            ] },
-        ]"
-        type="password"
-        @blur="handleConfirmBlur"
-        placeholder="confirm Password"
-        allow-clear
-      >
-        <a-icon slot="prefix" type="lock" style="color:rgba(0,0,0,.25)" />
-      </a-input>
-    </a-form-item>
-
-    <a-form-item :validate-status="terms_conditionsError() ? 'error' : ''" :help="terms_conditionsError() || ''">
-      <a-checkbox 
-        v-decorator="[
-          'terms_conditions',
-          { valuePropName: 'checked',
-            rules: [{ required: true, message: 'Please agree with terms and conditions!' }]
-           },
-        ]"
-      >
-        I agree with <a href="#">terms and conditions.</a>
-
-      </a-checkbox>
-    </a-form-item>
-
-    <a-form-item>
-      <a-button icon="check-circle"  type="primary" html-type="submit" :disabled="hasErrors(form.getFieldsError())" :style="{ marginRight:  '2%'}">
-          Done
-      </a-button >
-    </a-form-item>
-  </a-form>
+<v-dialog v-model="dialog" persistent max-width="600px" min-width="360px">
+            <div>
+                <v-tabs v-model="tab" show-arrows background-color="grey darken-3" icons-and-text dark grow>
+                    <v-tabs-slider color="purple darken-4"></v-tabs-slider>
+                    <v-tab v-for="i in tabs" :key="i">
+                        <v-icon large>{{ i.icon }}</v-icon>
+                        <div class="caption py-1">{{ i.name }}</div>
+                    </v-tab>
+                    <v-tab-item>
+                        <v-card class="px-4">
+                            <v-card-text>
+                                <v-form ref="loginForm" v-model="valid" lazy-validation>
+                                    <v-row>
+                                        <v-col cols="12">
+                                            <v-text-field v-model="loginEmail" :rules="loginEmailRules" label="E-mail" required></v-text-field>
+                                        </v-col>
+                                        <v-col cols="12">
+                                            <v-text-field v-model="loginPassword" :append-icon="show1?'eye':'eye-off'" :rules="[rules.required, rules.min]" :type="show1 ? 'text' : 'password'" name="input-10-1" label="Password" hint="At least 8 characters" counter @click:append="show1 = !show1"></v-text-field>
+                                        </v-col>
+                                        <v-col class="d-flex" cols="12" sm="6" xsm="12">
+                                        </v-col>
+                                        <v-spacer></v-spacer>
+                                        <v-col class="d-flex" cols="12" sm="3" xsm="12" align-end>
+                                            <v-btn elevation="1" large block :disabled="!valid" color="success" @click="validate"> Login </v-btn>
+                                        </v-col>
+                                    </v-row>
+                                </v-form>
+                            </v-card-text>
+                        </v-card>
+                    </v-tab-item>
+                    <v-tab-item>
+                        <v-card class="px-4">
+                            <v-card-text>
+                                <v-form ref="registerForm" v-model="valid" lazy-validation>
+                                    <v-row>
+                                        <v-col cols="12" sm="6" md="6">
+                                            <v-text-field v-model="firstName" :rules="[rules.required]" label="First Name" maxlength="20" required></v-text-field>
+                                        </v-col>
+                                        <v-col cols="12" sm="6" md="6">
+                                            <v-text-field v-model="lastName" :rules="[rules.required]" label="Last Name" maxlength="20" required></v-text-field>
+                                        </v-col>
+                                        <v-col cols="12">
+                                            <v-text-field v-model="email" :rules="emailRules" label="E-mail" required></v-text-field>
+                                        </v-col>
+                                        <v-col cols="12">
+                                            <v-text-field v-model="password" :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'" :rules="[rules.required, rules.min]" :type="show1 ? 'text' : 'password'" name="input-10-1" label="Password" hint="At least 8 characters" counter @click:append="show1 = !show1"></v-text-field>
+                                        </v-col>
+                                        <v-col cols="12">
+                                            <v-text-field block v-model="verify" :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'" :rules="[rules.required, passwordMatch]" :type="show1 ? 'text' : 'password'" name="input-10-1" label="Confirm Password" counter @click:append="show1 = !show1"></v-text-field>
+                                        </v-col>
+                                        <v-spacer></v-spacer>
+                                        <v-col class="d-flex ml-auto" cols="12" sm="3" xsm="12">
+                                            <v-btn elevation="1" large :disabled="!valid" color="success" @click="validate">Register</v-btn>
+                                        </v-col>
+                                    </v-row>
+                                </v-form>
+                            </v-card-text>
+                        </v-card>
+                    </v-tab-item>
+                </v-tabs>
+            </div>
+        </v-dialog>
 </template>
 
 <script>
-function hasErrors(fieldsError) {
-  return Object.keys(fieldsError).some(field => fieldsError[field]);
-}
+
 export default {
-  data() {
-    return {
-      hasErrors,
-      form: this.$form.createForm(this, { name: 'horizontal_login' }),
-      countrys:'',
-      provinceStates:'',
-      selectedProvinceStates:'',
-    };
-  },
-  mounted() {
-    this.$nextTick(() => {
-      // To disabled submit button at the beginning.
-      this.form.validateFields();
-    });
+  computed: {
+    passwordMatch() {
+      return () => this.password === this.verify || "Password must match";
+    }
   },
   methods: {
-    handleConfirmBlur(e) {
-      const value = e.target.value;
-      this.confirmDirty = this.confirmDirty || !!value;
-    },
-    compareToFirstPassword(rule, value, callback) {
-      const form = this.form;
-      if (value && value !== form.getFieldValue('password')) {
-        callback('Two passwords that you enter is inconsistent!');
-      } else {
-        callback();
+    validate() {
+      if (this.$refs.loginForm.validate()) {
+        // submit form to server/API here...
       }
     },
-    validateToNextPassword(rule, value, callback) {
-      const form = this.form;
-      if (value && this.confirmDirty) {
-        form.validateFields(['confirm'], { force: true });
-      }
-      callback();
+    reset() {
+      this.$refs.form.reset();
     },
-    filterStates(event){
-     this.form.setFields({
-                          "province": {
-                            "values": [
-                              {
-                                "province": "",
-                              }
-                            ]
-                          },
-                        });
-      const search = event.toLowerCase().trim();
-     if (!search) return null;
-     this.selectedProvinceStates =  this.provinceStates.filter(function(country) {
-      return country.country_name.toLowerCase() == search;
-     });
-    },
-    // Only show error after a field is touched.
-    lastNameError() {
-      const { getFieldError, isFieldTouched } = this.form;
-      return isFieldTouched('lastName') && getFieldError('lastName');
-    },
-    nameError() {
-      const { getFieldError, isFieldTouched } = this.form;
-      return isFieldTouched('name') && getFieldError('name');
-    },
-    emailError() {
-      const { getFieldError, isFieldTouched } = this.form;
-      return isFieldTouched('email') && getFieldError('email');
-    },
-    typeError() {
-      const { getFieldError, isFieldTouched } = this.form;
-      return isFieldTouched('type') && getFieldError('type');
-    },
-    countryError() {
-      const { getFieldError, isFieldTouched } = this.form;
-      return isFieldTouched('country') && getFieldError('country');
-    },
-    provinceError() {
-      const { getFieldError, isFieldTouched } = this.form;
-      return isFieldTouched('province') && getFieldError('province');
-    },
-   /* postalCodeError() {
-      const { getFieldError, isFieldTouched } = this.form;
-      return isFieldTouched('postalCode') && getFieldError('postalCode');
-    },*/
-    dataBrithError() {
-      const { getFieldError, isFieldTouched } = this.form;
-      return isFieldTouched('dataBrith') && getFieldError('dataBrith');
-    },
-    phone1Error() {
-      const { getFieldError, isFieldTouched } = this.form;
-      return isFieldTouched('phone1') && getFieldError('phone1');
-    },
-    /*userNameError() {
-      const { getFieldError, isFieldTouched } = this.form;
-      return isFieldTouched('userName') && getFieldError('userName');
-    },*/
-    // Only show error after a field is touched.
-    password_confirmationError() {
-      const { getFieldError, isFieldTouched } = this.form;
-      return isFieldTouched('password_confirmation') && getFieldError('password_confirmation');
-    },
-    terms_conditionsError() {
-      const { getFieldError, isFieldTouched } = this.form;
-      return isFieldTouched('terms_conditions') && getFieldError('terms_conditions');
-    },
-    passwordError() {
-      const { getFieldError, isFieldTouched } = this.form;
-      return isFieldTouched('password') && getFieldError('password');
-    },
-    handleSubmit(e) {
-      e.preventDefault();
-      this.form.validateFields((err, values) => {
-        if (!err) {
-          console.log('Received values of form: ', values);
-          this.sendData(values);
-        }
-      });
-    },
-  sendData(data) {
-      axios
-      .post("register", { data: { userData: data} })
-      .then(response => {
-          this.allerros = [];
-          this.sucess = true;
-          if (response.data.errors) {
-              //console.log(response.data.errors);
-              response.data.errors.forEach(error => { this.openNotification('error', 'Error on Save', error);});
-              
-          } else {
-              
-              this.openNotification('success', 'Save', 'You have been store all data successfully');
-              this.$router.push({ name: 'register/result' });
-          }
-      })
-      .catch((error) => {
-          this.success = false;
-        var errors =null;
-        var status=error.response.status;
-        //console.log(status);
-            if (status == 422){
-            errors=error.response.data.errors;
-            //console.log(errors);
-            errors.forEach(error => { this.openNotification('error', 'Error on Save', error);});
-          }else{
-            this.openNotification('error','Error on Save',error);
-          }
-      });
+    resetValidation() {
+      this.$refs.form.resetValidation();
+    }
   },
-    openNotification: function (type, m, d) {
-        this.$notification.config({
-            placement: 'topRight',
-            top: 35,
-            duration: 8,
-        });
-        this.$notification[type]({
-          message: m,
-          description: d,
-        });
-    },
-  },
-  mounted() {
-  axios
-      .get('getCountryStates')
-      .then(response => (this.countrys = response.data));
-  },
-  computed: {
-    filteredClients() {
-      this.selectedCountry="canada";
-      const search = this.selectedCountry.toLowerCase().trim();
-      //console.log(selectedCountry);
-     //if (!search) return this.clients;
-     return this.provinceStates.filter(c => c.country_name.toLowerCase().indexOf("canada") > -1);
-     console.log(provinceStates);
-  }},
+  data: () => ({
+    dialog: true,
+    tab: 0,
+    tabs: [
+        {name:"Login", icon:"mdi-account"},
+        {name:"Register", icon:"mdi-account-outline"}
+    ],
+    valid: true,
+    
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+    verify: "",
+    loginPassword: "",
+    loginEmail: "",
+    loginEmailRules: [
+      v => !!v || "Required",
+      v => /.+@.+\..+/.test(v) || "E-mail must be valid"
+    ],
+    emailRules: [
+      v => !!v || "Required",
+      v => /.+@.+\..+/.test(v) || "E-mail must be valid"
+    ],
+
+    show1: false,
+    rules: {
+      required: value => !!value || "Required.",
+      min: v => (v && v.length >= 8) || "Min 8 characters"
+    }
+  })
 };
+
 </script>
 

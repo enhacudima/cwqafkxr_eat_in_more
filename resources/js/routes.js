@@ -8,6 +8,7 @@ import RegisterResult from './components/Auth/RegisterResult.vue';
 import VerifyResult from './components/Auth/VerifyResult.vue';
 import CreateChefe from './components/Chefe/CV.vue';
 import MealNew from './components/Meal/MealNew';
+import MealIndex from './components/Meal/index';
 
 export const routes = [
     {
@@ -67,6 +68,16 @@ export const routes = [
         name: 'meal/new',
         path: '/mealNew',
         component: MealNew,
+        props: true,
+        meta: {
+            antMasterLayout: true,
+            auth: true,
+        },
+    },
+    {
+        name: 'meal/index',
+        path: '/mealIndex',
+        component: MealIndex,
         props: true,
         meta: {
             antMasterLayout: true,

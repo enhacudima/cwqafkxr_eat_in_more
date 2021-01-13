@@ -17,11 +17,12 @@ class FilesController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware('auth:api');
     }
 
     public function filePictureReturn(Request $request)
     {
+      
         $validator = Validator::make($request->all(), [
             'file' => 'required|mimes:jpeg,jpg,png|max:5000', 
         ],

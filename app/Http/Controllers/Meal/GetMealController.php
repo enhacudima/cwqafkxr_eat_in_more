@@ -16,4 +16,18 @@ class GetMealController extends Controller
     	$data=Meals::with('mealUser.userType','mealAllergies.allergiesSync','mealAllergies.allergiesIngredients','mealtiming','mealPrices','mealPrices.priceCurrency','mealType','mealFiles','mealChefs')->get();
     	return response()->json($data, 200); 
     }
+        
+    public function getPagmMals()
+    {
+    	$data=Meals::with('mealUser.userType','mealAllergies.allergiesSync','mealAllergies.allergiesIngredients','mealtiming','mealPrices','mealPrices.priceCurrency','mealType','mealFiles','mealChefs')->paginate(7);
+    	return response()->json($data, 200); 
+    }
+    public function searchMeals($search)
+    {
+        $data=Meals::limit(20)
+        ->where('name','like',"%".$search."%")
+        ->with('mealUser.userType','mealAllergies.allergiesSync','mealAllergies.allergiesIngredients','mealtiming','mealPrices','mealPrices.priceCurrency','mealType','mealFiles','mealChefs')
+        ->get();
+    	return response()->json($data, 200); 
+    }
 }

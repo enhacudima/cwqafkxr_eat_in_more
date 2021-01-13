@@ -12,7 +12,7 @@ class SyncMealAllergies extends Model
 
     public $primaryKey = 'id';
 
-    public $timestamps=false;
+    public $timestamps=true;
 
 
 

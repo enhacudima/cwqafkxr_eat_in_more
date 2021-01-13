@@ -77,11 +77,13 @@ Route::group(['namespace' => 'Chefe','middleware' => []], function() {
 });
 
 
-Route::group(['namespace' => 'Meal','middleware' => []], function() {
+Route::group(['namespace' => 'Meal','middleware' => ['auth.api']], function() {
 	Route::get('GetMeals','GetMealController@getAllMeals');
+	Route::get('getPagmMals','GetMealController@getPagmMals');
+	Route::get('getPagmMalsSearch/{search}','GetMealController@searchMeals');
+	Route::post('create/meal','CreateMealController@newMeal');
 
 });
-
 
 Route::group(['namespace' => 'Cuisines','middleware' => []], function() {
 	Route::get('getCuisines','CuisinesController@getCuisines');
@@ -98,5 +100,14 @@ Route::group(['namespace' => 'Kitchen','middleware' => []], function() {
 
 Route::group(['namespace' => 'Booking','middleware' => []], function() {
 	Route::post('createBooking','BookingController@createBooking');
+
+});
+
+Route::group(['namespace' => 'Tags','middleware' => []], function() {
+	Route::get('getTags/{type}','TagsController@getTags');
+
+});
+Route::group(['namespace' => 'Ingredients','middleware' => []], function() {
+	Route::get('getIngredients','IngredientsController@getIngredients');
 
 });

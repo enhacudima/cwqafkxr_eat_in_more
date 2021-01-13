@@ -150,7 +150,7 @@ class BookingController extends Controller
 
     public function getEndDate($start_date, $start_time,$time_to)
     {   
-        $waiting = 0.5;//time shift
+        $waiting = 0.5;//time shift 30min
         $end_date = Carbon::createFromFormat('Y-m-d H:i', $start_date . ' '. $start_time)->toDateTimeString();
         //$end_date = $end_date->addHour($time_to+$waiting);
 

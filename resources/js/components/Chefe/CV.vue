@@ -9,7 +9,7 @@
       list-type="picture-card"
       class="avatar-uploader"
       :show-upload-list="false"
-      action="/laravel-passport-vue-sap/public/api/filePicture"
+      action="/cwqafkxr_eat_in_more/public/api/filePicture"
       :before-upload="beforeUpload"
       @change="handleChange"
     >

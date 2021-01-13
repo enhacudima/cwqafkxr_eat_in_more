@@ -1,97 +1,125 @@
 <template>
-  <a-layout id="components-layout-demo-responsive">
-    <a-layout-sider
-      breakpoint="lg"
-      collapsed-width="0"
-      @collapse="onCollapse"
-      @breakpoint="onBreakpoint"
+  <v-app id="inspire">
+    <v-app-bar
+      app
+      color="white"
+      flat
     >
-      <img  v-bind:src="'storage/icons/icon.jpg'" class="logo" alt="Icon" />
-      <a-menu theme="dark" mode="inline" :default-selected-keys="['1']" :default-open-keys="['sub1']">
-          <a-sub-menu key="sub1">
-            <span slot="title"><a-icon type="user" />Profile</span>
-            <a-menu-item  key="1">      
-              <router-link to="/chefeNew" >
-                CV
-              </router-link>  
-            </a-menu-item>
-            <a-menu-item key="2">
-              option2
-            </a-menu-item>
-            <a-menu-item key="3">
-              option3
-            </a-menu-item>
-            <a-menu-item key="4">
-              option4
-            </a-menu-item>
-          </a-sub-menu>
-          <a-sub-menu key="sub2">
-            <span slot="title"><a-icon type="laptop" />Meals</span>
-            <a-menu-item key="5">     
-              <router-link to="/mealNew" >
-                New
-              </router-link> 
-            </a-menu-item>
-            <a-menu-item key="6">
-              option6
-            </a-menu-item>
-            <a-menu-item key="7">
-              option7
-            </a-menu-item>
-            <a-menu-item key="8">
-              option8
-            </a-menu-item>
-          </a-sub-menu>
-          <a-sub-menu key="sub3">
-            <span slot="title"><a-icon type="notification" />subnav 3</span>
-            <a-menu-item key="9">
-              option9
-            </a-menu-item>
-            <a-menu-item key="10">
-              option10
-            </a-menu-item>
-            <a-menu-item key="11">
-              option11
-            </a-menu-item>
-            <a-menu-item key="12">
-              option12
-            </a-menu-item>
-          </a-sub-menu>
-      </a-menu>
-    </a-layout-sider>
-    <a-layout> 
+      <v-avatar
+        :color="$vuetify.breakpoint.smAndDown ? 'grey darken-1' : 'transparent'"
+        size="32"
+      ></v-avatar>
 
-      <a-layout-content :style="{ margin: '24px 16px 0' }">
-      <a-breadcrumb style="margin: 16px 0">
-        <a-breadcrumb-item>Home</a-breadcrumb-item>
-        <a-breadcrumb-item>List</a-breadcrumb-item>
-        <a-breadcrumb-item>App</a-breadcrumb-item>
-      </a-breadcrumb>
-        <div :style="{ padding: '24px', background: '#fff', minHeight: '360px' }">
-          <slot/>
-        </div>
-      </a-layout-content>
-    </a-layout>
-  </a-layout>
+      <v-tabs
+        centered
+        class="ml-n9"
+        color="grey darken-1"
+      >
+        <v-tab
+          v-for="(linkName, index)  in linksNames"
+          :key="linkName"
+          :to="links[index]"
+        >
+          {{ linkName }} 
+        </v-tab>
+      </v-tabs>
+
+      <v-avatar
+        class="hidden-sm-and-down"
+        color="grey darken-1 shrink"
+        size="32"
+      ></v-avatar>
+    </v-app-bar>
+
+    <v-main class="grey lighten-3">
+      <v-container>
+        <v-row>
+          <v-col
+            cols="12"
+            sm="2"
+          >
+            <v-sheet
+              rounded="lg"
+              min-height="268"
+            >
+              <!--  -->
+            </v-sheet>
+          </v-col>
+
+          <v-col
+            cols="12"
+            sm="8"
+          >
+            <v-sheet
+              min-height="70vh"
+              rounded="lg"
+              class="spacing-playground pa-2 "
+            >
+            
+            <v-subheader
+            >
+            <strong>MEALS</strong> 
+            </v-subheader>
+            <v-divider></v-divider>
+            <div class="pt-6">
+              <slot/>
+            </div>
+            </v-sheet>
+          </v-col>
+
+          <v-col
+            cols="12"
+            sm="2"
+          >
+            <v-sheet
+              rounded="lg"
+              min-height="268"
+            >
+              <!--  -->
+            </v-sheet>
+          </v-col>
+        </v-row>
+      </v-container>
+    </v-main>
+    <v-footer padless  >
+      
+      <v-col
+        class="text-center"
+        cols="12"
+      >
+        &copy;{{ new Date().getFullYear() }} — <strong>EatInMore</strong> 
+      </v-col>
+    </v-footer>
+  </v-app>
 </template>
+
 <script>
-export default {
-  data() {
-    return {
-      collapsed: false,
+  export default {
+    data: () => ({
+      linksNames: [
+        'Dashboard',
+        'Meals',
+        'Chef',
+        'Updates',
+      ],
+      links:[
+        'home',
+        'mealIndex',
+        'chefeNew',
+        'Updates',
+      ],
+      icons: [
+        'mdi-facebook',
+        'mdi-twitter',
+        'mdi-linkedin',
+        'mdi-instagram',
+      ],
       userInfo: localStorage.getItem('user'),
       userType: '',
       userTypeName: '',
-    };
-  },
-
+    }),
   methods: {
-    onCollapse(collapsed, type) {
-      //console.log(collapsed, type);
-    },
-    onBreakpoint(broken) {
-      //console.log(broken);
-    },
+
   },
   mounted() {
     const userData = JSON.parse(this.userInfo);
@@ -110,15 +138,5 @@ export default {
     //console.log([this.userType]);
 
   },
-};
+  }
 </script>
-
-<style>
-#components-layout-demo-responsive .logo {
-  height: 32px;
-  background: rgba(255, 255, 255, 0.2);
-  margin: 16px 16px 16px 38%;
-
-
-}
-</style>

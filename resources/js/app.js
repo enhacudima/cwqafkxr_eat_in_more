@@ -13,6 +13,7 @@ import 'es6-promise/auto';
 import store from './loginLogout';
 import { ValidationProvider, extend } from 'vee-validate';
 import { ValidationObserver } from 'vee-validate';
+import Vuetify from "../plugins/vuetify";
 
 Vue.config.productionTip = false;
 // Add a rule.
@@ -29,12 +30,12 @@ Vue.use(VueRouter);
 Vue.use(VueAxios, axios);
 Vue.use(Vuex);
 
-axios.defaults.baseURL = 'http://localhost/laravel-passport-vue-sap/public/api';
+axios.defaults.baseURL = 'http://localhost/cwqafkxr_eat_in_more/public/api';
 //axios.defaults.baseURL = 'https://greenisle.co.za/api';
 
 const router = new VueRouter({
     mode: 'history',
-    base: "/laravel-passport-vue-sap/public/",
+    base: "/cwqafkxr_eat_in_more/public/",
     //base: "/greenisle.co.za/",
     routes: routes
 });
@@ -52,6 +53,7 @@ router.beforeEach((to, from, next) => {
 
 
 const app = new Vue({
+    vuetify:Vuetify,
     el: '#app',
     router: router,
     store,
