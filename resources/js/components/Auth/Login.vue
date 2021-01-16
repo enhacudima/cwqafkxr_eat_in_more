@@ -107,17 +107,6 @@ export default {
         var status=err.response.status;
         //console.log(status);
             if (status == 403){
-             /*var inval=err.response.data.error;
-             this.form.setFields({
-                                  "userName": {
-                                    "errors": [
-                                      {
-                                        "message": inval,
-                                        "field": "userName"
-                                      }
-                                    ]
-                                  }
-                                });*/
                 this.user_id=err.response.data.id;
                 this.verDescription=err.response.data.description;
                 this.verMessage=err.response.data.message;
@@ -133,39 +122,6 @@ export default {
               this.loginError=errors.error;
               //this.openNotification('error', 'Error on Save', errors.error);
 
-                if (errors) {
-                 /*this.form.setFields({
-                                      "userName": {
-                                        "errors": [
-                                          {
-                                            "message": errors.email,
-                                            "field": "userName"
-                                          }
-                                        ]
-                                      },
-                                      "password": {
-                                        "errors": [
-                                          {
-                                            "message": errors.password,
-                                            "field": "password"
-                                          }
-                                        ]
-                                      }
-                                    });*/
-              }
-             if (err.response.data.error) {
-             var inval=err.response.data.error;
-             /*this.form.setFields({
-                                  "userName": {
-                                    "errors": [
-                                      {
-                                        "message": inval,
-                                        "field": "userName"
-                                      }
-                                    ]
-                                  }
-                                });*/
-              }
           }if (status != 422 && status != 403){
             this.openNotification('error','Error during login','Please contact admin web-site');
           }
