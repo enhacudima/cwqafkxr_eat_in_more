@@ -119,7 +119,14 @@
                 </v-img>
 
                 <v-card-actions>
-                    <v-spacer></v-spacer>
+                    <v-spacer></v-spacer>              
+                    <v-btn 
+                        icon
+                        @click.stop="modfShowDialog(meal.id)"
+                    >
+                        <v-icon
+                        >mdi-pencil</v-icon>
+                    </v-btn>
                     <v-btn
                         icon
                         @click="postUserId = meal.id; show = !show"
@@ -139,8 +146,10 @@
             </v-card>
         </v-col>
       </v-row>
+      
+    <!--dialog-->
+    <dialogView v-model="showDialog" v-bind:codMeal="mealIDShow"/>
     </v-responsive>
-          
         <v-pagination
             v-model="pagination.current"
             :length="pagination.total"
@@ -148,13 +157,16 @@
             v-show="isSearch"
         ></v-pagination>
     </v-container>
-
 </div>
 </template>
 <script>
+  import dialogView from './dialog.vue';
 export default {
+    components: { dialogView},
     data() {
         return {
+            showDialog: false,
+            mealIDShow: null,
             columuns:3,
             showNew:false,
             isSearch:true,
@@ -170,19 +182,24 @@ export default {
         }
     },
     methods: {
-        getMeals() {
-            window.axios.get('/getPagmMals?page=' + this.pagination.current)
-                .then(response => {
-                    this.meals = response.data.data;
-                    this.isSearch = true;
-                    this.pagination.current = response.data.current_page;
-                    this.pagination.total = response.data.last_page;
-                });
+        modfShowDialog(mealId){
+            this.showDialog=true;
+            this.mealIDShow=mealId;
+            //console.log(this.mealIDShow);
         },
-        onPageChange() {
-            this.getMeals();
-        }
-    },
+        getMeals() {
+                window.axios.get('/getPagmMals?page=' + this.pagination.current)
+                    .then(response => {
+                        this.meals = response.data.data;
+                        this.isSearch = true;
+                        this.pagination.current = response.data.current_page;
+                        this.pagination.total = response.data.last_page;
+                    });
+            },
+            onPageChange() {
+                this.getMeals();
+            }
+        },
     mounted() {
         this.getMeals();
     },

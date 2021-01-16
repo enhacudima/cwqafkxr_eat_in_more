@@ -40,9 +40,9 @@ class RegisterController extends Controller
             'email' => 'required|email|unique:users,email|max:255', 
             'password' => 'required|string|min:8|confirmed', 
             'dataBrith' => 'required|date|date_format:Y-m-d|before:18 years ago',
-            'phone1'=>'required|numeric',
-            'prefix_phone_1'=>'required|numeric',
-            'type'=>'required|numeric',
+            'phone1'=>'required|numeric|unique:users,phone1',
+            //'prefix_phone_1'=>'required|numeric', //removed
+            //'type'=>'required|numeric', //removed
             'terms_conditions' =>'required|accepted',
         ],
         [
@@ -51,20 +51,30 @@ class RegisterController extends Controller
     	);
     if ($validator->fails()) { 
                 return response()->json(['errors'=>$validator->errors()->all()], 422);            
-            }
-    $country = CountryStates::find($userData['prefix_phone_1']);
-    $province = ProvinceStates::where('state_2_code',$country->internet)->first();
+            }    
+    //$country = CountryStates::find($userData['prefix_phone_1']);
+    // $province = ProvinceStates::where('state_2_code',$country->internet)->first();
     $key = md5(time()).'U';
     $input = $myRequest->all(); 
-            $input['password'] = bcrypt($input['password']); 
-            $input['prefix_phone_1'] = '+'.$country->phone; 
-            $input['prefix_id'] = $userData['prefix_phone_1'];
-            $input['key'] = $key;
-            $user = User::create($input);
-            $user->sendEmailVerificationNotification();
 
-            $success['token'] =  $user->createToken('MyApp')-> accessToken; 
-            $success['name'] =  $user->name;
+    $phone1=$input['phone1'];
+    
+    if(isset($userData['prefix_phone_1'])){
+        $prefix_phone_1 = $input['prefix_phone_1']['phone'];
+        $input['phone1']= $prefix_phone_1.$phone1;
+    }else{
+        $prefix_phone_1 = substr($phone1, 0, -9); 
+    }  
+        $input['userName'] = strtok($input['email'], '@');
+        $input['password'] = bcrypt($input['password']); 
+        $input['prefix_phone_1'] = '+'.$prefix_phone_1; 
+        //$input['prefix_id'] = $userData['prefix_phone_1'];
+        $input['key'] = $key;
+        $user = User::create($input);
+        $user->sendEmailVerificationNotification();
+
+        $success['token'] =  $user->createToken('MyApp')-> accessToken; 
+        $success['name'] =  $user->name;
     return response()->json(['success'=>'Added new records.'], 200); 
     }
 }

@@ -10,7 +10,7 @@ class CountryStatesController extends Controller
     
     public function getCountryStates()
     {
-    	$data=CountryStates::orderby('internet','asc')->get();
+    	$data=CountryStates::select('phone')->orderby('internet','asc')->get()->toArray();
     	return response()->json($data, 200); 
     }
 }

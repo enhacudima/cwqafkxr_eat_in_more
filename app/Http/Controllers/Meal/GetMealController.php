@@ -30,4 +30,12 @@ class GetMealController extends Controller
         ->get();
     	return response()->json($data, 200); 
     }
+
+    public function getThisMeal ($idMeal)
+    {
+        $data=Meals::where('id',$idMeal)
+        ->with('mealUser.userType','mealAllergies.allergiesSync','mealAllergies.allergiesIngredients','mealtiming','mealPrices','mealPrices.priceCurrency','mealType','mealFiles','mealFile','mealChefs')
+        ->first();
+    	return response()->json($data, 200); 
+    }
 }

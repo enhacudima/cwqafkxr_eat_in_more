@@ -82,6 +82,7 @@ Route::group(['namespace' => 'Meal','middleware' => ['auth.api']], function() {
 	Route::get('getPagmMals','GetMealController@getPagmMals');
 	Route::get('getPagmMalsSearch/{search}','GetMealController@searchMeals');
 	Route::post('create/meal','CreateMealController@newMeal');
+	Route::get('getThisMeal/{idMeal}','GetMealController@getThisMeal');
 
 });
 

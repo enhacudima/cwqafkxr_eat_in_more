@@ -1,64 +1,66 @@
 <template>
-  <a-form
-    id="components-form-demo-normal-login"
-    :form="form"
-    class="login-form"
-    @submit="handleSubmit"
-  >
-    <a-form-item >
-      <a-input 
-        v-decorator="[
-          'userName',
-          { rules: [{ required: true, message: 'Please input your username!' }] },
-        ]"
-        placeholder="Email"
-      >
-        <a-icon slot="prefix" type="user" style="color: rgba(0,0,0,.25)" />
-      </a-input>
-    </a-form-item>
-    <a-form-item >
-      <a-input
-        v-decorator="[
-          'password',
-          { rules: [{ required: true, message: 'Please input your Password!' }] },
-        ]"
-        type="password"
-        placeholder="Password"
-      >
-        <a-icon slot="prefix" type="lock" style="color: rgba(0,0,0,.25)" />
-      </a-input>
-    </a-form-item>
-    <a-form-item>
-      <a-checkbox
-        class="login-form-Remember"
-        v-decorator="[
-          'remember',
-          {
-            valuePropName: 'checked',
-            initialValue: true,
-          },
-        ]"
-      >
-        Remember me
-      </a-checkbox>
-      <a class="login-form-forgot" href="">
-        Forgot password
-      </a>
-      <a-button type="primary" html-type="submit" class="login-form-button">
-        Log in
-      </a-button>
-      Or
-      <router-link to="/register" class="nav-item nav-link">
-        register now!
-      </router-link>  
-    </a-form-item>
-  </a-form>
+  <v-card class="px-4">
+      <v-card-text>
+          <v-form ref="loginForm" v-model="valid" lazy-validation>
+              <v-row>
+                  <v-col cols="12">
+                      <v-text-field v-model="loginEmail" :rules="loginEmailRules" label="E-mail" required></v-text-field>
+                  </v-col>
+                  <v-col cols="12">
+                      <v-text-field autocomplete="off" v-model="loginPassword" :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'" :rules="[rules.required, rules.min]" :type="show1 ? 'text' : 'password'" name="input-10-1" label="Password" hint="At least 8 characters" counter @click:append="show1 = !show1"></v-text-field>
+                  </v-col>
+                  <v-col class="d-flex" cols="12" sm="12" xsm="12" align-end>
+                      <v-btn elevation="1" large block :disabled="!valid" color="success" @click="validate"> Login </v-btn>
+                  </v-col>
+                  <v-spacer></v-spacer>
+                  <v-col class="d-flex" cols="12" sm="12" xsm="12">
+                    <v-tooltip bottom >
+                      <template v-slot:activator="{ on }">
+                        <a
+                          target="_blank"
+                          href=""
+                          @click.stop
+                          v-on="on"
+                        >
+                          Forgot password
+                        </a>
+                      </template>
+                      Use this link to reset you password
+                    </v-tooltip>
+                    <div class="pl-3">
+                      Or
+                    </div>  
+                    <router-link to="/register" class="nav-item nav-link pl-3">
+                      register now!
+                    </router-link>
+                  </v-col>
+              </v-row>
+          </v-form>
+      </v-card-text>
+  </v-card>
 </template>
 
 <script>
 export default {
   data() {
     return {
+      dialog: true,
+      tab: 0,
+      tabs: [
+          {name:"Login", icon:"mdi-account"},
+      ],
+      valid: true,
+      loginPassword: "",
+      loginEmail: "",
+      loginEmailRules: [
+        v => !!v || "Required",
+        v => /.+@.+\..+/.test(v) || "E-mail must be valid"
+      ],
+      show1: false,
+      rules: {
+        required: value => !!value || "Required.",
+        min: v => (v && v.length >= 8) || "Min 8 characters"
+      },
       testError:'',
       country:'',
       user_id:'',
@@ -74,15 +76,21 @@ export default {
     this.form = this.$form.createForm(this, { name: 'normal_login' });
   },
   methods: {
-    handleSubmit(e) {
-      e.preventDefault();
-      this.form.validateFields((err, values) => {
-        if (!err) {
-          this.login(values.userName,values.password);
-          //console.log('Received values of form: ', values);
-        }
-      });
+      save (date) {
+        this.$refs.menu.save(dataBrith)
+      },
+    validate() {
+      if (this.$refs.loginForm.validate()) {
+        // submit form to server/API here...
+        this.login(this.loginEmail,this.loginPassword);
+      }
     },
+    reset() {
+      this.$refs.form.reset();
+    },
+    resetValidation() {
+      this.$refs.form.resetValidation();
+    }, 
 
     login (email,password) {
       this.$store
@@ -98,7 +106,7 @@ export default {
         var status=err.response.status;
         //console.log(status);
             if (status == 403){
-             var inval=err.response.data.error;
+             /*var inval=err.response.data.error;
              this.form.setFields({
                                   "userName": {
                                     "errors": [
@@ -108,7 +116,7 @@ export default {
                                       }
                                     ]
                                   }
-                                });
+                                });*/
                 this.user_id=err.response.data.id;
                 this.verDescription=err.response.data.description;
                 this.verMessage=err.response.data.message;
@@ -123,7 +131,7 @@ export default {
                 } = err.response.data;
 
                 if (errors) {
-                 this.form.setFields({
+                 /*this.form.setFields({
                                       "userName": {
                                         "errors": [
                                           {
@@ -140,11 +148,11 @@ export default {
                                           }
                                         ]
                                       }
-                                    });
+                                    });*/
               }
              if (err.response.data.error) {
              var inval=err.response.data.error;
-             this.form.setFields({
+             /*this.form.setFields({
                                   "userName": {
                                     "errors": [
                                       {
@@ -153,7 +161,7 @@ export default {
                                       }
                                     ]
                                   }
-                                });
+                                });*/
               }
           }if (status != 422 && status != 403){
             this.openNotification('error','Error during login','Please contact admin web-site');

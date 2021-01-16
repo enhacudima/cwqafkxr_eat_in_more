@@ -2,7 +2,7 @@
 
   <a-form  :form="form" @submit="handleSubmit" :label-col="{ span: 5 }" :wrapper-col="{ span: 12 }" >
   <a-row> 
-    <a-form-item label="Picture">
+    <a-form-item label="Picture of meal">
       <div class="dropbox">
     <a-upload
       name="picture"
