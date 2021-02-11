@@ -38,7 +38,7 @@ class Meals extends Model
 
         public function mealType()
     {
-        return $this->belongsTo('App\MealType','type_id','id');
+        return $this->belongsTo('App\MealType','type_meal_id','id');
     }
 
     	public function mealFiles()

@@ -23,13 +23,6 @@
           >
             Close
           </v-btn>
-          <v-btn
-            color="blue darken-1"
-            text
-            @click="showDialog = false"
-          >
-            Save
-          </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>

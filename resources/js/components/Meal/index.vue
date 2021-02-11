@@ -38,7 +38,7 @@
           </v-col>
       </v-row>  
       <v-row dense> 
-          <v-col :cols="columuns" v-if="pagination.current === 1 && isSearch">
+          <v-col :cols="columuns" sm="3" xsm="12" xs="12" v-if="pagination.current === 1 && isSearch">
             <v-card
                 class="pa-2"
             >   

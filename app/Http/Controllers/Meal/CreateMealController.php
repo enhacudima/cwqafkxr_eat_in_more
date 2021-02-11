@@ -13,6 +13,7 @@ use Illuminate\Validation\Rule;
 use Carbon\Carbon;
 use App\SyncMealAllergies;
 use App\SyncTags;
+use App\Options;
 
 class CreateMealController extends Controller
 {
@@ -27,27 +28,30 @@ class CreateMealController extends Controller
 
     	$mealData=$request->data['mealData'];
         $tags=$request->data['tags'];
-        $file_id = $request->data['fileData']['file_id']; 
+        $file_id=null;
+        if(isset($request->data['fileData']['file_id'])){
+            $file_id = $request->data['fileData']['file_id']; 
+        }
         $mealData['tags'] = $tags; 
         $mealData['file_id'] = $file_id;
 
         $myRequest = new Request();
         $myRequest->setMethod('POST');
         $myRequest->request->add($mealData);
-        //unique:meals,name
+
         $validator = Validator::make($myRequest->all(), [
-            'name' => 'required|string|max:50|unique:meals,name',
+            //'name' => 'required|string|max:50|unique:meals,name',
             'alias' => 'required|string|max:255',
             'details' => 'required|string|max:255',
             'commonTiming'=>'required',
-            'time' => 'required|',
+            'time' => 'required|numeric',
             'people' => 'required|numeric', 
             'experience' => 'required|numeric|exists:experiences,id',
             'tags' => 'required', 
             'file_id' => 'required|numeric',
         ],
         [
-     	
+     	    'file_id.required'=>'Please add a picture of meal.'
         ]
     	);
     if ($validator->fails()) { 
@@ -65,7 +69,7 @@ class CreateMealController extends Controller
                     'alias'=> $input['alias'],
             		'details' => $input['details'],
             		'common_timing_id' => $input['commonTiming'],
-            		'time' => new Carbon($input['time']),
+            		'time' => $input['time'],
             		'people' => $input['people'],
             		'experience_id' => $input['experience'],
             		'key' => $input['key'],
@@ -87,6 +91,25 @@ class CreateMealController extends Controller
                ]);
 
            }
+
+           
+           foreach($input['options'] as $key => $option){
+            //add options to meal
+            $optiKey = md5(time()).Auth::user()->id;
+            Options::updateOrInsert(
+                [
+                    'name' => $option,
+                    'meal_id' =>$meal->id,
+                ],
+                [
+                    'user_id'=> $input['user_id'],
+                    'key' => $optiKey
+                ]
+            );
+
+            }
+
+
            if(isset($tags)){
                $tagKey = md5(time()).Auth::user()->id;
                foreach($tags as $key => $tag){

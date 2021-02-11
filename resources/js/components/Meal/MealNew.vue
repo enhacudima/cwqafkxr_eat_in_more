@@ -25,7 +25,7 @@
       </div>
     </a-form-item>
 
-    <a-form-item label="Name" :validate-status="nameError() ? 'error' : ''" :help="nameError() || ''">
+    <a-form-item label="Name (short)" :validate-status="nameError() ? 'error' : ''" :help="nameError() || ''">
       <a-input
         v-decorator="[
           'name',
@@ -37,7 +37,7 @@
       </a-input>
     </a-form-item>
 
-    <a-form-item label="Alias" :validate-status="aliasError() ? 'error' : ''" :help="aliasError() || ''">
+    <a-form-item label="Alias (full)" :validate-status="aliasError() ? 'error' : ''" :help="aliasError() || ''">
       <a-input
         v-decorator="[
           'alias',
@@ -109,14 +109,17 @@
     </a-form-item>
 
 
-    <a-form-item label="Time to Cook"  :validate-status="timeError() ? 'error' : ''" :help="timeError() || ''">
-     <a-time-picker :minute-step="15" :second-step="10"
+    <a-form-item label="Time (minutes)"  :validate-status="timeError() ? 'error' : ''" :help="timeError() || ''">
+      
+      <a-input-number  :min="1" :max="1000" style="marginLeft: 16px" 
+
       v-decorator="[
       'time',
           {
-            rules: [{ required: true, message: 'Please input a Time!' }],
+            initialValue:30, rules: [{required: true, message: 'Please input a Time!' }],
           },
         ]"
+
       />
     </a-form-item>
 
@@ -164,6 +167,25 @@
           </a-select-option>
         </a-select>
       </template>
+    </a-form-item>
+
+    
+
+    <a-form-item label="Options" :validate-status="optionsError() ? 'error' : ''" :help="optionsError() || ''" >
+        <template>
+          <a-select mode="tags" style="width: 100%" :token-separators="[',']" @change="handleOptChange"       
+          v-decorator="[
+          'options',
+              {
+                rules: [{ required: false, message: 'Please input options!' }],
+              },
+            ]"
+            >
+            <a-select-option v-for="option in options" :key="option.name">
+              {{ option.name }}
+            </a-select-option>
+          </a-select>
+        </template>
     </a-form-item>
 
     <a-form-item label="Tags">
@@ -220,6 +242,7 @@ export default {
       selectedTags: [],
       cuisines:null,
       ingredients:null,
+      options:[],
     };
   },
   mounted() {
@@ -235,6 +258,9 @@ export default {
       );
     },
     handleingreChange(value) {
+      console.log(`selected ${value}`);
+    },
+    handleOptChange(value) {
       console.log(`selected ${value}`);
     },
     handletagChange(tag, checked) {
@@ -309,6 +335,10 @@ export default {
     ingredientsError() {
       const { getFieldError, isFieldTouched } = this.form;
       return isFieldTouched('ingredients') && getFieldError('ingredients');
+    },
+    optionsError() {
+      const { getFieldError, isFieldTouched } = this.form;
+      return isFieldTouched('options') && getFieldError('options');
     },
     cuisineError() {
       const { getFieldError, isFieldTouched } = this.form;
@@ -390,6 +420,9 @@ export default {
   axios
       .get('getCVData/'+this.userID)
       .then(response => (this.chefeCV = response.data));
+  axios
+      .get('getOptions')
+      .then(response => (this.options = response.data));
   },
 };
 </script>

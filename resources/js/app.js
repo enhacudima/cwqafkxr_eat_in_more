@@ -36,7 +36,7 @@ axios.defaults.baseURL = 'http://localhost/cwqafkxr_eat_in_more/public/api';
 const router = new VueRouter({
     mode: 'history',
     base: "/cwqafkxr_eat_in_more/public/",
-    //base: "/greenisle.co.za/",
+    //base: "/",
     routes: routes
 });
 

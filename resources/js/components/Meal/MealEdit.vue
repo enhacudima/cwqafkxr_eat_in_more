@@ -1,195 +1,244 @@
 <template>
-
-  <a-form  :form="form" @submit="handleSubmit" :label-col="{ span: 7 }" :wrapper-col="{ span: 17 }" >
-  <a-row> 
-    <a-form-item label="Picture of meal">
-      <div class="dropbox">
-    <a-upload
-      name="picture"
-      list-type="picture-card"
-      class="avatar-uploader"
-      :show-upload-list="false"
-      action="/cwqafkxr_eat_in_more/public/api/filePicture"
-      :before-upload="beforeUpload"
-      @change="handleChange"
+  <div >
+    <v-tabs
+    v-model="tab"
     >
-      <img v-if="imageUrl" :src="imageUrl" alt="avatar" class="picture_avatar" />
-      <div v-else>
-        <a-icon :type="loading ? 'loading' : 'plus'" />
-        <div class="ant-upload-text">
-          Upload
-        </div>
-      </div>
-    </a-upload>
+      <v-tab href="#tab-1">This Meal</v-tab>
+      <v-tab href="#tab-2">Prices</v-tab>
+    </v-tabs>
+    
+    
 
-      </div>
-    </a-form-item>
-
-    <a-form-item label="Name" :validate-status="nameError() ? 'error' : ''" :help="nameError() || ''">
-      <a-input
-        v-decorator="[
-          'name',
-          { rules: [{ required: true, message: 'Please input meal name!' }] },
-        ]"
-        placeholder="Name"
-        allow-clear
-      >
-      </a-input>
-    </a-form-item>
-
-    <a-form-item label="Alias" :validate-status="aliasError() ? 'error' : ''" :help="aliasError() || ''">
-      <a-input
-        v-decorator="[
-          'alias',
-          { rules: [{ required: true, message: 'Please input meal alias!' }] },
-        ]"
-        placeholder="Alias"
-        allow-clear
-      >
-      </a-input>
-    </a-form-item>
-
-    <a-form-item label="Details" :validate-status="detailsError() ? 'error' : ''" :help="detailsError() || ''">
-      <a-textarea 
-        placeholder="Details about the meal" 
-        :rows="2"
-        v-decorator="[
-          'details',
-          { rules: [{ required: true, message: 'Please input meal details!' }] },
-        ]" 
-
-        allow-clear
-
-      />
-    </a-form-item>
-
-    <a-form-item label="Cuisine" :validate-status="cuisineError() ? 'error' : ''" :help="cuisineError() || ''">
-      <a-select
-        show-search
-        option-filter-prop="children"
-        :filter-option="filterOption"
-        v-decorator="[
-          'cuisine',
-          { rules: [{ required: true, message: 'Please input Cuisine!' }] },
-        ]"
-        placeholder="Select Cuisine"
-      >
-        <a-select-option v-for="cuisine in cuisines"  v-bind:value="cuisine.id" :key="cuisine.id" >
-          {{ cuisine.name }}
-        </a-select-option>
-      </a-select>
-    </a-form-item>
-
-    <a-form-item label="Experience" :validate-status="experienceError() ? 'error' : ''" :help="experienceError() || ''">
-      <a-select
-        v-decorator="[
-          'experience',
-          { rules: [{ required: true, message: 'Please input your experience!' }] },
-        ]"
-        placeholder="Select Experience"
-      >
-        <a-select-option v-for="experience in experiences"  v-bind:value="experience.id" :key="experience.id" >
-          ({{ experience.ref }}) {{ experience.title }} - {{ experience.description }}
-        </a-select-option>
-      </a-select>
-    </a-form-item>
-
-    <a-form-item label="Common Timing" :validate-status="commonTimingError() ? 'error' : ''" :help="commonTimingError() || ''">
-      <a-select
-        v-decorator="[
-          'commonTiming',
-          { rules: [{ required: true, message: 'Please input Common Timing!' }] },
-        ]"
-        placeholder="Select Common Timing"
-      >
-        <a-select-option v-for="commonTiming in commonTimings"  v-bind:value="commonTiming.id" :key="commonTiming.id" >
-          {{ commonTiming.common_timing }}
-        </a-select-option>
-      </a-select>
-    </a-form-item>
-
-
-    <a-form-item label="Time to Cook"  :validate-status="timeError() ? 'error' : ''" :help="timeError() || ''">
-     <a-time-picker :minute-step="15" :second-step="10"
-      v-decorator="[
-      'time',
-          {
-            rules: [{ required: true, message: 'Please input a Time!' }],
-          },
-        ]"
-      />
-    </a-form-item>
-
-
-    <a-form-item label="People" :validate-status="peopleError() ? 'error' : ''" :help="peopleError() || ''" >
-
-    <a-row>
-      <a-col :span="12">
-        <a-slider v-model="inputValue1" :min="1" :max="50"
-
-         />
-      </a-col>
-      <a-col :span="4" >
-        <a-input-number  :min="1" :max="1000" style="marginLeft: 16px" 
-
-      v-decorator="[
-      'people',
-          {
-            initialValue:inputValue1, rules: [{required: true, message: 'Please input a number of people!' }],
-          },
-        ]"
-
-        />
-      </a-col>
-    </a-row>
-
-    </a-form-item>
-
-
-
-    <a-form-item label="Ingredients" :validate-status="ingredientsError() ? 'error' : ''" :help="ingredientsError() || ''" >
-      <template>
-        <a-select mode="multiple" style="width: 100%" placeholder="Select ingredients and Allergies" @change="handleingreChange"
-
-          v-decorator="[
-          'ingredients',
-              {
-                rules: [{ required: true, message: 'Please input ingredients!' }],
-              },
-            ]"
-          >
-        
-          <a-select-option v-for="ingredient in ingredients" v-bind:value="ingredient.id" :key="ingredient.id">
-            {{ingredient.name}} - {{ingredient.description}}
-          </a-select-option>
-        </a-select>
-      </template>
-    </a-form-item>
-
-    <a-form-item label="Tags">
-      <template v-for="tag in tags">
-        <a-checkable-tag
-          :key="tag.id"
-          :checked="selectedTags.indexOf(tag.id) > -1"
-          @change="checked => handletagChange(tag.id, checked)"  
+      <v-tabs-items v-model="tab" class="pt-4">
+        <v-tab-item
+          :key="2"
+          :value="'tab-' + 2"
         >
-          {{ tag.name }}
-        </a-checkable-tag>
-      </template>
-    </a-form-item>
+        <mealPrices v-bind:codMealId="codMealId"/>
+        </v-tab-item>
+        
+        <v-tab-item
+          :key="1"
+          :value="'tab-' + 1"
+        >
+        <template >
+          <a-form  :form="form" @submit="handleSubmit" :label-col="{ span: 5 }" :wrapper-col="{ span: 12 }" >
+          <a-row> 
+            <a-form-item label="Picture of meal">
+              <div class="dropbox">
+            <a-upload
+              name="picture"
+              list-type="picture-card"
+              class="avatar-uploader"
+              :show-upload-list="false"
+              action="/cwqafkxr_eat_in_more/public/api/filePicture"
+              :before-upload="beforeUpload"
+              @change="handleChange"
+            >
+              <img v-if="imageUrl" :src="imageUrl" alt="avatar" class="picture_avatar" />
+              <div v-else>
+                <a-icon :type="loading ? 'loading' : 'plus'" />
+                <div class="ant-upload-text">
+                  Upload
+                </div>
+              </div>
+            </a-upload>
 
-    <a-form-item >
-      <a-col :xs="{ span: 24, offset: 0}" :lg="{ span: 20, offset: 10}"> 
-          <a-button icon="check-circle"  type="primary" html-type="submit" :disabled="hasErrors(form.getFieldsError())" >
-              Save Meal
-          </a-button >
-      </a-col>
-    </a-form-item>
-  </a-row>
-  </a-form>
+              </div>
+            </a-form-item>
+
+            <a-form-item label="Name (short)" :validate-status="nameError() ? 'error' : ''" :help="nameError() || ''">
+              <a-input
+                v-decorator="[
+                  'name',
+                  { rules: [{ required: true, message: 'Please input meal name!' }] },
+                ]"
+                placeholder="Name"
+                allow-clear
+              >
+              </a-input>
+            </a-form-item>
+
+            <a-form-item label="Alias (full)" :validate-status="aliasError() ? 'error' : ''" :help="aliasError() || ''">
+              <a-input
+                v-decorator="[
+                  'alias',
+                  { rules: [{ required: true, message: 'Please input meal alias!' }] },
+                ]"
+                placeholder="Alias"
+                allow-clear
+              >
+              </a-input>
+            </a-form-item>
+
+            <a-form-item label="Details" :validate-status="detailsError() ? 'error' : ''" :help="detailsError() || ''">
+              <a-textarea 
+                placeholder="Details about the meal" 
+                :rows="2"
+                v-decorator="[
+                  'details',
+                  { rules: [{ required: true, message: 'Please input meal details!' }] },
+                ]" 
+
+                allow-clear
+
+              />
+            </a-form-item>
+
+            <a-form-item label="Cuisine" :validate-status="cuisineError() ? 'error' : ''" :help="cuisineError() || ''">
+              <a-select
+                show-search
+                option-filter-prop="children"
+                :filter-option="filterOption"
+                v-decorator="[
+                  'cuisine',
+                  { rules: [{ required: true, message: 'Please input Cuisine!' }] },
+                ]"
+                placeholder="Select Cuisine"
+              >
+                <a-select-option v-for="cuisine in cuisines"  v-bind:value="cuisine.id" :key="cuisine.id" >
+                  {{ cuisine.name }}
+                </a-select-option>
+              </a-select>
+            </a-form-item>
+
+            <a-form-item label="Experience" :validate-status="experienceError() ? 'error' : ''" :help="experienceError() || ''">
+              <a-select
+                v-decorator="[
+                  'experience',
+                  { rules: [{ required: true, message: 'Please input your experience!' }] },
+                ]"
+                placeholder="Select Experience"
+              >
+                <a-select-option v-for="experience in experiences"  v-bind:value="experience.id" :key="experience.id" >
+                  ({{ experience.ref }}) {{ experience.title }} - {{ experience.description }}
+                </a-select-option>
+              </a-select>
+            </a-form-item>
+
+            <a-form-item label="Common Timing" :validate-status="commonTimingError() ? 'error' : ''" :help="commonTimingError() || ''">
+              <a-select
+                v-decorator="[
+                  'commonTiming',
+                  { rules: [{ required: true, message: 'Please input Common Timing!' }] },
+                ]"
+                placeholder="Select Common Timing"
+              >
+                <a-select-option v-for="commonTiming in commonTimings"  v-bind:value="commonTiming.id" :key="commonTiming.id" >
+                  {{ commonTiming.common_timing }}
+                </a-select-option>
+              </a-select>
+            </a-form-item>
+
+
+            <a-form-item label="Time (minutes)"  :validate-status="timeError() ? 'error' : ''" :help="timeError() || ''">
+              
+              <a-input-number  :min="1" :max="1000" style="marginLeft: 16px" 
+
+              v-decorator="[
+              'time',
+                  {
+                    initialValue:30, rules: [{required: true, message: 'Please input a Time!' }],
+                  },
+                ]"
+
+              />
+            </a-form-item>
+
+
+            <a-form-item label="People" :validate-status="peopleError() ? 'error' : ''" :help="peopleError() || ''" >
+
+            <a-row>
+              <a-col :span="12">
+                <a-slider v-model="inputValue1" :min="1" :max="50"
+
+                />
+              </a-col>
+              <a-col :span="4" >
+                <a-input-number  :min="1" :max="1000" style="marginLeft: 16px" 
+
+              v-decorator="[
+              'people',
+                  {
+                    initialValue:inputValue1, rules: [{required: true, message: 'Please input a number of people!' }],
+                  },
+                ]"
+
+                />
+              </a-col>
+            </a-row>
+
+            </a-form-item>
+
+
+
+            <a-form-item label="Ingredients" :validate-status="ingredientsError() ? 'error' : ''" :help="ingredientsError() || ''" >
+              <template>
+                <a-select mode="multiple" style="width: 100%" placeholder="Select ingredients and Allergies" @change="handleingreChange"
+
+                  v-decorator="[
+                  'ingredients',
+                      {
+                        rules: [{ required: true, message: 'Please input ingredients!' }],
+                      },
+                    ]"
+                  >
+                
+                  <a-select-option v-for="ingredient in ingredients" v-bind:value="ingredient.id" :key="ingredient.id">
+                    {{ingredient.name}} - {{ingredient.description}}
+                  </a-select-option>
+                </a-select>
+              </template>
+            </a-form-item>
+
+            
+
+            <a-form-item label="Options" :validate-status="optionsError() ? 'error' : ''" :help="optionsError() || ''" >
+                <template>
+                  <a-select mode="tags" style="width: 100%" :token-separators="[',']" @change="handleOptChange"       
+                  v-decorator="[
+                  'options',
+                      {
+                        rules: [{ required: false, message: 'Please input options!' }],
+                      },
+                    ]"
+                    >
+                    <a-select-option v-for="option in options" :key="option.name">
+                      {{ option.name }}
+                    </a-select-option>
+                  </a-select>
+                </template>
+            </a-form-item>
+
+            <a-form-item label="Tags">
+              <template v-for="tag in tags">
+                <a-checkable-tag
+                  :key="tag.id"
+                  :checked="selectedTags.indexOf(tag.id) > -1"
+                  @change="checked => handletagChange(tag.id, checked)"  
+                >
+                  {{ tag.name }}
+                </a-checkable-tag>
+              </template>
+            </a-form-item>
+
+            <a-form-item >
+              <a-col :xs="{ span: 24, offset: 0}" :lg="{ span: 20, offset: 10}"> 
+                  <a-button icon="check-circle"  type="primary" html-type="submit" :disabled="hasErrors(form.getFieldsError())" >
+                      Save Meal
+                  </a-button >
+              </a-col>
+            </a-form-item>
+          </a-row>
+          </a-form>
+        </template>
+        </v-tab-item>
+      </v-tabs-items>
+  </div> 
 </template>
 
 <script>
+import mealPrices from './Prices.vue';
 
 function getBase64(img, callback) {
   const reader = new FileReader();
@@ -200,11 +249,13 @@ function hasErrors(fieldsError) {
   return Object.keys(fieldsError).some(field => fieldsError[field]);
 }
 export default {
+  components: { mealPrices},
     props: {
         codMealId: Number
     },
   data() {
     return {
+      tab:null,
       inputValue: 0,
       inputValue1: 1,
       loading: false,
@@ -224,6 +275,7 @@ export default {
       cuisines:null,
       ingredients:null,
       thisMeal:[],
+      options:[],
     };
   },
   mounted() {
@@ -263,6 +315,9 @@ export default {
         });
       }
     },
+    handleOptChange(value) {
+      console.log(`selected ${value}`);
+    },
     beforeUpload(file) {
       const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
       if (!isJpgOrPng) {
@@ -297,6 +352,10 @@ export default {
     experienceError() {
       const { getFieldError, isFieldTouched } = this.form;
       return isFieldTouched('experience') && getFieldError('experience');
+    },
+    optionsError() {
+      const { getFieldError, isFieldTouched } = this.form;
+      return isFieldTouched('options') && getFieldError('options');
     },
     timeError() {
       const { getFieldError, isFieldTouched } = this.form;
@@ -393,10 +452,14 @@ export default {
   axios
       .get('getCVData/'+this.userID)
       .then(response => (this.chefeCV = response.data));
+      
+  axios
+      .get('getOptions')
+      .then(response => (this.options = response.data));
   axios
       .get('getThisMeal/'+this.codMealId)
       .then(response => (this.thisMeal = response.data,this.imageUrl = 'storage/'+response.data.meal_file.path+response.data.meal_file.name));
-    //console.log(this.codMealId);
+    console.log(this.codMealId);
   },
 };
 </script>

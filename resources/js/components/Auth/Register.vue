@@ -16,13 +16,13 @@
                                 <v-form ref="registerForm" v-model="valid" lazy-validation>
                                     <v-row>
                                         <v-col cols="12" sm="6" md="6">
-                                            <v-text-field v-model="formReg.name"  label="First Name" maxlength="20" required></v-text-field>
+                                            <v-text-field v-model="formReg.name"  label="First Name" maxlength="255" :counter="255" required :rules="[rules.required]"></v-text-field>
                                         </v-col>
                                         <v-col cols="12" sm="6" md="6">
-                                            <v-text-field v-model="formReg.lastName"  label="Last Name" maxlength="20" required></v-text-field>
+                                            <v-text-field v-model="formReg.lastName"  label="Last Name" maxlength="255" :counter="255" :rules="[rules.required]" required></v-text-field>
                                         </v-col>
                                         <v-col cols="12">
-                                            <v-text-field v-model="formReg.email" :rules="emailRules" label="E-mail" required></v-text-field>
+                                            <v-text-field v-model="formReg.email" :rules="emailRules" label="E-mail" :counter="255" required></v-text-field>
                                         </v-col>
                                         <v-col cols="12" sm="4" md="4">                                          
                                           <v-autocomplete
@@ -32,6 +32,7 @@
                                             required
                                             item-text="phone"
                                             return-object
+                                            :rules="[rules.required]"
                                           >
                                           </v-autocomplete>
                                         </v-col>
@@ -122,10 +123,10 @@ export default {
   },
   methods: {
       save (date) {
-        this.$refs.menu.save(dataBrith)
+        this.$refs.menu.save(formReg.dataBrith)
       },
     validate() {
-      if (this.$refs.loginForm.validate()) {
+      if (this.$refs.registerForm.validate()) {
         // submit form to server/API here...
         //console.log(this.formReg);
         this.sendData(this.formReg);

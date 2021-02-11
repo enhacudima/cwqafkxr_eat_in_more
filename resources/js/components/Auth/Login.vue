@@ -77,9 +77,6 @@ export default {
     this.form = this.$form.createForm(this, { name: 'normal_login' });
   },
   methods: {
-      save (date) {
-        this.$refs.menu.save(dataBrith)
-      },
     validate() {
       if (this.$refs.loginForm.validate()) {
         // submit form to server/API here...
