@@ -55,4 +55,14 @@ class Meals extends Model
     {
         return $this->hasMany('App\CvChefeV','exy_id','experience_id');
     }
+
+    public function mealTags()
+    {
+        return $this->hasMany('App\SyncTags','meal_id','id');
+    }
+
+    public function mealOptions()
+    {
+        return $this->hasMany('App\Options','meal_id','id');
+    }
 }

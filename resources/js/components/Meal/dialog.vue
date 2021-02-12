@@ -6,9 +6,25 @@
       hide-overlay
       transition="dialog-bottom-transition"
     >
-      <v-card>
+      <v-card>        
+        <v-toolbar
+          dark
+          background-color="indigo"
+          fixed-tabs
+        >
+          <v-spacer></v-spacer>
+          <v-toolbar-items>
+            <v-btn
+              dark
+              text
+              @click="showDialog = false"
+            >
+            <v-icon>mdi-close</v-icon>
+              Close
+            </v-btn>
+          </v-toolbar-items>
+        </v-toolbar>
         <v-card-title>
-          <span class="headline">Update Meal</span>
         </v-card-title>
         <v-card-text>
           <v-container>

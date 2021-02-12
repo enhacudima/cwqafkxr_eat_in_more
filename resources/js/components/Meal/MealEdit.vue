@@ -51,7 +51,7 @@
               <a-input
                 v-decorator="[
                   'name',
-                  { rules: [{ required: true, message: 'Please input meal name!' }] },
+                  { initialValue:this.thisMeal.name,rules: [{ required: true, message: 'Please input meal name!' }] },
                 ]"
                 placeholder="Name"
                 allow-clear
@@ -63,7 +63,7 @@
               <a-input
                 v-decorator="[
                   'alias',
-                  { rules: [{ required: true, message: 'Please input meal alias!' }] },
+                  { initialValue:this.thisMeal.alias,rules: [{ required: true, message: 'Please input meal alias!' }] },
                 ]"
                 placeholder="Alias"
                 allow-clear
@@ -77,7 +77,7 @@
                 :rows="2"
                 v-decorator="[
                   'details',
-                  { rules: [{ required: true, message: 'Please input meal details!' }] },
+                  { initialValue:this.thisMeal.details,rules: [{ required: true, message: 'Please input meal details!' }] },
                 ]" 
 
                 allow-clear
@@ -92,7 +92,7 @@
                 :filter-option="filterOption"
                 v-decorator="[
                   'cuisine',
-                  { rules: [{ required: true, message: 'Please input Cuisine!' }] },
+                  { initialValue:this.thisMeal.cuisine_id,rules: [{ required: true, message: 'Please input Cuisine!' }] },
                 ]"
                 placeholder="Select Cuisine"
               >
@@ -106,7 +106,7 @@
               <a-select
                 v-decorator="[
                   'experience',
-                  { rules: [{ required: true, message: 'Please input your experience!' }] },
+                  { initialValue:this.thisMeal.experience_id,rules: [{ required: true, message: 'Please input your experience!' }] },
                 ]"
                 placeholder="Select Experience"
               >
@@ -120,7 +120,7 @@
               <a-select
                 v-decorator="[
                   'commonTiming',
-                  { rules: [{ required: true, message: 'Please input Common Timing!' }] },
+                  { initialValue:this.thisMeal.common_timing_id,rules: [{ required: true, message: 'Please input Common Timing!' }] },
                 ]"
                 placeholder="Select Common Timing"
               >
@@ -131,14 +131,14 @@
             </a-form-item>
 
 
-            <a-form-item label="Time (minutes)"  :validate-status="timeError() ? 'error' : ''" :help="timeError() || ''">
+            <a-form-item label="Durraction (minutes)"  :validate-status="timeError() ? 'error' : ''" :help="timeError() || ''">
               
               <a-input-number  :min="1" :max="1000" style="marginLeft: 16px" 
 
               v-decorator="[
               'time',
                   {
-                    initialValue:30, rules: [{required: true, message: 'Please input a Time!' }],
+                    initialValue:this.thisMeal.time, rules: [{required: true, message: 'Please input a Time!' }],
                   },
                 ]"
 
@@ -150,7 +150,7 @@
 
             <a-row>
               <a-col :span="12">
-                <a-slider v-model="inputValue1" :min="1" :max="50"
+                <a-slider v-model="this.thisMeal.people" :min="1" :max="50"
 
                 />
               </a-col>
@@ -160,7 +160,7 @@
               v-decorator="[
               'people',
                   {
-                    initialValue:inputValue1, rules: [{required: true, message: 'Please input a number of people!' }],
+                    initialValue:this.thisMeal.people, rules: [{required: true, message: 'Please input a number of people!' }],
                   },
                 ]"
 
@@ -172,14 +172,14 @@
 
 
 
-            <a-form-item label="Ingredients" :validate-status="ingredientsError() ? 'error' : ''" :help="ingredientsError() || ''" >
+            <a-form-item label="Allergies" :validate-status="ingredientsError() ? 'error' : ''" :help="ingredientsError() || ''" >
               <template>
-                <a-select mode="multiple" style="width: 100%" placeholder="Select ingredients and Allergies" @change="handleingreChange"
+                <a-select mode="multiple" style="width: 100%" placeholder="Select Allergies" @change="handleingreChange"
 
                   v-decorator="[
                   'ingredients',
                       {
-                        rules: [{ required: true, message: 'Please input ingredients!' }],
+                        initialValue:inIngredients,rules: [{ required: true, message: 'Please input ingredients!' }],
                       },
                     ]"
                   >
@@ -199,7 +199,7 @@
                   v-decorator="[
                   'options',
                       {
-                        rules: [{ required: false, message: 'Please input options!' }],
+                          initialValue:iniOpttions,rules: [{ required: false, message: 'Please input options!' }],
                       },
                     ]"
                     >
@@ -277,6 +277,8 @@ export default {
       ingredients:null,
       thisMeal:[],
       options:[],
+      iniOpttions:[],
+      inIngredients:[],
     };
   },
     watch: {
@@ -285,7 +287,7 @@ export default {
         //console.log('watch', val);
         axios
             .get('getThisMeal/'+this.codMealId)
-            .then(response => (this.thisMeal = response.data,this.imageUrl = 'storage/'+response.data.meal_file.path+response.data.meal_file.name));
+            .then(response => (this.handleIngredients(response.data.meal_allergies),this.handletags(response.data.meal_tags),this.handleOptions(response.data.meal_options),this.thisMeal = response.data,this.imageUrl = 'storage/'+response.data.meal_file.path+response.data.meal_file.name));
       },
       deep: true,
       immediate: true
@@ -300,14 +302,41 @@ export default {
       );
     },
     handleingreChange(value) {
-      console.log(`selected ${value}`);
+      //console.log(`selected ${value}`);
     },
+    
+    handleIngredients(list){
+      var ingredients=[];
+        list.map (function(value,key) {
+          ingredients.push(value.ingredients_id);
+        });
+
+      this.inIngredients = ingredients;
+    },
+    handletags(list){
+      var tags=[];
+        list.map (function(value,key) {
+          tags.push(value.tag_id);
+        });
+
+      this.selectedTags = tags;
+    },
+    
+    handleOptions(list){
+      var options=[];
+        list.map (function(value,key) {
+          options.push(value.name);
+        });
+
+      this.iniOpttions = options;
+    },
+
     handletagChange(tag, checked) {
       const { selectedTags } = this;
       const nextSelectedTags = checked
         ? [...selectedTags, tag]
         : selectedTags.filter(t => t !== tag);
-      console.log('You are interested in: ', nextSelectedTags);
+      //console.log('You are interested in: ', nextSelectedTags);
       this.selectedTags = nextSelectedTags;
     },
     handleChange(info) {
@@ -397,7 +426,7 @@ export default {
     },
   sendData(data) {
       axios
-      .post("create/meal", { data: { mealData: data, tags:this.selectedTags, fileData:this.fileInfo} })
+      .post("update/meal", { data: { mealData: data, tags:this.selectedTags, fileData:this.fileInfo} })
       .then(response => {
           this.allerros = [];
           this.sucess = true;
