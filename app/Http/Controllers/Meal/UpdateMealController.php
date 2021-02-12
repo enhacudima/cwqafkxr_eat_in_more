@@ -23,7 +23,7 @@ class UpdateMealController extends Controller
         $this->middleware('auth:api');
     }
     
-    public function newMeal(Request $request)
+    public function updateMeal(Request $request,$id)
     { 
 
     	$mealData=$request->data['mealData'];
@@ -34,13 +34,14 @@ class UpdateMealController extends Controller
         }
         $mealData['tags'] = $tags; 
         $mealData['file_id'] = $file_id;
+        $mealData['id'] =$id;
 
         $myRequest = new Request();
         $myRequest->setMethod('POST');
         $myRequest->request->add($mealData);
 
         $validator = Validator::make($myRequest->all(), [
-            //'name' => 'required|string|max:50|unique:meals,name',
+            'name' => 'required|string|max:50|unique:meals,name,'.$id.',id',
             'alias' => 'required|string|max:255',
             'details' => 'required|string|max:255',
             'commonTiming'=>'required',
@@ -48,10 +49,15 @@ class UpdateMealController extends Controller
             'people' => 'required|numeric', 
             'experience' => 'required|numeric|exists:experiences,id',
             'tags' => 'required', 
-            'file_id' => 'required|numeric',
+            //'file_id' => 'required|numeric',
+            'mealType' => 'required|numeric',
+            'id' =>'required|numeric|exists:meals,id',
         ],
         [
-     	    'file_id.required'=>'Please add a picture of meal.'
+     	    'file_id.required'=>'Please add a picture of meal.',
+            'id.required'=>"This meal don't exist.",
+            'id.numeric'=>"This meal don't exist.",
+            'id.required'=>"This meal don't exist.",
         ]
     	);
     if ($validator->fails()) { 
@@ -60,9 +66,9 @@ class UpdateMealController extends Controller
 
     $input = $myRequest->all(); 
             $input['user_id'] = Auth::user()->id; 
-            $input['key'] = md5(time()).Auth::user()->id;
 
-            $meal=Meals::Create(
+            $meal=Meals::where('id',$id)
+                ->update(
             	[
                     'user_id'=> $input['user_id'],
                     'name'=> $input['name'],
@@ -72,34 +78,35 @@ class UpdateMealController extends Controller
             		'time' => $input['time'],
             		'people' => $input['people'],
             		'experience_id' => $input['experience'],
-            		'key' => $input['key'],
             		'cuisine_id' =>$input['cuisine'],
+                    'type_meal_id'=>$input['mealType'],
 
             	]
             );
 
-                    
-            $file = new FilesController; 
-            $file_id = $myRequest['file_id'];      
-            $file->useFile($file_id,$meal->id, 'meals', 0);
-
-           foreach($input['ingredients'] as $key => $ingredient){
+            if($file_id){        
+                $file = new FilesController; 
+                $file_id = $myRequest['file_id'];      
+                $file->useFile($file_id,$id, 'meals', 0);
+            }
+            SyncMealAllergies::where('meal_id',$id)->delete();
+            foreach($input['ingredients'] as $key => $ingredient){
                //add ingredients to meal
                SyncMealAllergies::create([
-                   'meal_id' => $meal->id ,
+                   'meal_id' => $id ,
                    'ingredients_id' => $ingredient,
                ]);
 
-           }
+            }
 
-           
+            Options::where('meal_id',$id)->delete();
            foreach($input['options'] as $key => $option){
             //add options to meal
             $optiKey = md5(time()).Auth::user()->id;
             Options::updateOrInsert(
                 [
                     'name' => $option,
-                    'meal_id' =>$meal->id,
+                    'meal_id' =>$id,
                 ],
                 [
                     'user_id'=> $input['user_id'],
@@ -109,13 +116,13 @@ class UpdateMealController extends Controller
 
             }
 
-
+            SyncTags::where('meal_id',$id)->delete();
            if(isset($tags)){
                $tagKey = md5(time()).Auth::user()->id;
                foreach($tags as $key => $tag){
                     SyncTags::create([
                         'tag_id' => $tag,
-                        'meal_id' => $meal->id,
+                        'meal_id' => $id,
                         'user_id'=> $input['user_id'],
                         'key' => $tagKey
                     ]);
@@ -123,7 +130,7 @@ class UpdateMealController extends Controller
            }
            
 
-    return response()->json(['success'=>'Added new records.'], 200); 
+    return response()->json(['success'=>'updated records.'], 200); 
     }
 
 

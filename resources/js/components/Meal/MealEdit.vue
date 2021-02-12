@@ -116,6 +116,20 @@
               </a-select>
             </a-form-item>
 
+            <a-form-item label="Type" :validate-status="mealTypeError() ? 'error' : ''" :help="mealTypeError() || ''">
+              <a-select
+                v-decorator="[
+                  'mealType',
+                  { initialValue:this.thisMeal.type_meal_id,rules: [{ required: true, message: 'Please input Meal type!' }] },
+                ]"
+                placeholder="Select type"
+              >
+                <a-select-option v-for="mealType in mealTypes"  v-bind:value="mealType.id" :key="mealType.id" >
+                  {{ mealType.meal_type }}
+                </a-select-option>
+              </a-select>
+            </a-form-item>
+
             <a-form-item label="Common Timing" :validate-status="commonTimingError() ? 'error' : ''" :help="commonTimingError() || ''">
               <a-select
                 v-decorator="[
@@ -149,18 +163,13 @@
             <a-form-item label="People" :validate-status="peopleError() ? 'error' : ''" :help="peopleError() || ''" >
 
             <a-row>
-              <a-col :span="12">
-                <a-slider v-model="this.thisMeal.people" :min="1" :max="50"
-
-                />
-              </a-col>
               <a-col :span="4" >
                 <a-input-number  :min="1" :max="1000" style="marginLeft: 16px" 
 
               v-decorator="[
               'people',
                   {
-                    initialValue:this.thisMeal.people, rules: [{required: true, message: 'Please input a number of people!' }],
+                    initialValue:inputValue1, rules: [{required: true, message: 'Please input a number of people!' }],
                   },
                 ]"
 
@@ -225,7 +234,7 @@
             <a-form-item >
               <a-col :xs="{ span: 24, offset: 0}" :lg="{ span: 20, offset: 10}"> 
                   <a-button icon="check-circle"  type="primary" html-type="submit" :disabled="hasErrors(form.getFieldsError())" >
-                      Save Meal
+                      Update
                   </a-button >
               </a-col>
             </a-form-item>
@@ -279,6 +288,7 @@ export default {
       options:[],
       iniOpttions:[],
       inIngredients:[],
+      mealTypes:[],
     };
   },
     watch: {
@@ -287,7 +297,7 @@ export default {
         //console.log('watch', val);
         axios
             .get('getThisMeal/'+this.codMealId)
-            .then(response => (this.handleIngredients(response.data.meal_allergies),this.handletags(response.data.meal_tags),this.handleOptions(response.data.meal_options),this.thisMeal = response.data,this.imageUrl = 'storage/'+response.data.meal_file.path+response.data.meal_file.name));
+            .then(response => (this.inputValue1=response.data.people,this.handleIngredients(response.data.meal_allergies),this.handletags(response.data.meal_tags),this.handleOptions(response.data.meal_options),this.thisMeal = response.data,this.imageUrl = 'storage/'+response.data.meal_file.path+response.data.meal_file.name));
       },
       deep: true,
       immediate: true
@@ -403,6 +413,10 @@ export default {
       const { getFieldError, isFieldTouched } = this.form;
       return isFieldTouched('people') && getFieldError('people');
     },
+    mealTypeError() {
+      const { getFieldError, isFieldTouched } = this.form;
+      return isFieldTouched('mealType') && getFieldError('mealType');
+    },
     commonTimingError() {
       const { getFieldError, isFieldTouched } = this.form;
       return isFieldTouched('commonTiming') && getFieldError('commonTiming');
@@ -426,7 +440,7 @@ export default {
     },
   sendData(data) {
       axios
-      .post("update/meal", { data: { mealData: data, tags:this.selectedTags, fileData:this.fileInfo} })
+      .post("update/meal/"+this.codMealId, { data: { mealData: data, tags:this.selectedTags, fileData:this.fileInfo} })
       .then(response => {
           this.allerros = [];
           this.sucess = true;
@@ -501,6 +515,9 @@ export default {
   axios
       .get('getOptions')
       .then(response => (this.options = response.data));
+  axios
+      .get('getMealType')
+      .then(response => (this.mealTypes = response.data));
     //console.log(this.codMealId);
   },
 };

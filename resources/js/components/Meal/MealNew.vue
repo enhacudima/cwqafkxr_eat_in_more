@@ -94,6 +94,20 @@
       </a-select>
     </a-form-item>
 
+    <a-form-item label="Type" :validate-status="mealTypeError() ? 'error' : ''" :help="mealTypeError() || ''">
+      <a-select
+        v-decorator="[
+          'mealType',
+          { rules: [{ required: true, message: 'Please input Meal type!' }] },
+        ]"
+        placeholder="Select type"
+      >
+        <a-select-option v-for="mealType in mealTypes"  v-bind:value="mealType.id" :key="mealType.id" >
+          {{ mealType.meal_type }}
+        </a-select-option>
+      </a-select>
+    </a-form-item>
+
     <a-form-item label="Common Timing" :validate-status="commonTimingError() ? 'error' : ''" :help="commonTimingError() || ''">
       <a-select
         v-decorator="[
@@ -107,6 +121,7 @@
         </a-select-option>
       </a-select>
     </a-form-item>
+
 
 
     <a-form-item label="Durraction (minutes)"  :validate-status="timeError() ? 'error' : ''" :help="timeError() || ''">
@@ -128,7 +143,7 @@
 
     <a-row>
       <a-col :span="12">
-        <a-slider v-model="inputValue1" :min="1" :max="50"
+        <a-slider v-model="inputValue1" :min="1" :max="1000"
 
          />
       </a-col>
@@ -243,6 +258,7 @@ export default {
       cuisines:null,
       ingredients:null,
       options:[],
+      mealTypes:[],
     };
   },
   mounted() {
@@ -258,17 +274,17 @@ export default {
       );
     },
     handleingreChange(value) {
-      console.log(`selected ${value}`);
+      //console.log(`selected ${value}`);
     },
     handleOptChange(value) {
-      console.log(`selected ${value}`);
+      //console.log(`selected ${value}`);
     },
     handletagChange(tag, checked) {
       const { selectedTags } = this;
       const nextSelectedTags = checked
         ? [...selectedTags, tag]
         : selectedTags.filter(t => t !== tag);
-      console.log('You are interested in: ', nextSelectedTags);
+      //console.log('You are interested in: ', nextSelectedTags);
       this.selectedTags = nextSelectedTags;
     },
     handleChange(info) {
@@ -328,6 +344,10 @@ export default {
       const { getFieldError, isFieldTouched } = this.form;
       return isFieldTouched('people') && getFieldError('people');
     },
+    mealTypeError() {
+      const { getFieldError, isFieldTouched } = this.form;
+      return isFieldTouched('mealType') && getFieldError('mealType');
+    },
     commonTimingError() {
       const { getFieldError, isFieldTouched } = this.form;
       return isFieldTouched('commonTiming') && getFieldError('commonTiming');
@@ -348,7 +368,7 @@ export default {
       e.preventDefault();
       this.form.validateFields((err, values) => {
         if (!err) {
-          console.log('Received values of form: ', values);
+          //console.log('Received values of form: ', values);
           this.sendData(values);
         }
       });
@@ -419,10 +439,13 @@ export default {
 
   axios
       .get('getCVData/'+this.userID)
-      .then(response => (this.chefeCV = response.data));
+      .then(response => (this.chefeCV = response.data));  
   axios
       .get('getOptions')
       .then(response => (this.options = response.data));
+  axios
+      .get('getMealType')
+      .then(response => (this.mealTypes = response.data));
   },
 };
 </script>

@@ -83,9 +83,10 @@ Route::group(['namespace' => 'Meal','middleware' => []], function() {
 	Route::get('getPagmMals','GetMealController@getPagmMals');
 	Route::get('getPagmMalsSearch/{search}','GetMealController@searchMeals');
 	Route::post('create/meal','CreateMealController@newMeal');
-	Route::post('upadate/meal','UpadteMealController@updateMeal');
+	Route::post('update/meal/{id}','UpdateMealController@updateMeal');
 	Route::get('getThisMeal/{idMeal}','GetMealController@getThisMeal');
 	Route::get('getThisMealPrices/{idMeal}','GetMealController@getThisMealPrices');
+	Route::get('getMealType','GetMealController@getMealType');
 
 });
 

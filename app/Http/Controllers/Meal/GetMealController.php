@@ -12,6 +12,7 @@ use App\Http\Controllers\Helpers\RemoveRelectionController as RemoveRelections;
 use App\Options;
 use App\MealPrices;
 use Auth;
+use App\MealType;
 
 class GetMealController extends Controller
 {
@@ -68,7 +69,7 @@ class GetMealController extends Controller
         
     public function getPagmMals()
     {
-    	$data=Meals::with('mealUser.userType','mealAllergies.allergiesSync','mealAllergies.allergiesIngredients','mealtiming','mealPrices','mealPrices.priceCurrency','mealType','mealFiles','mealFile','mealChefs')->paginate(7);
+    	$data=Meals::with('mealUser.userType','mealAllergies.allergiesSync','mealAllergies.allergiesIngredients','mealtiming','mealPrices','mealPrices.priceCurrency','mealType','mealFiles','mealFile','mealChefs')->orderby('id','desc')->paginate(9);
        
         return response()->json($data, 200); 
     }
@@ -92,6 +93,12 @@ class GetMealController extends Controller
     
     public function getThisMealPrices($id){
         $data=MealPrices::where('meal_id',$id)->with('users','priceCurrency')->get();
+        return response()->json($data, 200); 
+    }
+
+        
+    public function getMealType(){
+        $data=MealType::get();
         return response()->json($data, 200); 
     }
 }

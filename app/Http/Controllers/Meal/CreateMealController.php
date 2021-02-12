@@ -40,7 +40,7 @@ class CreateMealController extends Controller
         $myRequest->request->add($mealData);
 
         $validator = Validator::make($myRequest->all(), [
-            //'name' => 'required|string|max:50|unique:meals,name',
+            'name' => 'required|string|max:50|unique:meals,name',
             'alias' => 'required|string|max:255',
             'details' => 'required|string|max:255',
             'commonTiming'=>'required',
@@ -49,6 +49,7 @@ class CreateMealController extends Controller
             'experience' => 'required|numeric|exists:experiences,id',
             'tags' => 'required', 
             'file_id' => 'required|numeric',
+            'mealType' => 'required|numeric',
         ],
         [
      	    'file_id.required'=>'Please add a picture of meal.'
@@ -74,6 +75,7 @@ class CreateMealController extends Controller
             		'experience_id' => $input['experience'],
             		'key' => $input['key'],
             		'cuisine_id' =>$input['cuisine'],
+                    'type_meal_id'=>$input['mealType'],
 
             	]
             );

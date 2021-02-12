@@ -1,6 +1,7 @@
 <template>
 <div>
     <v-row >
+
         <v-spacer></v-spacer>
         <v-col cols="12">
             <v-text-field
@@ -38,54 +39,6 @@
           </v-col>
       </v-row>  
       <v-row dense> 
-          <v-col :cols="columuns" sm="3" xsm="12" xs="12" v-if="pagination.current === 1 && isSearch">
-            <v-card
-                class="pa-2"
-            >   
-                <router-link to="/mealNew">
-                <v-img
-                    aspect-ratio="1"
-                    class="white--text align-end"
-                    gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
-                    height="200px"
-                >
-                <v-card-title v-text="'New'"></v-card-title>
-                    <template v-slot:placeholder>
-                    <v-row
-                        class="fill-height ma-0"
-                        align="center"
-                        justify="center"
-                    >
-                    <v-icon
-                    color="white"
-                    dense
-                    x-large
-                    >mdi-plus</v-icon>
-                    </v-row>
-                    </template>
-                </v-img>
-                </router-link>
-
-                <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn
-                        icon
-                        @click="showNew = !showNew"
-                    >
-                        <v-icon>{{ showNew ? 'mdi-chevron-up' : 'mdi-chevron-down' }}</v-icon>
-                    </v-btn>
-                </v-card-actions>
-                <v-expand-transition>
-                <div v-show="showNew">
-                    <v-divider></v-divider>
-                    <v-card-text>
-                    Add new meal.
-                    </v-card-text>
-                </div>
-                </v-expand-transition>
-            </v-card>
-
-          </v-col>
         <v-col
             v-for="(meal, index) in meals"
             :key="index"
@@ -167,7 +120,7 @@ export default {
         return {
             showDialog: false,
             mealIDShow: null,
-            columuns:3,
+            columuns:4,
             showNew:false,
             isSearch:true,
             isLoadingSearch: false,
