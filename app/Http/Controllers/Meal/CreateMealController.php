@@ -126,4 +126,5 @@ class CreateMealController extends Controller
     return response()->json(['success'=>'Added new records.'], 200); 
     }
 
+
 }

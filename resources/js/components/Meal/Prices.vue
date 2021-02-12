@@ -13,9 +13,6 @@
             Create by
           </th>
           <th class="text-left">
-            People
-          </th>
-          <th class="text-left">
             Amount
           </th>
           <th class="text-left">
@@ -37,9 +34,9 @@
           <td>{{ item.price_currency.entity }}</td>
           <td>{{ item.price_currency.currency }}</td>
           <td>{{ item.users.name }} {{ item.users.lastName }}</td>
-          <td>{{ item.people}}</td>
           <td>{{ item.amount}}</td>
           <td>{{ item.created_at }}</td>
+          <td>{{ item.updated_at }}</td>
           <td>{{ item.updated_at }}</td>
         </tr>
       </tbody>
@@ -49,17 +46,27 @@
 <script>
   export default {
     props: {
-        codMealId: Number
+        codMealId: null
     },
     data () {
       return {
         prices: [],
       }
     },
+    watch: {
+    codMealId: {
+      handler (val) {
+        //console.log('watch', val);
+        axios
+            .get('getThisMealPrices/'+this.codMealId)
+            .then(response => (this.prices = response.data));
+      },
+      deep: true,
+      immediate: true
+    },
+
+    },
     mounted() {
-    axios
-        .get('getThisMealPrices/'+this.codMealId)
-        .then(response => (this.prices = response.data));
       }
   }
 </script>

@@ -109,7 +109,7 @@
     </a-form-item>
 
 
-    <a-form-item label="Time (minutes)"  :validate-status="timeError() ? 'error' : ''" :help="timeError() || ''">
+    <a-form-item label="Durraction (minutes)"  :validate-status="timeError() ? 'error' : ''" :help="timeError() || ''">
       
       <a-input-number  :min="1" :max="1000" style="marginLeft: 16px" 
 
@@ -150,7 +150,7 @@
 
 
 
-    <a-form-item label="Ingredients" :validate-status="ingredientsError() ? 'error' : ''" :help="ingredientsError() || ''" >
+    <a-form-item label="Allergies" :validate-status="ingredientsError() ? 'error' : ''" :help="ingredientsError() || ''" >
       <template>
         <a-select mode="multiple" style="width: 100%" placeholder="Select ingredients and Allergies" @change="handleingreChange"
 

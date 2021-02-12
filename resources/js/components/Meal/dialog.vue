@@ -2,8 +2,9 @@
   <v-row justify="center">
     <v-dialog
       v-model="showDialog"
-      persistent
-      max-width="600px"
+      fullscreen
+      hide-overlay
+      transition="dialog-bottom-transition"
     >
       <v-card>
         <v-card-title>
@@ -59,7 +60,14 @@
         },
     },
     mounted() {
+      //console.log(this.codMeal)
         
+    },
+    watch: {
+    codMeal (val, oldVal) {
+      //console.log(val)
     }
+    }
+    
   }
 </script>

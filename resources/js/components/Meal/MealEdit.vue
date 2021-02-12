@@ -251,7 +251,8 @@ function hasErrors(fieldsError) {
 export default {
   components: { mealPrices},
     props: {
-        codMealId: Number
+        codMealId: null,
+        
     },
   data() {
     return {
@@ -278,12 +279,20 @@ export default {
       options:[],
     };
   },
-  mounted() {
-    this.$nextTick(() => {
-      // To disabled submit button at the beginning.
-      this.form.validateFields();
-    });
-  },
+    watch: {
+    codMealId: {
+      handler (val) {
+        //console.log('watch', val);
+        axios
+            .get('getThisMeal/'+this.codMealId)
+            .then(response => (this.thisMeal = response.data,this.imageUrl = 'storage/'+response.data.meal_file.path+response.data.meal_file.name));
+      },
+      deep: true,
+      immediate: true
+    },
+
+    },
+    
   methods: {
     filterOption(input, option) {
       return (
@@ -428,9 +437,16 @@ export default {
         });
     },
   },
+
   mounted() {
     const userData = JSON.parse(this.userInfo);
     this.userID = userData.logged_in_user.id;
+    
+    this.$nextTick(() => {
+      // To disabled submit button at the beginning.
+      this.form.validateFields();
+    });
+
   axios
       .get('getExperiences')
       .then(response => (this.experiences = response.data));
@@ -456,10 +472,7 @@ export default {
   axios
       .get('getOptions')
       .then(response => (this.options = response.data));
-  axios
-      .get('getThisMeal/'+this.codMealId)
-      .then(response => (this.thisMeal = response.data,this.imageUrl = 'storage/'+response.data.meal_file.path+response.data.meal_file.name));
-    console.log(this.codMealId);
+    //console.log(this.codMealId);
   },
 };
 </script>
