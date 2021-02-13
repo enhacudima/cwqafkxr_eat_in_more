@@ -77,6 +77,7 @@ class GetMealController extends Controller
     {
         $data=Meals::limit(20)
         ->where('name','like',"%".$search."%")
+        ->orwhere('alias','like',"%".$search."%")
         ->with('mealUser.userType','mealAllergies.allergiesSync','mealAllergies.allergiesIngredients','mealtiming','mealPrices','mealPrices.priceCurrency','mealType','mealFiles','mealFile','mealChefs')
         ->get();
     	return response()->json($data, 200); 

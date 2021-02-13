@@ -55,12 +55,6 @@
               rounded="lg"
               class="spacing-playground pa-2 "
             >
-            
-            <v-subheader
-            >
-            <strong>MEALS</strong> 
-            </v-subheader>
-            <v-divider></v-divider>
             <div class="pt-6">
               <slot/>
             </div>
