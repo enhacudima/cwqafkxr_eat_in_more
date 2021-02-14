@@ -13,4 +13,11 @@ class CurrencyController extends Controller
     	$data=Currency::all();
     	return response()->json($data, 200); 
     }
+    
+
+    public function getCurrencyArr ()
+    {
+        $data=Currency::select('currency')->orderby('currency','asc')->get()->toArray();
+    	return response()->json($data, 200); 
+    }
 }

@@ -31,6 +31,7 @@ Route::get('getExperiences','ExperiencesController@getExperiences');
 Route::get('getTimeType','TimeTypeController@getTimeType');
 Route::get('getTimeCurrency','CurrencyController@getCurrency');
 Route::get('getCommonTiming','CommonTimingController@getCommonTiming');
+Route::get('getCurrencyArr','CurrencyController@getCurrencyArr');
 
 Route::group(['namespace' => 'Auth'], function() {
 	Route::post('register', 'RegisterController@register');
