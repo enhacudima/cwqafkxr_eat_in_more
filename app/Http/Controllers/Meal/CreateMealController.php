@@ -14,6 +14,7 @@ use Carbon\Carbon;
 use App\SyncMealAllergies;
 use App\SyncTags;
 use App\Options;
+use App\MealPrices;
 
 class CreateMealController extends Controller
 {
@@ -126,6 +127,50 @@ class CreateMealController extends Controller
            
 
     return response()->json(['success'=>'Added new records.'], 200); 
+    }
+
+    public function addprices(Request $request,$idMeal)
+    {
+        $priceData=$request->data['priceData'];
+        $priceData['currency'] = $priceData['currency']['id'];
+        
+        $myRequest = new Request();
+        $myRequest->setMethod('POST');
+        $myRequest->request->add($priceData);
+        $validator = Validator::make($myRequest->all(), [
+            'price' => 'required|numeric',
+            'currency' => 'required|numeric|exists:currency,id',
+        ],
+        [
+     	    'currency.numeric'=>'please select a valid currency.',
+            'currency.exists'=>'please select a valid currency.'
+        ]
+    	);
+        if ($validator->fails()) { 
+            return response()->json(['errors'=>$validator->errors()->all()], 422);            
+        } 
+        $oldMel=MealPrices::where('currency_id',$myRequest->currency)->where('meal_id',$idMeal)->where('amount',$myRequest->price)->first();
+        if($oldMel){
+            return response()->json(['errors'=>['You cannot override a same price']], 422); 
+        }
+        MealPrices::where('currency_id',$myRequest->currency)->where('meal_id',$idMeal)
+                ->update([
+                    'status'=>0
+                ]);
+                
+        MealPrices::create([
+            'currency_id' => $myRequest->currency,
+            'meal_id' => $idMeal,
+            'amount'=> $myRequest->price,
+            'key'=> md5(time()).Auth::user()->id,
+            'user_id'=>Auth::user()->id,
+        ]);
+
+
+
+      
+        
+        return response()->json(['success'=>'Added new records.'], 200); 
     }
 
 

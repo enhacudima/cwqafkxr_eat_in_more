@@ -12,7 +12,7 @@ class MealPrices extends Model
 
     public $primaryKey = 'id';
 
-    public $timestamps=false;
+    public $timestamps=true;
 
         public function users()
     {

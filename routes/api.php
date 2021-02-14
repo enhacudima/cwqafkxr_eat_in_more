@@ -33,6 +33,7 @@ Route::get('getTimeCurrency','CurrencyController@getCurrency');
 Route::get('getCommonTiming','CommonTimingController@getCommonTiming');
 Route::get('getCurrencyArr','CurrencyController@getCurrencyArr');
 
+
 Route::group(['namespace' => 'Auth'], function() {
 	Route::post('register', 'RegisterController@register');
 	Route::get('email/verify/{id}', 'VerificationController@verify')->name('verification.verify'); // Make sure to keep this as your route name
@@ -88,6 +89,7 @@ Route::group(['namespace' => 'Meal','middleware' => []], function() {
 	Route::get('getThisMeal/{idMeal}','GetMealController@getThisMeal');
 	Route::get('getThisMealPrices/{idMeal}','GetMealController@getThisMealPrices');
 	Route::get('getMealType','GetMealController@getMealType');
+	Route::post('meal/price/new/{idMeal}','CreateMealController@addprices');
 
 });
 

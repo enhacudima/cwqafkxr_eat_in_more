@@ -78,10 +78,11 @@
               <v-autocomplete
                 v-model="formPrice.currency"
                 :items="currencys"
-                label="Currency"
+                label="Country"
                 required
                 :rules="[rules.required]"
-                item-text="currency"
+                item-text="entity"
+                item-value="id"
                 return-object
               >
               </v-autocomplete>
@@ -156,9 +157,10 @@
     codMealId: {
       handler (val) {
         //console.log('watch', val);
-        axios
+       /* axios
             .get('getThisMealPrices/'+this.codMealId)
-            .then(response => (this.prices = response.data));
+            .then(response => (this.prices = response.data));*/
+            this.getPrices();
       },
       deep: true,
       immediate: true
@@ -166,6 +168,11 @@
 
     },
     methods:{
+    getPrices(){
+      axios
+          .get('getThisMealPrices/'+this.codMealId)
+          .then(response => (this.prices = response.data));
+    },
     validate() {
       if (this.$refs.priceForm.validate()) {
         // submit form to server/API here...
@@ -182,8 +189,9 @@
     },  
     sendData(data) {
       axios
-      .post("meal/price/new", { data: { priceData: data} })
+      .post("meal/price/new/"+this.codMealId, { data: { priceData: data} })
       .then(response => {
+          this.getPrices();
           this.allerros = [];
           this.sucess = true;
           if (response.data.errors) {
@@ -193,7 +201,7 @@
           } else {
               
               this.openNotification('success', 'Save', 'You have been store all data successfully');
-              this.$router.push({ name: 'register/result' });
+              
           }
       })
       .catch((error) => {
