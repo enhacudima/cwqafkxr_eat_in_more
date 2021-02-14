@@ -41,7 +41,11 @@
         <v-col
             v-for="(meal, index) in meals"
             :key="index"
-            :cols="columuns"
+            xs="12"
+            sm="4"
+            md="4"
+            lg="4"
+            xl="4"
         >
             <v-card
                 class="pa-2"            
