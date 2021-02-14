@@ -19,6 +19,7 @@
       dark
       small
       color="green"
+      @click="priceStatus(true)"
     >
       <v-icon dark>
         mdi-check
@@ -30,6 +31,7 @@
       dark
       small
       color="pink"
+       @click="priceStatus(false)"
     >
       <v-icon dark>
         mdi-close
@@ -41,11 +43,20 @@
       <v-data-table
       dense
       class="elevation-1"
+        v-model="selected"
         :headers="headers"
         :items="prices"
-        item-key="name"
+        item-key="id"
         show-select
+        :single-select="singleSelect"
       >
+      <template v-slot:top class="pl-2">
+        <v-switch
+          v-model="singleSelect"
+          label="Single select"
+          class="pa-3"
+        ></v-switch>
+      </template>
       </v-data-table>
     </v-row>
 
@@ -136,14 +147,16 @@
         currencys:[],
         dialog:false,
         selected: [],
+        singleSelect: false,
         prices: [],
         headers: [
           {
-            text: 'Country',
+            text: 'Status',
             align: 'start',
             //sortable: false,
-            value: 'price_currency.entity',
+            value: 'price_status.name',
           },
+          { text: 'Country', value: 'price_currency.entity' },
           { text: 'Currency', value: 'price_currency.currency' },
           { text: 'Creator Name', value: 'users.name' },
           { text: 'Creator Last Name', value: 'users.lastName' },
@@ -201,6 +214,37 @@
           } else {
               
               this.openNotification('success', 'Save', 'You have been store all data successfully');
+              
+          }
+      })
+      .catch((error) => {
+        this.success = false;
+        var errors =null;
+        var status=error.response.status;
+        //console.log(status);
+            if (status == 422){
+            errors=error.response.data.errors;
+            //console.log(errors);
+            errors.forEach(error => { this.openNotification('error', 'Error on Save', error);});
+          }else{
+            this.openNotification('error','Error on Save',error);
+          }
+      });
+  },
+    priceStatus(status) {
+      axios
+      .post("meal/price/status/"+status, { data: { priceStatusData: this.selected} })
+      .then(response => {
+          this.getPrices();
+          this.allerros = [];
+          this.sucess = true;
+          if (response.data.errors) {
+              //console.log(response.data.errors);
+              response.data.errors.forEach(error => { this.openNotification('error', 'Error on Save', error);});
+              
+          } else {
+              
+              this.openNotification('success', 'Save', 'You have been updated all data successfully');
               
           }
       })

@@ -157,7 +157,7 @@ class CreateMealController extends Controller
                 ->update([
                     'status'=>0
                 ]);
-                
+
         MealPrices::create([
             'currency_id' => $myRequest->currency,
             'meal_id' => $idMeal,
@@ -171,6 +171,33 @@ class CreateMealController extends Controller
       
         
         return response()->json(['success'=>'Added new records.'], 200); 
+    }
+
+    public function pricesStatus(Request $request, $status)
+    {
+        $priceData=$request->data['priceStatusData'];
+        if($status=="false"){
+            foreach($priceData as $key => $price){
+                MealPrices::where('key',$price['key'])
+                ->update([
+                    'status'=>0
+                ]);
+            }
+
+        }else{
+            foreach($priceData as $key => $price){
+                MealPrices::where('currency_id',$price['currency_id'])->where('meal_id',$price['meal_id'])
+                ->update([
+                    'status'=>0
+                ]);
+
+                MealPrices::where('key',$price['key'])
+                ->update([
+                    'status'=>1
+                ]);
+            }
+        }
+        return response()->json(['success'=>'Added new records.'], 200);
     }
 
 

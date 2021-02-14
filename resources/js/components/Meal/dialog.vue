@@ -33,13 +33,6 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn
-            color="blue darken-1"
-            text
-            @click="showDialog = false"
-          >
-            Close
-          </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>

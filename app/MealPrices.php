@@ -30,5 +30,9 @@ class MealPrices extends Model
     {
         return $this->belongsTo('App\Meals','meal_id','id');
     }
+        public function priceStatus()
+    {
+        return $this->belongsTo('App\StatusName','status','code');
+    }
 
 }

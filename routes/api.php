@@ -90,6 +90,7 @@ Route::group(['namespace' => 'Meal','middleware' => []], function() {
 	Route::get('getThisMealPrices/{idMeal}','GetMealController@getThisMealPrices');
 	Route::get('getMealType','GetMealController@getMealType');
 	Route::post('meal/price/new/{idMeal}','CreateMealController@addprices');
+	Route::post('meal/price/status/{status}','CreateMealController@pricesStatus');
 
 });
 

@@ -93,7 +93,7 @@ class GetMealController extends Controller
 
     
     public function getThisMealPrices($id){
-        $data=MealPrices::where('meal_id',$id)->with('users','priceCurrency')->get();
+        $data=MealPrices::where('meal_id',$id)->with('users','priceCurrency','priceStatus')->get();
         return response()->json($data, 200); 
     }
 
