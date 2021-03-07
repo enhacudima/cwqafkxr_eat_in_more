@@ -41,6 +41,7 @@
               rounded
               text
               color="error"
+              @click="deleteEx(experience.id)"
             >
               Delete
             </v-btn>
@@ -197,7 +198,7 @@
       max-width="600px"
     >
       <v-card>
-        <v-form ref="priceForm" v-model="valid" lazy-validation>
+        <v-form ref="editForm" v-model="validEdit" lazy-validation>
         <v-card-title>
           <span class="headline">Edit Experience</span>
         </v-card-title>
@@ -206,7 +207,7 @@
             <v-row>
               <v-col cols="12">
                 <v-text-field
-                  v-model="formExperience.position"
+                  v-model="formEditExperience.position"
                   label="Position*"
                   required
                   :rules="[rules.required]"
@@ -214,7 +215,7 @@
               </v-col>
               <v-col cols="12">
                 <v-textarea
-                  v-model="formExperience.description"
+                  v-model="formEditExperience.description"
                   label="Description*"
                   required
                   :rules="[rules.required]"
@@ -222,7 +223,7 @@
               </v-col>
               <v-col cols="12">
                 <v-text-field
-                  v-model="formExperience.company_name"
+                  v-model="formEditExperience.company_name"
                   label="Company*"
                   required
                   :rules="[rules.required]"
@@ -231,8 +232,8 @@
               <v-col cols="6">
                 
                 <v-menu
-                  ref="menu_1"
-                  v-model="menu_1"
+                  ref="menu_3"
+                  v-model="menu_3"
                   :close-on-content-click="false"
                   transition="scale-transition"
                   offset-y
@@ -240,7 +241,7 @@
                 >
                   <template v-slot:activator="{ on, attrs }">
                     <v-text-field
-                      v-model="formExperience.start"
+                      v-model="formEditExperience.start"
                       label="Start date*"
                       prepend-icon="mdi-calendar"
                       readonly
@@ -251,14 +252,14 @@
                   </template>
                   <v-date-picker
                     ref="picker"
-                    v-model="formExperience.start"
+                    v-model="formEditExperience.start"
                   ></v-date-picker>
                 </v-menu>
               </v-col>
               <v-col cols="6">
                 <v-menu
-                  ref="menu_2"
-                  v-model="menu_2"
+                  ref="menu_4"
+                  v-model="menu_4"
                   :close-on-content-click="false"
                   transition="scale-transition"
                   offset-y
@@ -266,7 +267,7 @@
                 >
                   <template v-slot:activator="{ on, attrs }">
                     <v-text-field
-                      v-model="formExperience.end"
+                      v-model="formEditExperience.end"
                       label="End date*"
                       prepend-icon="mdi-calendar"
                       readonly
@@ -277,7 +278,7 @@
                   </template>
                   <v-date-picker
                     ref="picker"
-                    v-model="formExperience.end"
+                    v-model="formEditExperience.end"
                   ></v-date-picker>
                 </v-menu>
               </v-col>
@@ -286,7 +287,7 @@
               >
                                      
               <v-autocomplete
-                v-model="formExperience.location_country"
+                v-model="formEditExperience.location_country"
                 :items="currencys"
                 label="Country*"
                 required
@@ -314,13 +315,44 @@
           <v-btn
             color="blue darken-1"
             text
-            @click="validate"
-            :disabled="!valid"
+            @click="validateEdit"
+            :disabled="!validEdit"
           >
             Save
           </v-btn>
         </v-card-actions>
         </v-form>
+      </v-card>
+    </v-dialog>
+
+    
+    <v-dialog
+      v-model="deleteM"
+      persistent
+      max-width="290"
+    >
+      <v-card>
+        <v-card-title class="headline">
+          Delete experience?
+        </v-card-title>
+        <v-card-text>{{tempExperience.position}}</v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+            color="green darken-1"
+            text
+            @click="deleteM = false"
+          >
+            No
+          </v-btn>
+          <v-btn
+            color="green darken-1"
+            text
+            @click="confirmDel(tempExperience.id)"
+          >
+            Yes
+          </v-btn>
+        </v-card-actions>
       </v-card>
     </v-dialog>
     
@@ -333,11 +365,16 @@
     },
     data () {
       return {
+        deleteM:false,
+        tempExperience:[],
         dialogEdit:false,
         experiences:[],
         menu_1: false,
         menu_2: false,
+        menu_3: false,
+        menu_4: false,
         valid: true,
+        validEdit: true,
         rules: {
           required: value => !!value || "Required.",
         },
@@ -351,6 +388,17 @@
           description:null,
 
         },
+        formEditExperience:{
+          position:null,
+          company_name:null,
+          location_country:null,
+          start:null,
+          end:null,
+          actual:null,
+          description:null,
+          id:null,
+
+        },
         currencys:[],
         dialog:false,
       }
@@ -362,13 +410,43 @@
     menu_2 (val) {
       val && setTimeout(() => (this.$refs.picker.activePicker = 'YEAR'))
     },
+    menu_3 (val) {
+      val && setTimeout(() => (this.$refs.picker.activePicker = 'YEAR'))
+    },
+    menu_4 (val) {
+      val && setTimeout(() => (this.$refs.picker.activePicker = 'YEAR'))
+    },
+    tempExperience: {
+      handler (val) {
+        //console.log('watch', val);
+        this.formEditExperience.position = this.tempExperience.position;
+        this.formEditExperience.company_name = this.tempExperience.company_name;
+        this.formEditExperience.start = this.tempExperience.start;
+        this.formEditExperience.end = this.tempExperience.end;
+        this.formEditExperience.description = this.tempExperience.description;
+        this.formEditExperience.location_country = this.tempExperience.location_country;
+        this.formEditExperience.id = this.tempExperience.key;
+        
+      },
+      deep: true,
+    },
 
     },
     methods:{
+    confirmDel(experience){
+      axios
+        .get('chefe/experience/delete/'+experience)
+        .then(response => (this.getExperience(),this.deleteM=false));
+    },
     edit(experience){
       axios
         .get('chefe/experience/get/'+experience)
         .then(response => (this.tempExperience = response.data, this.dialogEdit=true));
+    },
+    deleteEx(experience){
+      axios
+        .get('chefe/experience/get/'+experience)
+        .then(response => (this.tempExperience = response.data, this.deleteM=true));
     },
     getExperience(){
       axios
@@ -381,6 +459,14 @@
         //console.log(this.formReg);
         this.sendData(this.formExperience);
         this.dialog = false;
+      }
+    },
+    validateEdit() {
+      if (this.$refs.editForm.validate()) {
+        // submit form to server/API here...
+        //console.log(this.formReg);
+        this.sendDataEit(this.formEditExperience);
+        this.dialogEdit = false;
       }
     },
     reset() {
@@ -403,6 +489,38 @@
           } else {
               
               this.openNotification('success', 'Save', 'You have been store all data successfully');
+              
+          }
+      })
+      .catch((error) => {
+        this.success = false;
+        var errors =null;
+        var status=error.response.status;
+        //console.log(status);
+            if (status == 422){
+            errors=error.response.data.errors;
+            //console.log(errors);
+            errors.forEach(error => { this.openNotification('error', 'Error on Save', error);});
+          }else{
+            this.openNotification('error','Error on Save',error);
+          }
+      });
+  },
+    
+    sendDataEit(data) {
+      axios
+      .post("chefe/experience/update/"+this.formEditExperience.id, { data: { experienceData: data} })
+      .then(response => {
+          this.getExperience();
+          this.allerros = [];
+          this.sucess = true;
+          if (response.data.errors) {
+              //console.log(response.data.errors);
+              response.data.errors.forEach(error => { this.openNotification('error', 'Error on Save', error);});
+              
+          } else {
+              
+              this.openNotification('success', 'Save', 'You have been update all data successfully');
               
           }
       })

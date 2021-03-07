@@ -65,9 +65,23 @@ Route::group(['namespace' => 'Helpers','middleware' => []], function() {
 Route::group(['namespace' => 'Chefe','middleware' => ['auth.api','CheckStatus','UserType']], function() {
 	Route::post('create/cv','CVController@createCV');
 	Route::get('getCVData/{id}','CVController@getCVData');
+	//experience
 	Route::post('chefe/experience/new','ExperienceController@create');
 	Route::get('chefe/experience/getThis','ExperienceController@getThis');
 	Route::get('chefe/experience/get/{id}','ExperienceController@getThisId');
+	Route::get('chefe/experience/delete/{id}','ExperienceController@delete');
+	Route::post('chefe/experience/update/{id}','ExperienceController@update');
+	//school
+	
+	Route::post('chefe/school/new','SchoolController@create');
+	Route::get('chefe/school/getThis','SchoolController@getThis');
+	Route::get('chefe/school/get/{id}','SchoolController@getThisId');
+	Route::get('chefe/school/delete/{id}','SchoolController@delete');
+	Route::post('chefe/school/update/{id}','SchoolController@update');
+	//references
+	
+	Route::post('create/references','ReferencesController@create');
+	Route::get('getContactData/{id}','ReferencesController@getData');
 
 });
 
