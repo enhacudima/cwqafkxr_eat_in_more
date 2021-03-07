@@ -41,14 +41,22 @@ class CVController extends Controller
                 return response()->json(['errors'=>$validator->errors()->all()], 422);            
             } 
     $file = new FilesController; 
-    $file_id = $request->data['fileData']['file_id'];      
-    $file->useFile($file_id, 'CV', 0);
          
     $input = $myRequest->all(); 
-            $input['user_id'] = Auth::user()->id; 
-            $input['picture'] = $file_id;
-            $input['key'] = md5(time()).Auth::user()->id;
-            $cv=CV::firstOrCreate(
+    $input['user_id'] = Auth::user()->id; 
+
+    if (isset($request->data['fileData']['file_id'])){
+        $file_id = $request->data['fileData']['file_id'];      
+        $file->useFile($file_id, 'CV', 0);
+        $input['picture'] = $file_id;
+        $input['key'] = md5(time()).Auth::user()->id;
+    }else{
+        $tempCV=CV::where('user_id',Auth::user()->id)->first();
+        $input['picture'] = $tempCV->picture;
+        $input['key'] = $tempCV->key;
+    }    
+
+            $cv=CV::updateOrCreate(
             	[
             		'user_id'=> $input['user_id'],
             	],

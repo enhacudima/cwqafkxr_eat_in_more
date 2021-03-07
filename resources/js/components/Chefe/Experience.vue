@@ -15,13 +15,49 @@
     </v-btn>
 
     </v-row>
-    <v-row colos="12" justify="center">
-      <v-card>
-          5555
-      </v-card>
+    <v-row dense >
+      <v-col cols="12" justify="center" v-for="(experience, index) in experiences" :key="index" class="pb-6 pl-6 pr-6">
+        <v-card
+          cols="12"
+          outlined
+        >
+          <v-list-item three-line>
+            <v-list-item-content>
+              <div class="overline mb-4">
+                {{experience.company_name}}
+              </div>
+              <v-list-item-subtitle>{{experience.country.entity}} · From {{experience.start}} to {{experience.end}}</v-list-item-subtitle>
+              <v-list-item-title class="headline mb-1">
+                {{experience.position}}
+              </v-list-item-title>
+              <v-list-item-subtitle>{{experience.description}}</v-list-item-subtitle>
+            </v-list-item-content>
+
+          </v-list-item>
+
+          <v-card-actions>
+            <v-btn
+              outlined
+              rounded
+              text
+              color="error"
+            >
+              Delete
+            </v-btn>
+            <v-btn
+              outlined
+              rounded
+              text
+              @click="edit(experience.id)"
+            >
+              Edit
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-col>
+      
     </v-row>
 
-  <v-row justify="center">
     <v-dialog
       v-model="dialog"
       persistent
@@ -154,7 +190,139 @@
         </v-form>
       </v-card>
     </v-dialog>
-  </v-row>
+
+    <v-dialog
+      v-model="dialogEdit"
+      persistent
+      max-width="600px"
+    >
+      <v-card>
+        <v-form ref="priceForm" v-model="valid" lazy-validation>
+        <v-card-title>
+          <span class="headline">Edit Experience</span>
+        </v-card-title>
+        <v-card-text>
+          <v-container>
+            <v-row>
+              <v-col cols="12">
+                <v-text-field
+                  v-model="formExperience.position"
+                  label="Position*"
+                  required
+                  :rules="[rules.required]"
+                ></v-text-field>
+              </v-col>
+              <v-col cols="12">
+                <v-textarea
+                  v-model="formExperience.description"
+                  label="Description*"
+                  required
+                  :rules="[rules.required]"
+                ></v-textarea>
+              </v-col>
+              <v-col cols="12">
+                <v-text-field
+                  v-model="formExperience.company_name"
+                  label="Company*"
+                  required
+                  :rules="[rules.required]"
+                ></v-text-field>
+              </v-col>
+              <v-col cols="6">
+                
+                <v-menu
+                  ref="menu_1"
+                  v-model="menu_1"
+                  :close-on-content-click="false"
+                  transition="scale-transition"
+                  offset-y
+                  min-width="auto"
+                >
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-text-field
+                      v-model="formExperience.start"
+                      label="Start date*"
+                      prepend-icon="mdi-calendar"
+                      readonly
+                      v-bind="attrs"
+                      v-on="on"
+                      :rules="[rules.required]"
+                    ></v-text-field>
+                  </template>
+                  <v-date-picker
+                    ref="picker"
+                    v-model="formExperience.start"
+                  ></v-date-picker>
+                </v-menu>
+              </v-col>
+              <v-col cols="6">
+                <v-menu
+                  ref="menu_2"
+                  v-model="menu_2"
+                  :close-on-content-click="false"
+                  transition="scale-transition"
+                  offset-y
+                  min-width="auto"
+                >
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-text-field
+                      v-model="formExperience.end"
+                      label="End date*"
+                      prepend-icon="mdi-calendar"
+                      readonly
+                      v-bind="attrs"
+                      v-on="on"
+                      :rules="[rules.required]"
+                    ></v-text-field>
+                  </template>
+                  <v-date-picker
+                    ref="picker"
+                    v-model="formExperience.end"
+                  ></v-date-picker>
+                </v-menu>
+              </v-col>
+              <v-col
+                cols="12"
+              >
+                                     
+              <v-autocomplete
+                v-model="formExperience.location_country"
+                :items="currencys"
+                label="Country*"
+                required
+                :rules="[rules.required]"
+                item-text="entity"
+                item-value="id"
+                return-object
+              >
+              </v-autocomplete>
+
+              </v-col>
+            </v-row>
+          </v-container>
+          <small>*indicates required field</small>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+            color="blue darken-1"
+            text
+            @click="dialogEdit = false"
+          >
+            Close
+          </v-btn>
+          <v-btn
+            color="blue darken-1"
+            text
+            @click="validate"
+            :disabled="!valid"
+          >
+            Save
+          </v-btn>
+        </v-card-actions>
+        </v-form>
+      </v-card>
+    </v-dialog>
     
   </div>
 </template>
@@ -165,6 +333,7 @@
     },
     data () {
       return {
+        dialogEdit:false,
         experiences:[],
         menu_1: false,
         menu_2: false,
@@ -196,6 +365,11 @@
 
     },
     methods:{
+    edit(experience){
+      axios
+        .get('chefe/experience/get/'+experience)
+        .then(response => (this.tempExperience = response.data, this.dialogEdit=true));
+    },
     getExperience(){
       axios
           .get('chefe/experience/getThis')
@@ -261,9 +435,11 @@
 
     },
     mounted() {
+    this.getExperience();
     axios
         .get('getCurrencyArr')
         .then(response => (this.currencys = response.data));
-      }
+      },
+      
   }
 </script>

@@ -67,6 +67,7 @@ Route::group(['namespace' => 'Chefe','middleware' => ['auth.api','CheckStatus','
 	Route::get('getCVData/{id}','CVController@getCVData');
 	Route::post('chefe/experience/new','ExperienceController@create');
 	Route::get('chefe/experience/getThis','ExperienceController@getThis');
+	Route::get('chefe/experience/get/{id}','ExperienceController@getThisId');
 
 });
 

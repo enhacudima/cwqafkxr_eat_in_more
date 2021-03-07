@@ -18,7 +18,6 @@ class ExperienceController extends Controller
     public function __construct()
     {
         $this->middleware('auth:api');
-        $this->user_id = Auth::user()->id;
         
     }
 
@@ -73,7 +72,14 @@ class ExperienceController extends Controller
 
     public function getThis()
     {
-        $data=CVExperience::where('user_id',$this->user_id)->get();
+        $data=CVExperience::where('user_id',Auth::user()->id)->with('country')->orderby('start', 'desc')->get();
+        return response()->json($data, 200); 
+
+    }
+
+    public function getThisId($id)
+    {
+        $data=CVExperience::where('user_id',Auth::user()->id)->where('id',$id)->with('country')->orderby('start', 'desc')->get();
         return response()->json($data, 200); 
 
     }
