@@ -22,4 +22,17 @@ class CuisinesController extends Controller
     return response()->json($data, 200); 
 
     }
+    
+    public function getCuisinesV2()
+    {
+
+    	$data =  Cuisines::select('cuisines.*')
+                        ->with('pictureCuisines')
+                        ->join('meals','meals.cuisine_id','cuisines.id')
+                        ->distinct()
+                        ->get();
+
+    return response()->json($data, 200); 
+
+    }
 }

@@ -6,7 +6,7 @@ import UserEdit from './components/Auth/UserEdit.vue';
 import ForgotPassword from './components/Auth/ForgotPassword.vue';
 import RegisterResult from './components/Auth/RegisterResult.vue';
 import VerifyResult from './components/Auth/VerifyResult.vue';
-import CreateChefe from './components/Chefe/CV.vue';
+import CreateChefe from './components/Chefe/Index.vue';
 import MealNew from './components/Meal/MealNew';
 import MealIndex from './components/Meal/index';
 

@@ -69,15 +69,6 @@
           <a-button icon="check-circle"  type="primary" html-type="submit" :disabled="hasErrors(form.getFieldsError())" >
               Save
           </a-button >
-          <a-button icon="plus"  type="primary" >
-              Experience
-          </a-button >
-          <a-button icon="plus"  type="primary" >
-              School
-          </a-button >
-          <a-button icon="plus"  type="primary" >
-              Contact
-          </a-button >
       </a-col>
     </a-form-item>
 

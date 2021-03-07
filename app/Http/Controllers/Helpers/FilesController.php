@@ -112,9 +112,10 @@ class FilesController extends Controller
         $filePathTable = "uploads/{$mime}/{$dateFolder}/";
         $finalPath = storage_path("app/".$filePath);
         // move the file name
-        $file->move($finalPath, $fileName);
-
-        $last_id=$this->storeToTable($filePathTable,$fileName,$mime);
+        $check_file=$file->move($finalPath, $fileName);
+        if($check_file){
+            $last_id=$this->storeToTable($filePathTable,$fileName,$mime);
+        }
         return [
             'path' => $filePath,
             'name' => $fileName,

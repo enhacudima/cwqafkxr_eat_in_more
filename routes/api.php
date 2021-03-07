@@ -24,6 +24,14 @@ Route::get('/clear-cache-all', function() {
     dd("Cache Clear All");
 
 });
+Route::get('/create/folder/link', function() {
+
+    Artisan::call('storage:link');
+
+    dd("created link");
+
+});
+
 
 Route::get('getCountry','ProvinceStatesController@getCountry');
 Route::get('getCountryStates','CountryStatesController@getCountryStates');
@@ -57,6 +65,8 @@ Route::group(['namespace' => 'Helpers','middleware' => []], function() {
 Route::group(['namespace' => 'Chefe','middleware' => ['auth.api','CheckStatus','UserType']], function() {
 	Route::post('create/cv','CVController@createCV');
 	Route::get('getCVData/{id}','CVController@getCVData');
+	Route::post('chefe/experience/new','ExperienceController@create');
+	Route::get('chefe/experience/getThis','ExperienceController@getThis');
 
 });
 
@@ -96,6 +106,7 @@ Route::group(['namespace' => 'Meal','middleware' => []], function() {
 
 Route::group(['namespace' => 'Cuisines','middleware' => []], function() {
 	Route::get('getCuisines','CuisinesController@getCuisines');
+	Route::get('getCuisinesV2','CuisinesController@getCuisinesV2');
 
 });
 

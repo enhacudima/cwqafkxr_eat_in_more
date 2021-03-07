@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <v-row class="pt-6 pb-6 pl-2">
+  <div justify="center">
+    <v-row class=" pb-6" cols="12" justify="center">
       <v-btn
       class="mx-2"
       fab
@@ -39,16 +39,17 @@
     </v-btn>
 
     </v-row>
-    <v-row colos="12">
+    <v-row colos="12" justify="center">
       <v-data-table
-      dense
-      class="elevation-1"
+        dense
+        class="elevation-1"
         v-model="selected"
         :headers="headers"
         :items="prices"
         item-key="id"
         show-select
         :single-select="singleSelect"
+        justify="center"
       >
       <template v-slot:top class="pl-2">
         <v-switch
