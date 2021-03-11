@@ -28,4 +28,9 @@ class Experiences extends Model
     {
         return $this->hasMany('App\ExperiencesSync','id','experiences_id');
     }
+    
+    public function experienceStatus()
+    {
+        return $this->belongsTo('App\StatusName','status','code');
+    }
 }

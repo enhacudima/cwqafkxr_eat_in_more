@@ -7,6 +7,7 @@
       <v-tab href="#tab-2">Experience</v-tab>
       <v-tab href="#tab-3">School</v-tab>
       <v-tab href="#tab-4">References</v-tab>
+      <v-tab href="#tab-5">Certificates and attachments</v-tab>
     </v-tabs>
     <v-tabs-items v-model="tab" class="pt-4">
         <v-tab-item
@@ -30,6 +31,12 @@
         <v-tab-item
             :key="4"
             :value="'tab-' + 4"
+        >
+        <Contact />
+        </v-tab-item>  
+        <v-tab-item
+            :key="5"
+            :value="'tab-' + 5"
         >
         <Contact />
         </v-tab-item>

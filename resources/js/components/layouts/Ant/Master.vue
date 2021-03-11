@@ -94,13 +94,13 @@
         'Dashboard',
         'Meals',
         'Chef',
-        'Updates',
+        'Tools',
       ],
       links:[
         'home',
         'mealIndex',
         'chefeNew',
-        'Updates',
+        'tools',
       ],
       icons: [
         'mdi-facebook',

@@ -44,16 +44,21 @@ class CVController extends Controller
          
     $input = $myRequest->all(); 
     $input['user_id'] = Auth::user()->id; 
-
+    $tempCV=CV::where('user_id',Auth::user()->id)->first();
+    if(isset($tempCV)){
+        $key=$tempCV->key;
+    }else{
+        $key=md5(time()).Auth::user()->id;
+    }
     if (isset($request->data['fileData']['file_id'])){
         $file_id = $request->data['fileData']['file_id'];     
         $file->useFile($file_id, 'CV','', 0);
         $input['picture'] = $file_id;
-        $input['key'] = md5(time()).Auth::user()->id;
+        $input['key'] =$key;
     }else{
         $tempCV=CV::where('user_id',Auth::user()->id)->first();
         $input['picture'] = $tempCV->picture;
-        $input['key'] = $tempCV->key;
+        $input['key'] = $key;
     }    
 
             $cv=CV::updateOrCreate(

@@ -12,7 +12,7 @@
         placeholder="Linkedin"
         allow-clear
       >
-        <a-icon slot="prefix" type="user" style="color:rgba(0,0,0,.25)" />
+        <a-icon slot="prefix" type="linkedin" style="color:rgba(0,0,0,.25)" />
       </a-input>
     </a-form-item>
     </v-col>
@@ -40,7 +40,7 @@
         placeholder="Reference Phone"
         allow-clear
       >
-        <a-icon slot="prefix" type="user" style="color:rgba(0,0,0,.25)" />
+        <a-icon slot="prefix" type="contacts" style="color:rgba(0,0,0,.25)" />
       </a-input>
     </a-form-item>
       <a-form-item label="1 Reference Email" :validate-status="re1emailError() ? 'error' : ''" :help="re1emailError() || ''">
@@ -52,7 +52,7 @@
         placeholder="Reference Email"
         allow-clear
       >
-        <a-icon slot="prefix" type="user" style="color:rgba(0,0,0,.25)" />
+        <a-icon slot="prefix" type="global" style="color:rgba(0,0,0,.25)" />
       </a-input>
     </a-form-item>
 
@@ -81,7 +81,7 @@
         placeholder="Reference Phone"
         allow-clear
       >
-        <a-icon slot="prefix" type="user" style="color:rgba(0,0,0,.25)" />
+        <a-icon slot="prefix" type="contacts" style="color:rgba(0,0,0,.25)" />
       </a-input>
     </a-form-item>
       <a-form-item label="2 Reference Email" :validate-status="re2emailError() ? 'error' : ''" :help="re2emailError() || ''">
@@ -93,7 +93,7 @@
         placeholder="Reference Email"
         allow-clear
       >
-        <a-icon slot="prefix" type="user" style="color:rgba(0,0,0,.25)" />
+        <a-icon slot="prefix" type="global" style="color:rgba(0,0,0,.25)" />
       </a-input>
     </a-form-item>
 

@@ -104,6 +104,14 @@ Route::group(['namespace' => 'Chefe','middleware' => []], function() {
 });
 
 
+Route::group(['namespace' => 'Tools','middleware' => []], function() {
+	Route::get('getThisMealPrices/{idMeal}','ToolsController@getThisMealPrices');
+	Route::post('tools/experience/update/{key}','ExperienceController@update');
+	Route::post('tools/experience/create','ExperienceController@create');
+	Route::post('tools/experience/status/{status}','ExperienceController@status');
+
+});
+
 Route::group(['namespace' => 'Meal','middleware' => []], function() {
 	Route::get('GetMeals','GetMealController@getAllMeals');
 	Route::get('getMealsV2/{currency}','GetMealController@getMealsV2');

@@ -9,6 +9,7 @@ import VerifyResult from './components/Auth/VerifyResult.vue';
 import CreateChefe from './components/Chefe/Index.vue';
 import MealNew from './components/Meal/MealNew';
 import MealIndex from './components/Meal/index';
+import Tools from './components/Tools/index.vue';
 
 export const routes = [
     {
@@ -78,6 +79,16 @@ export const routes = [
         name: 'meal/index',
         path: '/mealIndex',
         component: MealIndex,
+        props: true,
+        meta: {
+            antMasterLayout: true,
+            auth: true,
+        },
+    },
+    {
+        name: 'tools/index',
+        path: '/tools',
+        component: Tools,
         props: true,
         meta: {
             antMasterLayout: true,

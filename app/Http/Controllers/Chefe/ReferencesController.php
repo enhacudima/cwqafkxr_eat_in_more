@@ -29,7 +29,7 @@ class ReferencesController extends Controller
         $myRequest->request->add($referenceDate);
 
         $validator = Validator::make($myRequest->all(), [
-            'linkedin' => 'required|string|max:255',
+            'linkedin' => 'required|url|max:255',
             're_1_email' => 'required|email|max:255', 
             're_1_phone' => 'required|numeric',
             're_1_name' => 'required|string|max:255',

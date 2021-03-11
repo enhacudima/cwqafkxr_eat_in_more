@@ -15,7 +15,7 @@ class ExperiencesSync extends Model
     public $timestamps=true;
 
     protected $fillable = [
-        'experiences_sync_id', 'experiences_id'
+        'experiences_sync_id', 'experiences_id','user_id'
     ];
 
 

@@ -10,7 +10,7 @@ class ExperiencesController extends Controller
     
     public function getExperiences()
     {
-    	$data=Experiences::all();
+    	$data=Experiences::with('experiencesUsers','experiencesSync','experienceStatus')->get();
     	return response()->json($data, 200); 
     }
 }
