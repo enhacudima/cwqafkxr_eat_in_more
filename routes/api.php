@@ -82,6 +82,12 @@ Route::group(['namespace' => 'Chefe','middleware' => ['auth.api','CheckStatus','
 	
 	Route::post('create/references','ReferencesController@create');
 	Route::get('getContactData/{id}','ReferencesController@getData');
+	//files 
+	Route::post("chefe/files/new",'FilesChefeController@create');
+	Route::get('chefe/files/getThis','FilesChefeController@getThis');
+	Route::get('chefe/file/get/{key}','FilesChefeController@getThisId');
+	Route::get('chefe/file/delete/{key}','FilesChefeController@delete');
+	Route::get('chefe/file/getAllData','FilesChefeController@getAllData');
 
 });
 

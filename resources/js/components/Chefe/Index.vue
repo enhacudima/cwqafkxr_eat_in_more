@@ -38,7 +38,7 @@
             :key="5"
             :value="'tab-' + 5"
         >
-        <Contact />
+        <Files />
         </v-tab-item>
     </v-tabs-items>
           
@@ -49,8 +49,9 @@
   import Experience from './Experience.vue';
   import School from './School.vue';
   import Contact from './Contact.vue';
+  import Files from './Files.vue';
 export default {
-    components: { CV,Experience,School,Contact},
+    components: { CV,Experience,School,Contact,Files},
     data() {
         return {
             tab:null,

@@ -76,8 +76,8 @@ class FilesController extends Controller
 
     public function fileOtherFormat(Request $request)
     {
-    	$validator = Validator::make($myRequest->all(), [
-            'file' => 'required|mimes:pdf|max:5000', 
+    	$validator = Validator::make($request->all(), [
+            'file' => 'required|mimes:jpeg,png,pdf,doc,docx|max:10000', 
         ],
         [
         	
