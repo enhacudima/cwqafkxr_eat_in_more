@@ -115,6 +115,7 @@ Route::group(['namespace' => 'Tools','middleware' => []], function() {
 	Route::post('tools/experience/update/{key}','ExperienceController@update');
 	Route::post('tools/experience/create','ExperienceController@create');
 	Route::post('tools/experience/status/{status}','ExperienceController@status');
+	Route::get('getUsersList','UserListController@getUsersList');
 
 });
 

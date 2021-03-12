@@ -4,7 +4,7 @@
     v-model="tab"
     >
       <v-tab href="#tab-1">Chef Level</v-tab>
-      <v-tab href="#tab-2">List of Chef</v-tab>
+      <v-tab href="#tab-2">Other Options</v-tab>
     </v-tabs>
     <v-tabs-items v-model="tab" class="pt-4">
         <v-tab-item
@@ -17,7 +17,7 @@
             :key="2"
             :value="'tab-' + 2"
         >
-        555
+        Comming soon
         </v-tab-item>
     </v-tabs-items>
           

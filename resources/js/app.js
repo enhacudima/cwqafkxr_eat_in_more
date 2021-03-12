@@ -1,5 +1,6 @@
 require('./bootstrap');
 window.Vue = require('vue');
+window.moment = require('moment');//para funcionar o moment fora do js
 
 import App from './App.vue';
 import VueRouter from 'vue-router';
@@ -14,6 +15,12 @@ import store from './loginLogout';
 import { ValidationProvider, extend } from 'vee-validate';
 import { ValidationObserver } from 'vee-validate';
 import Vuetify from "../plugins/vuetify";
+//vue tables 2
+import { ServerTable, ClientTable, Event } from 'vue-tables-2';
+import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
+import 'bootstrap/dist/css/bootstrap.css'
+import 'bootstrap-vue/dist/bootstrap-vue.css'
+
 
 Vue.config.productionTip = false;
 // Add a rule.
@@ -29,6 +36,10 @@ Vue.use(Antd);
 Vue.use(VueRouter);
 Vue.use(VueAxios, axios);
 Vue.use(Vuex);
+Vue.use(ServerTable, {}, false, 'bootstrap4')
+Vue.use(require('vue-moment'));
+Vue.use(BootstrapVue)
+Vue.use(IconsPlugin)
 
 axios.defaults.baseURL = 'http://localhost/cwqafkxr_eat_in_more/public/api';
 //axios.defaults.baseURL = 'https://greenisle.co.za/api';

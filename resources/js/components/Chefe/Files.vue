@@ -16,7 +16,14 @@
 
     </v-row>
     <v-row dense >
-      <v-col cols="3" justify="center" v-for="(file, index) in files" :key="index" class="pb-6 pl-6 pr-6">
+      <v-col justify="center" v-for="(file, index) in files" :key="index" class="pb-6 pl-6 pr-6"
+      
+            xs="12"
+            sm="4"
+            md="4"
+            lg="4"
+            xl="4"
+      >
         <v-card
           cols="12"
           outlined

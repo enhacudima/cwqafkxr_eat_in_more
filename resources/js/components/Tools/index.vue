@@ -1,22 +1,28 @@
 <template>
-  <v-tabs vertical>
+  <v-tabs >
       <v-tab>
         <v-icon left>
-          mdi-account
+          mdi-account-outline
         </v-icon>
         My Profile
       </v-tab>
       <v-tab>
         <v-icon left>
-          mdi-lock
+          mdi-lock-outline
         </v-icon>
         Security
       </v-tab>
       <v-tab>
         <v-icon left>
-          mdi-wrench
+          mdi-wrench-outline
         </v-icon>
-        Chef Options
+        Options
+      </v-tab>
+      <v-tab>
+        <v-icon left>
+          mdi-account-supervisor-outline
+        </v-icon>
+        Users
       </v-tab>
 
       <v-tab-item>
@@ -67,12 +73,19 @@
             <ChefConf/>
         </v-card>
       </v-tab-item>
+      <v-tab-item>
+        <v-card flat>
+            <!---->
+            <Users/>
+        </v-card>
+      </v-tab-item>
     </v-tabs>
 </template>
 <script>
      import ChefConf from './ChefConf/index.vue';
+     import Users from './Users/index.vue';
 export default {
-    components: { ChefConf },
+    components: { Users,ChefConf },
     data() {
         return {
             tab:null,
