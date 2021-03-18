@@ -60,7 +60,9 @@ class EloquentVueTablesUsersList implements VueTablesInterface
     public function getquery($data)//emidio cunstumize query
     {
         $data->join('users_type','users_type.id','users.type');
-        $data->select('users.*','users_type.name as user_type');
+        $data->leftjoin('cv','cv.user_id','users.id');
+        $data->leftjoin('experiences','experiences.id','cv.experience');
+        $data->select('users.*','users_type.name as user_type','experiences.title');
         return $data;
     }
 

@@ -25,7 +25,7 @@
       >
           <v-col
             cols="12"
-          >            
+          >
             <v-alert
             border="right"
             colored-border
@@ -36,77 +36,171 @@
             Sorry, nothing to display here :(
             </v-alert>
           </v-col>
-      </v-row>  
-      <v-row dense> 
+      </v-row>
+      <v-row dense>
         <v-col
             v-for="(meal, index) in meals"
             :key="index"
             xs="12"
-            sm="4"
-            md="4"
-            lg="4"
-            xl="4"
+            sm="3"
+            md="3"
+            lg="3"
+            xl="3"
         >
-            <v-card
-                class="pa-2"            
+       <v-card
+            class="mx-auto"
+            max-width="344"
+        >
+            <v-img
+            v-if="meal.meal_file"
+            :src="'storage/'+meal.meal_file.path+meal.meal_file.name"
+            :lazy-src="'storage/'+meal.meal_file.path+meal.meal_file.name"
+            aspect-ratio="1"
+            class="white--text align-end"
+            gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
+            height="200px"
             >
-                <v-img
-                    v-if="meal.meal_file"
-                    :src="'storage/'+meal.meal_file.path+meal.meal_file.name"
-                    :lazy-src="'storage/'+meal.meal_file.path+meal.meal_file.name"
-                    aspect-ratio="1"
-                    class="white--text align-end"
-                    gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
-                    height="200px"
+            <template v-slot:placeholder>
+            <v-row
+                class="fill-height ma-0"
+                align="center"
+                justify="center"
+            >
+                <v-progress-circular
+                indeterminate
+                color="grey lighten-5"
+                ></v-progress-circular>
+            </v-row>
+            </template>
+            </v-img>
+
+            <v-card-title>
+            {{meal.name}}
+            </v-card-title>
+
+            <v-card-subtitle>
+                <div> {{meal.alias}}</div>
+                <v-row
+                    align="center"
+                    class="mx-0 pt-2"
                 >
-                <v-card-title v-text="meal.name"></v-card-title>
-                    <template v-slot:placeholder>
-                    <v-row
-                        class="fill-height ma-0"
-                        align="center"
-                        justify="center"
-                    >
-                        <v-progress-circular
-                        indeterminate
-                        color="grey lighten-5"
-                        ></v-progress-circular>
-                    </v-row>
-                    </template>
-                </v-img>
+                    <v-rating
+                    :value="4.5"
+                    color="amber"
+                    dense
+                    half-increments
+                    readonly
+                    size="14"
+                    ></v-rating>
 
-                <v-card-actions>
-                    <v-spacer></v-spacer>              
-                    <v-btn 
-                        icon
-                        @click.stop="modfShowDialog(meal.id)"
-                    >
-                        <v-icon
-                        >mdi-pencil</v-icon>
-                    </v-btn>
-                    <v-btn
-                        icon
-                        @click="postUserId = meal.id; show = !show"
-                    >
-                        <v-icon>{{ show && postUserId == meal.id ? 'mdi-chevron-up' : 'mdi-chevron-down' }}</v-icon>
-                    </v-btn>
-                </v-card-actions>
-                <v-expand-transition>
-                <div v-show="show && postUserId == meal.id ">
-                    <v-divider></v-divider>
+                    <div class="grey--text ml-4">
+                    4.5 (413)
+                    </div>
+                </v-row>
+            </v-card-subtitle>
 
-                    <v-card-text>
-                    {{meal.alias}}.
-                    </v-card-text>
-                </div>
-                </v-expand-transition>
-            </v-card>
+
+            <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn
+                    small
+                    icon
+
+                >
+                    <v-icon
+                    small
+                    >mdi-thumb-up</v-icon>
+                </v-btn>
+                <v-btn
+                    small
+                    icon
+                    @click.stop="modfShowDialog(meal.id)"
+                >
+                    <v-icon
+                    small
+                    >mdi-pencil</v-icon>
+                </v-btn>
+
+            <v-btn
+                icon
+                @click="postUserId = meal.id; show = !show"
+            >
+                <v-icon>{{ show && postUserId == meal.id ? 'mdi-chevron-up' : 'mdi-chevron-down' }}</v-icon>
+            </v-btn>
+            </v-card-actions>
+
+            <v-expand-transition>
+            <div v-show="show && postUserId == meal.id">
+                <v-divider></v-divider>
+
+                <v-card-text>
+
+                    <v-timeline
+                        dense
+                    >
+                        <v-timeline-item
+                        small
+                        >
+                        <div>
+                            <div class="font-weight-normal">
+                            <strong>Cuisine</strong>
+                            </div>
+                            <div>{{meal.meal_cuisine.name}}</div>
+                        </div>
+                        </v-timeline-item><v-timeline-item
+                        small
+                        >
+                        <div>
+                            <div class="font-weight-normal">
+                            <strong>Type</strong>
+                            </div>
+                            <div>{{meal.meal_type.meal_type}}</div>
+                        </div>
+                        </v-timeline-item><v-timeline-item
+                        small
+                        >
+                        <div>
+                            <div class="font-weight-normal">
+                            <strong>Common timing</strong>
+                            </div>
+                            <div>{{meal.mealtiming.common_timing}}</div>
+                        </div>
+                        </v-timeline-item>
+                    </v-timeline>
+
+
+                    <div>{{meal.details}}</div>
+                </v-card-text>
+                <v-divider class="mx-4"></v-divider>
+
+                <v-card-title>Allergies</v-card-title>
+
+                <v-card-text>
+                <v-chip-group
+                    active-class="deep-purple accent-4 white--text"
+                    column
+                >
+                    <v-chip
+                    v-for="(allergies, index) in meal.meal_allergies"
+                    :key="index"
+                    >
+                     {{allergies.allergies_ingredients.name}}
+                    </v-chip>
+                </v-chip-group>
+                </v-card-text>
+
+
+
+            </div>
+            </v-expand-transition>
+        </v-card>
         </v-col>
 
       </v-row>
-      
+
     <!--dialog-->
     <dialogView v-model="showDialog" v-bind:codMeal="mealIDShow"/>
- 
+
 
     </v-responsive>
         <v-pagination
@@ -116,7 +210,7 @@
             v-show="isSearch"
         ></v-pagination>
 
-    </v-container>           
+    </v-container>
 </div>
 </template>
 <script>
@@ -166,7 +260,7 @@ export default {
     changeShow: function(idx) {
       this.list[idx].show = !this.list[idx].show;
     },
-        
+
     watch: {
         search (val){
             //console.log(val.length);
@@ -183,10 +277,13 @@ export default {
                     this.isSearch = true;
                     this.isLoadingSearch = false;
                 });
-            
 
-           
+
+
         }
     }
 }
 </script>
+
+
+

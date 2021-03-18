@@ -36,6 +36,7 @@ Route::get('/create/folder/link', function() {
 Route::get('getCountry','ProvinceStatesController@getCountry');
 Route::get('getCountryStates','CountryStatesController@getCountryStates');
 Route::get('getExperiences','ExperiencesController@getExperiences');
+Route::get('getExperiencesActive','ExperiencesController@getExperiencesActive');
 Route::get('getTimeType','TimeTypeController@getTimeType');
 Route::get('getTimeCurrency','CurrencyController@getCurrency');
 Route::get('getCommonTiming','CommonTimingController@getCommonTiming');
@@ -51,7 +52,7 @@ Route::group(['namespace' => 'Auth'], function() {
 
 
 Route::group(['namespace' => 'Auth','middleware' => ['auth.api']], function() {
-    Route::get('logout', 'AuthController@logout'); 
+    Route::get('logout', 'AuthController@logout');
 });
 
 
@@ -72,17 +73,17 @@ Route::group(['namespace' => 'Chefe','middleware' => ['auth.api','CheckStatus','
 	Route::get('chefe/experience/delete/{id}','ExperienceController@delete');
 	Route::post('chefe/experience/update/{id}','ExperienceController@update');
 	//school
-	
+
 	Route::post('chefe/school/new','SchoolController@create');
 	Route::get('chefe/school/getThis','SchoolController@getThis');
 	Route::get('chefe/school/get/{id}','SchoolController@getThisId');
 	Route::get('chefe/school/delete/{id}','SchoolController@delete');
 	Route::post('chefe/school/update/{id}','SchoolController@update');
 	//references
-	
+
 	Route::post('create/references','ReferencesController@create');
 	Route::get('getContactData/{id}','ReferencesController@getData');
-	//files 
+	//files
 	Route::post("chefe/files/new",'FilesChefeController@create');
 	Route::get('chefe/files/getThis','FilesChefeController@getThis');
 	Route::get('chefe/file/get/{key}','FilesChefeController@getThisId');
@@ -93,7 +94,7 @@ Route::group(['namespace' => 'Chefe','middleware' => ['auth.api','CheckStatus','
 
 
 Route::group(['namespace' => 'Meal','middleware' => ['auth.api','CheckStatus','UserType']], function() {
-	
+
 
 });
 
@@ -101,7 +102,7 @@ Route::group(['namespace' => 'Chefe','middleware' => ['auth.api','CheckStatus','
 
 });
 
-//move to middleware 
+//move to middleware
 
 
 Route::group(['namespace' => 'Chefe','middleware' => []], function() {
@@ -116,6 +117,13 @@ Route::group(['namespace' => 'Tools','middleware' => []], function() {
 	Route::post('tools/experience/create','ExperienceController@create');
 	Route::post('tools/experience/status/{status}','ExperienceController@status');
 	Route::get('getUsersList','UserListController@getUsersList');
+	Route::post('tools/users/update/{key}','UserListController@UserUpdate');
+
+});
+
+Route::group(['namespace' => 'Meal','middleware' => []], function() {
+	Route::get('getPagmMalsW','GetMealWelcomeController@getPagmMals');
+	Route::get('getPagmMalsSearchW/{search}','GetMealWelcomeController@searchMeals');
 
 });
 

@@ -1,6 +1,12 @@
 <template>
 
-    <div v-if="$route.meta.antMasterLayout" class="page">
+    <div v-if="$route.meta.antWelcomeLayout" class="page">
+        <ant-welcome>
+            <router-view></router-view>
+        </ant-welcome>
+    </div>
+
+    <div v-else-if="$route.meta.antMasterLayout" class="page">
         <ant-master>
             <router-view></router-view>
         </ant-master>
@@ -32,11 +38,13 @@
 </style>
 
 <script>
+    import AntWelcome from './components/layouts/Ant/Welcome.vue'
     import AntMaster from './components/layouts/Ant/Master.vue'
     import AntLogin from './components/layouts/Ant/Login.vue'
     import AntRegister from './components/layouts/Ant/Register.vue'
-    export default {    
+    export default {
         components: {
+          AntWelcome,
           AntMaster,
           AntLogin,
           AntRegister

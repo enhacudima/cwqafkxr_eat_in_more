@@ -1,4 +1,7 @@
-import Welcome from './components/Welcome.vue';
+import Welcome from './components/welcome/mealListWelcome.vue';
+import About from './components/Welcome/About.vue';
+import Terms from './components/Welcome/Terms.vue';
+import Contact from './components/Welcome/Contact.vue';
 import Home from './components/Home.vue';
 import Login from './components/Auth/Login.vue';
 import Register from './components/Auth/Register.vue';
@@ -15,7 +18,38 @@ export const routes = [
     {
         name: 'welcome',
         path: '/',
-        component: Welcome
+        component: Welcome,
+        props: true,
+        meta: {
+            antWelcomeLayout: true,
+        },
+    },
+    {
+        name: 'terms&conditions',
+        path: '/terms',
+        component: Terms,
+        props: true,
+        meta: {
+            antWelcomeLayout: true,
+        },
+    },
+    {
+        name: 'contact',
+        path: '/contact',
+        component: Contact,
+        props: true,
+        meta: {
+            antWelcomeLayout: true,
+        },
+    },
+    {
+        name: 'about',
+        path: '/about',
+        component: About,
+        props: true,
+        meta: {
+            antWelcomeLayout: true,
+        },
     },
     {
         name: 'register/result',

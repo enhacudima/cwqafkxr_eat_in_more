@@ -49,7 +49,7 @@
 
       />
     </a-form-item>
-
+  <!--
     <a-form-item label="Experience" :validate-status="experienceError() ? 'error' : ''" :help="experienceError() || ''">
       <a-select
         v-decorator="[
@@ -63,7 +63,7 @@
         </a-select-option>
       </a-select>
     </a-form-item>
-
+-->
     <a-form-item >
       <a-col :xs="{ span: 24, offset: 0}" :lg="{ span: 20, offset: 10}"> 
           <a-button icon="check-circle"  type="primary" html-type="submit" :disabled="hasErrors(form.getFieldsError())" >

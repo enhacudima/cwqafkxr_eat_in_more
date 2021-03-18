@@ -13,27 +13,32 @@
                       <v-btn elevation="1" large block :disabled="!valid" color="success" @click="validate"> Login </v-btn>
                   </v-col>
                   <v-spacer></v-spacer>
-                  <v-col class="d-flex" cols="12" sm="12" xsm="12">
-                    <v-tooltip bottom >
-                      <template v-slot:activator="{ on }">
-                        <a
-                          target="_blank"
-                          href=""
-                          @click.stop
-                          v-on="on"
-                        >
-                          Forgot password
-                        </a>
-                      </template>
-                      Use this link to reset you password
-                    </v-tooltip>
-                    <div class="pl-3">
-                      Or
-                    </div>  
-                    <router-link to="/register" class="nav-item nav-link pl-3">
-                      register now!
-                    </router-link>
-                  </v-col>
+                  <v-row>
+                    <v-col class="d-flex" cols="12" sm="12" xsm="12">
+                        <v-tooltip bottom >
+                        <template v-slot:activator="{ on }">
+                            <a
+                            target="_blank"
+                            href=""
+                            @click.stop
+                            v-on="on"
+                            >
+                            Forgot password
+                            </a>
+                        </template>
+                        Use this link to reset you password
+                        </v-tooltip>
+                        <div class="pl-3">
+                        Or
+
+                        </div>
+                        <div class="pl-3">
+                        <router-link to="/register" class="">
+                            Register now!
+                        </router-link>
+                        </div>
+                    </v-col>
+                  </v-row>
               </v-row>
           </v-form>
       </v-card-text>
@@ -88,7 +93,7 @@ export default {
     },
     resetValidation() {
       this.$refs.form.resetValidation();
-    }, 
+    },
 
     login (email,password) {
       this.$store
@@ -114,7 +119,7 @@ export default {
             }
             if (status == 422){
              const errors = err.response.data;
-                
+
               //console.log(errors.error);
               this.loginError=errors.error;
               //this.openNotification('error', 'Error on Save', errors.error);
@@ -136,7 +141,7 @@ export default {
           description: d,
         });
     },
-    closeNotification(key){  
+    closeNotification(key){
         axios
         .post(this.verUrl, { data: { id: this.user_id} })
         .then(response => {
@@ -144,9 +149,9 @@ export default {
             this.sucess = true;
             if (response.data.errors) {
                 response.data.errors.forEach(error => { this.openNotification('error', 'Action Button Error', error);});
-                
+
             } else {
-                
+
                 this.openNotification('success', this.verMessage, 'Action Button successfully');
             }
         })

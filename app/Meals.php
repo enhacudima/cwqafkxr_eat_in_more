@@ -20,6 +20,11 @@ class Meals extends Model
     {
         return $this->belongsTo('App\User','user_id','id');
     }
+    
+    public function mealCuisine()
+    {
+        return $this->belongsTo('App\Cuisines','cuisine_id','id');
+    }
 
     	public function mealAllergies()
     {

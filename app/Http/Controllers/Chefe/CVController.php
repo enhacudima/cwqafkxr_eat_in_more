@@ -31,7 +31,7 @@ class CVController extends Controller
         $validator = Validator::make($myRequest->all(), [
             'title' => 'required|string|max:255',
             'summary' => 'required|string', 
-            'experience' => 'required|numeric|exists:experiences,id',
+            //'experience' => 'required|numeric|exists:experiences,id',
         ],
         [
      	
@@ -69,7 +69,7 @@ class CVController extends Controller
             	[
             		'title' => $input['title'],
             		'summary' => $input['summary'],
-            		'experience' => $input['experience'],
+            		//'experience' => $input['experience'],
             		'picture' => $input['picture'],
             		
 
