@@ -84,7 +84,16 @@
       right
       dense
     >
-    <v-subheader><strong>Contents</strong></v-subheader>
+
+      <v-list-item>
+        <v-list-item-content>
+          <v-list-item-title class="title">
+            Contents
+          </v-list-item-title>
+        </v-list-item-content>
+      </v-list-item>
+
+    <v-divider></v-divider>
       <v-list shaped dense>
             <v-list-item-group
                 color="primary"
@@ -102,6 +111,19 @@
         </v-list-item>
             </v-list-item-group>
       </v-list>
+      <v-divider class="mx-4"></v-divider>
+            <v-row  dense justify="center" align="center">
+                <v-btn
+                v-for="icon in icons"
+                :key="icon"
+                class="mx-1"
+                icon
+                >
+                <v-icon size="24px">
+                    {{ icon }}
+                </v-icon>
+                </v-btn>
+            </v-row>
     </v-navigation-drawer>
     </v-row>
 </div>
@@ -115,6 +137,12 @@
           { title: 'Mission',link:'#Mission', icon: 'mdi-account' },
           { title: 'Vision',link:'#Vision', icon: 'mdi-hvac' },
           { title: 'Works',link:'#Works', icon: 'mdi-playlist-check'}
+        ],
+        icons: [
+            'mdi-facebook',
+            'mdi-twitter',
+            'mdi-linkedin',
+            'mdi-instagram',
         ],
       }
     },

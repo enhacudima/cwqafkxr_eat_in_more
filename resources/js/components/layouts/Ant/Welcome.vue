@@ -124,7 +124,7 @@
         </v-row>
       </v-container>
     </v-main>
-    <v-footer padless  >
+    <v-footer padless fixed >
 
       <v-col
         class="text-center"
@@ -142,6 +142,12 @@
     data: () => ({
       states:[],
       drawer: false,
+      iconsFoot: [
+        'mdi-facebook',
+        'mdi-twitter',
+        'mdi-linkedin',
+        'mdi-instagram',
+      ],
       linksNames: [
         'Welcome',
         'About US',

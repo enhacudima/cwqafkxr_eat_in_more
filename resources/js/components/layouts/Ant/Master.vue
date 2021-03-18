@@ -111,7 +111,7 @@
 
     <v-main>
       <v-container
-        class="py-8 px-6"
+        class="py-8 px-6 mb-8"
         fluid
       >
         <v-row>
@@ -123,7 +123,7 @@
         </v-row>
       </v-container>
     </v-main>
-    <v-footer padless  >
+    <v-footer padless fixed >
 
       <v-col
         class="text-center"
