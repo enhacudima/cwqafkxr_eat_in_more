@@ -65,8 +65,14 @@
     <v-col cols="12">
 
         <v-row class="mt-10">
-            <v-col cols="6" class="pl-6">
-                <v-row>
+            <v-col class="pl-6"
+            xs="12"
+            sm="6"
+            md="6"
+            lg="6"
+            xl="6"
+            >
+                <v-row class="pt-6">
                     <v-icon
 
                     >
@@ -75,7 +81,7 @@
 
                     <div class="font-weight-medium"> Countries</div>
                 </v-row>
-                <v-row class="pl-6 pt-6">
+                <v-row class="pl-6 pt-3">
                     <strong>South Africa</strong> - 234 STRELITZIA CNR BLACK ROCK,ROAD, EMERALD BLVD, GREENSTONE HILL, GAUTENG, 1609
                 </v-row>
 
@@ -88,8 +94,15 @@
 
             <v-divider  vertical></v-divider>
             </v-col>
-            <v-col cols="5" class="">
-                <v-row>
+
+            <v-col class="pl-6"
+            xs="12"
+            sm="5"
+            md="5"
+            lg="5"
+            xl="5"
+            >
+                <v-row class="pt-6">
                     <v-icon
 
                     >
@@ -98,11 +111,11 @@
 
                     <div class="font-weight-medium"> Dialing</div>
                 </v-row>
-                <v-row class="pt-6">
+                <v-row class="pl-6 pt-6">
                     <strong>South Africa</strong> - comercial.sa@eatinmore.com
                 </v-row>
 
-                <v-row class="pt-3">
+                <v-row class="pl-6 pt-3">
                     <strong>Mozambique</strong>-comercial.mz@eatinmore.com
                 </v-row>
 
