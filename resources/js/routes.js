@@ -58,7 +58,7 @@ export const routes = [
         component: RegisterResult
     },
     {
-        name: 'ForgotPassword/result',
+        name: 'ForgotPasswordResult',
         path: '/ForgotPasswordResult',
         component: ForgotPasswordResult
     },

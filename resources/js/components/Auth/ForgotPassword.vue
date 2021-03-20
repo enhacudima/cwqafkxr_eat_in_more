@@ -123,7 +123,7 @@ export default {
             //console.log(response.data.message);
             this.dialogW=false;
             this.openNotification('info', 'Reset', response.data.message);
-            this.$router.push({ name: 'forgot/password/result' })
+            this.$router.push({ name: 'ForgotPasswordResult' })
 
             }
         })
