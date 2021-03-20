@@ -5,6 +5,7 @@ import axios from 'axios'
 Vue.use(Vuex)
 
 axios.defaults.baseURL = 'http://localhost/laravel-passport-vue-sap/public/api'
+//axios.defaults.baseURL = 'https://greenisle.co.za/api';
 
 export default new Vuex.Store({
   state: {

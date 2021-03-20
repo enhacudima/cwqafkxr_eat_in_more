@@ -19,7 +19,7 @@
                         <template v-slot:activator="{ on }">
                             <a
                             target="_blank"
-                            href=""
+                            href="forgetPassword"
                             @click.stop
                             v-on="on"
                             >

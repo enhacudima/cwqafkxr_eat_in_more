@@ -43,11 +43,17 @@ Route::get('getCommonTiming','CommonTimingController@getCommonTiming');
 Route::get('getCurrencyArr','CurrencyController@getCurrencyArr');
 
 
+Route::group(['middleware' => 'Auth'], function () {
+ Route::post('change-password', 'AuthController@changePassword');
+});
+
 Route::group(['namespace' => 'Auth'], function() {
 	Route::post('register', 'RegisterController@register');
 	Route::get('email/verify/{id}', 'VerificationController@verify')->name('verification.verify'); // Make sure to keep this as your route name
 	Route::post('email/resend', 'VerificationController@resend')->name('verification.resend');
-	Route::post('login', 'AuthController@login');
+	Route::post('login', 'ForgotPasswordController@login');
+    Route::post('forgot-password', 'ForgotPasswordController@forgotPassword');
+    Route::post('password/reset', 'ResetPasswordAPIController@reset')->name('password.reset');
 });
 
 

@@ -13,6 +13,7 @@ import CreateChefe from './components/Chefe/Index.vue';
 import MealNew from './components/Meal/MealNew';
 import MealIndex from './components/Meal/index';
 import Tools from './components/Tools/index.vue';
+import ForgotPasswordResult from './components/Auth/ForgotPasswordResult.vue';
 
 export const routes = [
     {
@@ -57,6 +58,11 @@ export const routes = [
         component: RegisterResult
     },
     {
+        name: 'ForgotPassword/result',
+        path: '/ForgotPasswordResult',
+        component: ForgotPasswordResult
+    },
+    {
         name: 'verifyResult',
         path: '/verifyResult',
         component: VerifyResult
@@ -65,6 +71,15 @@ export const routes = [
         name: 'login',
         path: '/login',
         component: Login,
+        props: true,
+        meta: {
+            antLoginLayout: true,
+        },
+    },
+    {
+        name: 'forgetPassword',
+        path: '/forgetPassword',
+        component: ForgotPassword,
         props: true,
         meta: {
             antLoginLayout: true,
