@@ -6,13 +6,14 @@
         <v-card
         elevation="2"
         >
-        <v-card-title>Send message for us</v-card-title>
+        <v-card-title v-if="!respMessage">Send message for us</v-card-title>
+        <v-card-title v-else >Message received successfully</v-card-title>
         <v-card-subtitle>Our team will answer you as soon as possible</v-card-subtitle>
-            <form class="pa-6">
+            <v-form class="pa-6" ref="Form" v-model="valid" lazy-validation>
                 <v-text-field
                 v-model="name"
                 :error-messages="nameErrors"
-                :counter="10"
+                :counter="45"
                 label="Name"
                 required
                 @input="$v.name.$touch()"
@@ -44,6 +45,7 @@
                 outlined
                 class="mr-4"
                 @click="submit"
+                :disabled="!valid"
                 >
                 submit
                 </v-btn>
@@ -57,7 +59,7 @@
 
             </v-card-actions>
 
-            </form>
+            </v-form>
             </v-card>
 
     </section>
@@ -82,11 +84,15 @@
                     <div class="font-weight-medium"> Countries</div>
                 </v-row>
                 <v-row class="pl-6 pt-3">
-                    <strong>South Africa</strong> - 234 STRELITZIA CNR BLACK ROCK,ROAD, EMERALD BLVD, GREENSTONE HILL, GAUTENG, 1609
+                    <p class="font-weight-light">
+                        <strong>South Africa</strong> - 234 STRELITZIA CNR BLACK ROCK,ROAD, EMERALD BLVD, GREENSTONE HILL, GAUTENG, 1609
+                    </p>
                 </v-row>
 
                 <v-row class="pl-6 pt-3">
+                    <p class="font-weight-light">
                     <strong>Mozambique</strong>
+                    </p>
                 </v-row>
 
             </v-col>
@@ -112,11 +118,15 @@
                     <div class="font-weight-medium"> Dialing</div>
                 </v-row>
                 <v-row class="pl-6 pt-6">
-                    <strong>South Africa</strong> - comercial.sa@eatinmore.com
+                    <p class="font-weight-light">
+                        <strong>South Africa</strong> - comercial.sa@eatinmore.com
+                    </p>
                 </v-row>
 
                 <v-row class="pl-6 pt-3">
-                    <strong>Mozambique</strong>-comercial.mz@eatinmore.com
+                    <p class="font-weight-light">
+                        <strong>Mozambique</strong>-comercial.mz@eatinmore.com
+                    </p>
                 </v-row>
 
             </v-col>
@@ -196,12 +206,14 @@
     mixins: [validationMixin],
 
     validations: {
-      name: { required, maxLength: maxLength(10) },
+      name: { required, maxLength: maxLength(45) },
       email: { required, email ,maxLength: maxLength(255)},
       message: { required,maxLength: maxLength(255) },
     },
 
     data: () => ({
+        respMessage:false,
+        valid: true,
         icons: [
             'mdi-facebook',
             'mdi-twitter',
@@ -227,7 +239,7 @@
       nameErrors () {
         const errors = []
         if (!this.$v.name.$dirty) return errors
-        !this.$v.name.maxLength && errors.push('Name must be at most 10 characters long')
+        !this.$v.name.maxLength && errors.push('Name must be at most 45 characters long')
         !this.$v.name.required && errors.push('Name is required.')
         return errors
       },
@@ -243,14 +255,65 @@
     methods: {
       submit () {
         this.$v.$touch()
+        if (this.$refs.Form.validate()) {
+            // submit form to server/API here...
+             var form={
+                "name":this.name,
+                "email":this.email,
+                "message":this.message,
+            }
+            this.sendData(form);
+        }
       },
+    sendData(data) {
+        axios
+        .post("contact/send/message", { data: { messageData: data} })
+        .then(response => {
+            this.clear();
+            this.allerros = [];
+            this.sucess = true;
+            if (response.data.errors) {
+                //console.log(response.data.errors);
+                response.data.errors.forEach(error => { this.openNotification('error', 'Error on Save', error);});
+
+            } else {
+                this.respMessage=true;
+                this.openNotification('success', 'Save', 'Message received successfully');
+
+            }
+        })
+        .catch((error) => {
+            this.success = false;
+            var errors =null;
+            var status=error.response.status;
+            //console.log(status);
+                if (status == 422){
+                errors=error.response.data.errors;
+                //console.log(errors);
+                errors.forEach(error => { this.openNotification('error', 'Error on Save', error);});
+            }else{
+                this.openNotification('error','Error on Save',error);
+            }
+        });
+    },
       clear () {
         this.$v.$reset()
         this.name = ''
         this.email = ''
-        this.name = null
-        this.checkbox = false
+        this.message = ''
       },
+
+    openNotification: function (type, m, d) {
+        this.$notification.config({
+            placement: 'topRight',
+            top: 35,
+            duration: 8,
+        });
+        this.$notification[type]({
+            message: m,
+            description: d,
+        });
+    },
     },
   }
 </script>

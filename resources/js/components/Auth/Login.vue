@@ -10,7 +10,7 @@
                       <v-text-field autocomplete="off" v-model="loginPassword" :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'" :rules="[rules.required, rules.min]" :type="show1 ? 'text' : 'password'" name="input-10-1" label="Password" hint="At least 8 characters"  :error-messages="loginError" counter @click:append="show1 = !show1"></v-text-field>
                   </v-col>
                   <v-col class="d-flex" cols="12" sm="12" xsm="12" align-end>
-                      <v-btn elevation="1" large block :disabled="!valid" color="success" @click="validate"> Login </v-btn>
+                      <v-btn elevation="1" large block  color="success" @click="validate"> Login </v-btn>
                   </v-col>
                   <v-spacer></v-spacer>
                   <v-row>
@@ -42,6 +42,27 @@
               </v-row>
           </v-form>
       </v-card-text>
+
+    <v-dialog
+      v-model="dialogW"
+      hide-overlay
+      persistent
+      width="300"
+    >
+      <v-card
+        color="primary"
+        dark
+      >
+        <v-card-text>
+          Please stand by
+          <v-progress-linear
+            indeterminate
+            color="white"
+            class="mb-0"
+          ></v-progress-linear>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
   </v-card>
 </template>
 
@@ -49,6 +70,7 @@
 export default {
   data() {
     return {
+      dialogW:false,
       loginError:null,
       dialog: true,
       tab: 0,
@@ -85,6 +107,7 @@ export default {
     validate() {
       if (this.$refs.loginForm.validate()) {
         // submit form to server/API here...
+        this.dialogW=true;
         this.login(this.loginEmail,this.loginPassword);
       }
     },
@@ -102,9 +125,11 @@ export default {
           password: password
         })
         .then(() => {
+          this.dialogW=false;
           this.$router.push({ name: 'home' })
         })
         .catch(err => {
+        this.dialogW=false;
         var errors =null;
         var status=err.response.status;
         //console.log(status);
@@ -125,6 +150,7 @@ export default {
               //this.openNotification('error', 'Error on Save', errors.error);
 
           }if (status != 422 && status != 403){
+            this.dialogW=false;
             this.openNotification('error','Error during login','Please contact admin web-site');
           }
         })
