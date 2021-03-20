@@ -53,7 +53,7 @@ Route::group(['namespace' => 'Auth'], function() {
 	Route::post('email/resend', 'VerificationController@resend')->name('verification.resend');
 	Route::post('login', 'ForgotPasswordController@login');
     Route::post('forgot-password', 'ForgotPasswordController@forgotPassword');
-    Route::post('password/reset', 'ResetPasswordAPIController@reset')->name('password.reset');
+   // Route::post('password/reset', 'ResetPasswordAPIController@reset')->name('password.reset');
 });
 
 
