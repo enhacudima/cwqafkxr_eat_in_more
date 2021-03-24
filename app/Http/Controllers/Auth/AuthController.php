@@ -62,4 +62,17 @@ class AuthController extends Controller
         ])->withCookie($cookie);
     }
 
+    public function logoutAll(Request $request)
+    {
+
+        $accessToken = auth()->user()->token();
+        $token= $request->user()->tokens->find($accessToken);
+        $token->revoke();
+
+        $cookie = Cookie::forget('_token');
+        return response()->json([
+            'message' => 'successful-logout'
+        ])->withCookie($cookie);
+    }
+
 }

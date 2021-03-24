@@ -14,8 +14,15 @@ import MealNew from './components/Meal/MealNew';
 import MealIndex from './components/Meal/index';
 import Tools from './components/Tools/index.vue';
 import ForgotPasswordResult from './components/Auth/ForgotPasswordResult.vue';
+import NotFound from './components/NotFound';
+import ResetPassword from './components/Auth/ResetPassword.vue';
+
 
 export const routes = [
+    {
+        path :'*',
+        component:NotFound
+    },
     {
         name: 'welcome',
         path: '/',
@@ -142,6 +149,15 @@ export const routes = [
         meta: {
             antMasterLayout: true,
             auth: true,
+        },
+    },
+    {
+        name: 'password/reset/',
+        path: '/password/reset/:token',
+        component: ResetPassword,
+        props: true,
+        meta: {
+            antLoginLayout: true,
         },
     },
 ];

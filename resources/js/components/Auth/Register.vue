@@ -24,7 +24,7 @@
                                         <v-col cols="12">
                                             <v-text-field v-model="formReg.email" :rules="emailRules" label="E-mail" :counter="255" required></v-text-field>
                                         </v-col>
-                                        <v-col cols="12" sm="4" md="4">                                          
+                                        <v-col cols="12" sm="4" md="4">
                                           <v-autocomplete
                                             v-model="formReg.prefix_phone_1"
                                             :items="countrys"
@@ -74,7 +74,7 @@
                                         <v-col cols="12">
                                             <v-text-field block v-model="formReg.password_confirmation" :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'" :rules="[rules.required, passwordMatch]" :type="show1 ? 'text' : 'password'" name="input-10-1" label="Confirm Password" counter @click:append="show1 = !show1"></v-text-field>
                                         </v-col>
-                                        <v-col cols="12">  
+                                        <v-col cols="12">
                                           <v-checkbox v-model="formReg.terms_conditions" :rules="[rules.required]">
                                             <template v-slot:label>
                                               <div>
@@ -83,14 +83,14 @@
                                                   <template v-slot:activator="{ on }">
                                                     <a
                                                       target="_blank"
-                                                      href="http://vuetifyjs.com"
+                                                      href="/terms"
                                                       @click.stop
                                                       v-on="on"
                                                     >
                                                       Terms of Service
                                                     </a>
                                                   </template>
-                                                  Open Terms and condition 
+                                                  Open Terms and condition
                                                 </v-tooltip>
                                               </div>
                                             </template>
@@ -137,7 +137,7 @@ export default {
     },
     resetValidation() {
       this.$refs.form.resetValidation();
-    },  
+    },
     sendData(data) {
       axios
       .post("register", { data: { userData: data} })
@@ -147,9 +147,9 @@ export default {
           if (response.data.errors) {
               //console.log(response.data.errors);
               response.data.errors.forEach(error => { this.openNotification('error', 'Error on Save', error);});
-              
+
           } else {
-              
+
               this.openNotification('success', 'Save', 'You have been store all data successfully');
               this.$router.push({ name: 'register/result' });
           }
@@ -239,8 +239,8 @@ export default {
       val && setTimeout(() => (this.$refs.picker.activePicker = 'YEAR'))
     },
   },
-  
-  
+
+
 };
 
 </script>

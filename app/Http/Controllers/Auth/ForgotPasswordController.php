@@ -83,4 +83,33 @@ class ForgotPasswordController extends Controller
         return \Response::json($arr);
     }
 
+    public function reset(Request $request){
+            $input = $request->only('email','token','password', 'password_confirmation');
+            $validator = Validator::make($input, [
+                'token' => 'required',
+                'email' => 'required|email|exists:users,email',
+                'password' => 'required|confirmed|min:8',
+            ]);
+
+             if ($validator->fails()) {
+                return response()->json(['errors'=>$validator->errors()->all()], 422);
+            }
+
+
+                $response = Password::reset($input, function ($user, $password) {
+                    $user->password = bcrypt($password);
+                    $user->save();
+                });
+
+                switch ($response) {
+                    case Password::INVALID_TOKEN:
+                        return response()->json(['errors'=>[trans($response)]], 422);
+                    case Password::INVALID_USER:
+                        return response()->json(['errors'=>[trans($response)]], 422);
+                }
+
+
+                 return response()->json(['success'=>'Password reseted successfully.'], 200);
+    }
+
 }

@@ -22,13 +22,103 @@
       <v-spacer></v-spacer>
 
         <div class="pr-2">
-            <v-avatar
-                class=""
-                color="brown"
-                size="32"
-            >
-                <span class="white--text headline">{{ iniName }}</span>
-            </v-avatar>
+
+            <template>
+                <div class="text-center">
+                    <v-menu
+                    v-model="menu"
+                    :close-on-content-click="false"
+                    :nudge-width="200"
+                    offset-x
+                    >
+                    <template v-slot:activator="{ on, attrs }">
+                        <v-avatar
+                            class=""
+                            color="brown"
+                            size="32"
+                            v-bind="attrs"
+                            v-on="on"
+                        >
+                            <span class="white--text headline">{{ iniName }}</span>
+                        </v-avatar>
+
+                    </template>
+
+                    <v-card>
+                        <v-list>
+                        <v-list-item>
+                            <v-list-item-avatar>
+                            <img
+                                :src="'storage/'+userAvatar"
+                                alt="avatar"
+
+                            >
+                            </v-list-item-avatar>
+
+                            <v-list-item-content>
+                            <v-list-item-title>{{userName}} {{userlastName}}</v-list-item-title>
+                            <v-list-item-subtitle>{{userTypeName}}</v-list-item-subtitle>
+                            </v-list-item-content>
+
+                            <v-list-item-action>
+                            <v-btn
+                                class="red--text"
+                                icon
+                                @click="logout"
+                            >
+                                <v-icon>mdi-logout</v-icon>
+                            </v-btn>
+                            </v-list-item-action>
+                        </v-list-item>
+                        </v-list>
+
+                        <v-divider></v-divider>
+
+                        <v-list>
+                        <v-list-item>
+                            <v-list-item-action>
+                            <v-switch
+                                v-model="message"
+                                color="purple"
+                            ></v-switch>
+                            </v-list-item-action>
+                            <v-list-item-title>Enable messages</v-list-item-title>
+                        </v-list-item>
+
+                        <v-list-item>
+                            <v-list-item-action>
+                            <v-switch
+                                v-model="hints"
+                                color="purple"
+                                @click="logoutAll"
+                            ></v-switch>
+                            </v-list-item-action>
+                            <v-list-item-title>Logout All Devices</v-list-item-title>
+                        </v-list-item>
+                        </v-list>
+
+                        <v-card-actions>
+                        <v-spacer></v-spacer>
+
+                        <v-btn
+                            text
+                            @click="menu = false"
+                        >
+                            Cancel
+                        </v-btn>
+                        <v-btn
+                            color="primary"
+                            text
+                            @click="menu = false"
+                        >
+                            Save
+                        </v-btn>
+                        </v-card-actions>
+                    </v-card>
+                    </v-menu>
+                </div>
+            </template>
+
         </div>
     </v-app-bar>
 
@@ -138,6 +228,10 @@
 <script>
   export default {
     data: () => ({
+      fav: true,
+      menu: false,
+      message: false,
+      hints: false,
       linksNames: [
         'Dashboard',
         'Meals',
@@ -161,13 +255,37 @@
       userInfo: localStorage.getItem('user'),
       userType: '',
       userTypeName: '',
+      userName:null,
+      userlastName:null,
       iniName: null,
+      userAvatar:null,
     }),
   methods: {
 
     initials(string) {
         var first=string.substring(0, 1)
       return first.toUpperCase();
+    },
+    logout(){
+      this.$store
+        .dispatch('logout')
+        .then(() => {
+          //this.$router.push({ name: 'home' })
+        })
+        .catch(err => {
+            console.log(err);
+        })
+    },
+
+    logoutAll(){
+      this.$store
+        .dispatch('logoutAll')
+        .then(() => {
+          //this.$router.push({ name: 'home' })
+        })
+        .catch(err => {
+            console.log(err);
+        })
     }
 
   },
@@ -187,6 +305,9 @@
     var userName = userData.logged_in_user.name;
     var userlastName = userData.logged_in_user.lastName;
     this.iniName=this.initials(userName);
+    this.userName = userName;
+    this.userlastName =userlastName;
+    this.userAvatar = userData.logged_in_user.avatar;
     //console.log(userlastName);
 
   },

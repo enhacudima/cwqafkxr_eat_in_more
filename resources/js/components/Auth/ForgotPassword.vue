@@ -7,7 +7,7 @@
                       <v-text-field v-model="loginEmail" :rules="loginEmailRules" label="E-mail" required :error-messages="loginError"></v-text-field>
                   </v-col>
                   <v-col class="d-flex" cols="12" sm="12" xsm="12" align-end>
-                      <v-btn elevation="1" large block  color="success" @click="validate"> Reset </v-btn>
+                      <v-btn elevation="1" large block  color="success" @click="validate"> Send Link </v-btn>
                   </v-col>
                   <v-spacer></v-spacer>
                   <v-row>
