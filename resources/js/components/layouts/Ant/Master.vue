@@ -45,7 +45,7 @@
                     </template>
 
                     <v-card>
-                        <v-list>
+                        <v-list dense>
                         <v-list-item>
                             <v-list-item-avatar>
                             <img
@@ -74,24 +74,29 @@
 
                         <v-divider></v-divider>
 
-                        <v-list>
+                        <v-list dense>
                         <v-list-item>
                             <v-list-item-action>
-                            <v-switch
-                                v-model="message"
-                                color="purple"
-                            ></v-switch>
+                            <v-btn
+                                :class="fav ? 'red--text' : ''"
+                                icon
+                                @click="fav = !fav"
+                            >
+                                <v-icon>mdi-weather-night</v-icon>
+                            </v-btn>
                             </v-list-item-action>
-                            <v-list-item-title>Enable messages</v-list-item-title>
+                            <v-list-item-title>Sleep mode</v-list-item-title>
                         </v-list-item>
 
                         <v-list-item>
                             <v-list-item-action>
-                            <v-switch
-                                v-model="hints"
-                                color="purple"
+                            <v-btn
+                                class="red--text"
+                                icon
                                 @click="logoutAll"
-                            ></v-switch>
+                            >
+                                <v-icon>mdi-power</v-icon>
+                            </v-btn>
                             </v-list-item-action>
                             <v-list-item-title>Logout All Devices</v-list-item-title>
                         </v-list-item>
@@ -100,18 +105,14 @@
                         <v-card-actions>
                         <v-spacer></v-spacer>
 
-                        <v-btn
-                            text
-                            @click="menu = false"
-                        >
-                            Cancel
-                        </v-btn>
+
                         <v-btn
                             color="primary"
                             text
                             @click="menu = false"
+                            icon
                         >
-                            Save
+                            <v-icon>mdi-pencil</v-icon>
                         </v-btn>
                         </v-card-actions>
                     </v-card>
@@ -228,7 +229,7 @@
 <script>
   export default {
     data: () => ({
-      fav: true,
+      fav: false,
       menu: false,
       message: false,
       hints: false,

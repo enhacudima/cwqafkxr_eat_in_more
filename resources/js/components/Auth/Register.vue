@@ -123,7 +123,7 @@ export default {
   },
   methods: {
       save (date) {
-        this.$refs.menu.save(formReg.dataBrith)
+        //this.$refs.menu.save(formReg.dataBrith)
       },
     validate() {
       if (this.$refs.registerForm.validate()) {
