@@ -1,5 +1,5 @@
 <template>
-  <v-app id="inspire">
+  <v-app id="inspire" :dark=true>
     <v-app-bar
       app
       clipped-right
@@ -77,12 +77,8 @@
                         <v-list dense>
                         <v-list-item>
                             <v-list-item-action>
-                            <v-btn
-                                :class="fav ? 'red--text' : ''"
-                                icon
-                                @click="fav = !fav"
-                            >
-                                <v-icon>mdi-weather-night</v-icon>
+                            <v-btn icon @click="toggle_dark_mode">
+                                <v-icon>mdi-theme-light-dark</v-icon>
                             </v-btn>
                             </v-list-item-action>
                             <v-list-item-title>Sleep mode</v-list-item-title>
@@ -109,7 +105,7 @@
                         <v-btn
                             color="primary"
                             text
-                            @click="menu = false"
+                            @click="editUser()"
                             icon
                         >
                             <v-icon>mdi-pencil</v-icon>
@@ -223,12 +219,17 @@
         &copy;{{ new Date().getFullYear() }} — <strong>EatInMore</strong>
       </v-col>
     </v-footer>
+        <!--dialog-->
+    <dialogo v-model="showDialog" v-bind:show="showDialog"/>
   </v-app>
 </template>
 
 <script>
+  import dialogo from '../../Auth/dialogUser.vue';
   export default {
+    components: { dialogo },
     data: () => ({
+      showDialog: false,
       fav: false,
       menu: false,
       message: false,
@@ -260,9 +261,30 @@
       userlastName:null,
       iniName: null,
       userAvatar:null,
+      modeGet: '',
     }),
   methods: {
+    editUser(){
+        this.menu = false;
+        this.showDialog = true;
 
+    },
+    toggle_dark_mode: function() {
+        this.$vuetify.theme.dark = !this.$vuetify.theme.dark;
+        localStorage.setItem("dark_theme", this.$vuetify.theme.dark.toString());
+        this.userMode(this.$vuetify.theme.dark.toString());
+    },
+
+    userMode(dark){
+      axios
+        .get('userMode/'+dark)
+        .then();
+    },
+    userModeGet(){
+      axios
+        .get('userModeGet')
+        .then(response => (this.modeGet = response.data));
+    },
     initials(string) {
         var first=string.substring(0, 1)
       return first.toUpperCase();
@@ -277,6 +299,28 @@
             console.log(err);
         })
     },
+    darkmode(){
+
+    const theme = localStorage.getItem("dark_theme");
+    //console.log(theme);
+    if (theme) {
+        if (theme === "true") {
+            this.$vuetify.theme.dark = true;
+        } else {
+            this.$vuetify.theme.dark = false;
+        }
+    } else if (
+        window.matchMedia &&
+        window.matchMedia("(prefers-color-scheme: dark)").matches
+    ) {
+        this.$vuetify.theme.dark = true;
+        localStorage.setItem(
+            "dark_theme",
+            this.$vuetify.theme.dark.toString()
+        );
+    }
+
+    },
 
     logoutAll(){
       this.$store
@@ -290,8 +334,25 @@
     }
 
   },
+
+    watch: {
+    modeGet (val, oldVal) {
+    //console.log(this.modeGet)
+    if(this.modeGet){
+        var dark =true
+    }else{
+        var dark = false
+    }
+    localStorage.setItem("dark_theme", dark);
+    this.darkmode();
+
+    }
+    },
   mounted() {
     const userData = JSON.parse(this.userInfo);
+    this.userModeGet();
+    this.darkmode();
+
     this.userType = userData.logged_in_user.type;
     if (this.userType == 1) {
       this.userTypeName = "Admin"

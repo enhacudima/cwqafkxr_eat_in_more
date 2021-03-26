@@ -41,7 +41,7 @@ class RegisterController extends Controller
             'password' => 'required|string|min:8|confirmed',
             'dataBrith' => 'required|date|date_format:Y-m-d|before:18 years ago',
             'phone1'=>'required|numeric|unique:users,phone1',
-            //'prefix_phone_1'=>'required|numeric', //removed
+            //'prefix_phone_1'=>'required', //removed
             //'type'=>'required|numeric', //removed
             'terms_conditions' =>'required|accepted',
         ],
