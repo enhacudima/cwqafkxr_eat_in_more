@@ -20,7 +20,7 @@ class UserProfileController extends Controller
     {
         $user = UserV::where('key',$token)->first();
         if(isset($user->id)){
-            $chef = CV::where('user_id',$user->id)->first();
+            $chef = CV::where('user_id',$user->id)->with('picture','cvExperiences')->first();
         }
 
         return response()->json(["user"=>$user,"chef"=>$chef], 200);

@@ -120,12 +120,26 @@
                         </v-list-item>
 
                         <v-list-item dense>
+                            <v-list-item-content>
+                                <v-img
+                                :lazy-src="'storage/'+user.chef.picture.path+user.chef.picture.name"
+                                max-height="150"
+                                max-width="250"
+                                aspect-ratio="1"
+                                contain
+                                :src="'storage/'+user.chef.picture.path+user.chef.picture.name"
+                                ></v-img>
+                            </v-list-item-content>
+
+                            <v-spacer></v-spacer>
+
                             <v-list-item-action></v-list-item-action>
 
                             <v-list-item-content>
                             <v-list-item-title>{{user.chef.title}}</v-list-item-title>
                             <v-list-item-subtitle>{{user.chef.summary}}</v-list-item-subtitle>
                             </v-list-item-content>
+
                         </v-list-item>
             </v-row>
         </v-card>
