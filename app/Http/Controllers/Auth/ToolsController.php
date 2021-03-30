@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\User;
 use Auth;
+use App\Http\Controllers\Helpers\FilesController;
 
 class ToolsController extends Controller
 {
@@ -39,6 +40,16 @@ class ToolsController extends Controller
         $user_id=Auth::user()->id;
         $data = User::where('id',$user_id)->first();
         return response()->json($data, 200);
+    }
+
+    public function avatar (Request $request){
+        $file= new FilesController();
+        $file_id=$request->data['file_id'];
+        $file->useFile($file_id, 'Avatar','Users', 0);
+        $user_id=Auth::user()->id;
+        $path=str_replace("public/","",$request->data['path']);
+        $user = User::where('id',$user_id)->update(["avatar"=>$path.$request->data['name']]);
+        $file->deleteExcept($file_id,'Avatar','Users');
     }
 
 }

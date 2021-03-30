@@ -10,6 +10,7 @@ use App\Files;
 use Auth;
 use Storage;
 use Illuminate\Support\Str;
+use File;
 
 class FilesController extends Controller
 {
@@ -17,84 +18,84 @@ class FilesController extends Controller
 
     public function __construct()
     {
-        //$this->middleware('auth');
+        // $this->middleware('auth:api');
     }
 
     public function filePictureReturn(Request $request)
     {
-      
+
         $validator = Validator::make($request->all(), [
-            'file' => 'required|mimes:jpeg,jpg,png|max:5000', 
+            'file' => 'required|mimes:jpeg,jpg,png|max:5000',
         ],
 
         [
-            
+
         ]
         );
-        if ($validator->fails()) { 
-            return response()->json(['errors'=>$validator->errors()->all()], 422);            
+        if ($validator->fails()) {
+            return response()->json(['errors'=>$validator->errors()->all()], 422);
         }
         $file_info=$this->getFile($request->file('picture'));
-        return $file_info; 
+        return $file_info;
 
     }
 
     public function fileOtherFormatReturn(Request $request)
     {
         $validator = Validator::make($myRequest->all(), [
-            'file' => 'required|mimes:pdf|max:5000', 
+            'file' => 'required|mimes:pdf|max:5000',
         ],
         [
-            
+
         ]
         );
 
-        if ($validator->fails()) { 
-            return response()->json(['errors'=>$validator->errors()->all()], 422);            
+        if ($validator->fails()) {
+            return response()->json(['errors'=>$validator->errors()->all()], 422);
         }
         $file_info=$this->getFile($request->file('file'));
-        return $file_info; 
+        return $file_info;
     }
 
     public function filePicture(Request $request)
     {
     	$validator = Validator::make($request->all(), [
-            'picture' => 'required|mimes:jpeg,jpg,png|max:5000', 
+            'picture' => 'required|mimes:jpeg,jpg,png|max:5000',
         ],
 
         [
-        	
+
         ]
     	);
-        if ($validator->fails()) { 
-            return response()->json(['errors'=>$validator->errors()->all()], 422);            
+        if ($validator->fails()) {
+            return response()->json(['errors'=>$validator->errors()->all()], 422);
         }
         $file_info=$this->getFile($request->file('picture'));
-        return response()->json($file_info, 200); 
+        return response()->json($file_info, 200);
 
     }
 
     public function fileOtherFormat(Request $request)
     {
     	$validator = Validator::make($request->all(), [
-            'file' => 'required|mimes:jpeg,png,pdf,doc,docx|max:10000', 
+            'file' => 'required|mimes:jpeg,png,pdf,doc,docx|max:10000',
         ],
         [
-        	
+
         ]
     	);
 
-        if ($validator->fails()) { 
-            return response()->json(['errors'=>$validator->errors()->all()], 422);            
+        if ($validator->fails()) {
+            return response()->json(['errors'=>$validator->errors()->all()], 422);
         }
         $file_info=$this->getFile($request->file('file'));
-        return response()->json($file_info, 200); 
+        return response()->json($file_info, 200);
     }
 
 
 
     public function getFile($file)
-    {	
+    {
     	$this->key=md5(time());
     	return $this->saveFile($file);
 
@@ -150,11 +151,38 @@ class FilesController extends Controller
     {
     	$data=Files::find($file_id);
 
-	    if (isset($data)) {	
+	    if (isset($data)) {
             $data->table = $table;
             $data->source_id=$source_id;
 	    	$data->status = $status;
+            $data->user_id = Auth::user()->id;
 	    	$data->save();
+    	}
+
+    	return "not_found";
+
+    }
+
+    public function deleteExcept($file_id,$source_id, $table)
+    {
+    	$data=Files::where("id","!=",$file_id)
+            ->where('user_id',Auth::user()->id)
+            ->where("source_id",$source_id)
+            ->where("table",$table)
+            ->get();
+
+
+	    if (isset($data)) {
+            foreach ($data as $key => $file) {
+                $newFile=$file->path.$file->name;
+
+                if(Storage::exists($newFile)){
+                    Storage::delete($newFile);
+                    Files::where("id","!=",$file->file_id)->delete();
+                }else{
+                    //dd(public_path($newFile));
+                }
+            }
     	}
 
     	return "not_found";

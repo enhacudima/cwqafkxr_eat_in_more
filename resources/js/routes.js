@@ -16,6 +16,7 @@ import Tools from './components/Tools/index.vue';
 import ForgotPasswordResult from './components/Auth/ForgotPasswordResult.vue';
 import NotFound from './components/NotFound';
 import ResetPassword from './components/Auth/ResetPassword.vue';
+import UserProfile from  './components/Profile/User.vue';
 
 
 export const routes = [
@@ -159,6 +160,12 @@ export const routes = [
         meta: {
             antLoginLayout: true,
         },
+    },
+    {
+        name: '/',
+        path: '/:token',
+        component: UserProfile,
+        props: true,
     },
 ];
 

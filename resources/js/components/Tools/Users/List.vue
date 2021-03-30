@@ -1,8 +1,21 @@
 <template>
-    <div>  
-    <v-col cols="12" dense>  
+    <div>
+    <v-col cols="12" dense>
         <v-server-table url="getUsersList" :columns="columns" :options="options">
-            
+
+            <div slot="id" slot-scope="props">
+                    {{props.row.id}}
+                    <v-btn
+                        small
+                        icon
+                        color="green"
+                        :to="'/'+props.row.key"
+                        target="_blank"
+                    >
+                    <v-icon small>mdi-eye-outline</v-icon>
+                    </v-btn>
+            </div>
+
             <div slot="status" slot-scope="props">
                     <v-btn
                     small
@@ -79,8 +92,8 @@
             </div>
         </v-server-table>
     </v-col>
-    
-    
+
+
     <v-dialog
       v-model="dialogType"
       persistent
@@ -102,7 +115,7 @@
                   :rules="[rules.required]"
                 ></v-text-field>
               </v-col>
-            <v-col cols="12">                     
+            <v-col cols="12">
               <v-autocomplete
                 v-model="formList.type"
                 :items="userType"
@@ -113,7 +126,7 @@
               >
               </v-autocomplete>
             </v-col>
-            <v-col cols="12">                     
+            <v-col cols="12">
               <v-autocomplete
                 v-model="formList.userStatus"
                 :items="userStatus"
@@ -124,7 +137,7 @@
               >
               </v-autocomplete>
             </v-col>
-            <v-col cols="12">                     
+            <v-col cols="12">
               <v-autocomplete
                 v-model="formList.chefType"
                 :items="experiences"
@@ -162,14 +175,14 @@
     </v-dialog>
 
     </div>
-     
+
 </template>
 
 
 <script>
-    
+
     export default {
-        
+
         mounted() {
         axios
             .get('getExperiencesActive')
@@ -187,6 +200,7 @@
             },
             openUserType(key){
                 this.userKey = key;
+
                 this.dialogType=true;
             },
         validate() {
@@ -202,7 +216,7 @@
         },
         resetValidation() {
         this.$refs.form.resetValidation();
-        },  
+        },
         sendData(data) {
         axios
         .post("tools/users/update/"+this.userKey, { data: { userData: data} })
@@ -212,11 +226,11 @@
             if (response.data.errors) {
                 //console.log(response.data.errors);
                 response.data.errors.forEach(error => { this.openNotification('error', 'Error on Save', error);});
-                
+
             } else {
-                
+
                 this.openNotification('success', 'Save', 'You have been store all data successfully');
-                
+
             }
         })
         .catch((error) => {
@@ -233,8 +247,8 @@
             }
         });
     },
-        
-        
+
+
     openNotification: function (type, m, d) {
         this.$notification.config({
             placement: 'topRight',
@@ -268,17 +282,17 @@
                     {type:"Client",id:"2"},
                     {type:"Chef",id:"3"}
                 ],
-                
+
                 userStatus:[
                     {name:"Suspended",id:"0"},
                     {name:"Active",id:"1"},
                 ],
                 dialogType:false,
-                columns: ["id","name",	"lastName","dataBrith","prefix_phone_1","phone1","updated_at","email_verified_at","user_type","status"],
+                columns: ["id","name","lastName","dataBrith","prefix_phone_1","phone1","updated_at","email_verified_at","user_type","status"],
                 tableData: [],
                 options: {
                 headings: {
-                        codigo: 'Name',
+                        name: 'Name',
                         lastName: 'Last_Name',
                         dataBrith: 'Data_Brith',
                         prefix_phone_1: '',
@@ -287,17 +301,17 @@
                         type: 'Type',
                         status: 'Status',
                         email_verified_at: 'Verified',
-                        
+
                     },
-                    filterable: ["id","name",	"lastName","dataBrith","prefix_phone_1","phone1","updated_at","user_type","status","email_verified_at"],
+                    filterable: ["id","name","lastName","dataBrith","prefix_phone_1","phone1","updated_at","user_type","status","email_verified_at"],
                     filterByColumn: true,
                     orderBy: { column: 'updated_at'},
                     setOrder: { ascending:true},
                     uniqueKey: 'id',
                     listColumns: {
                     },
-      
-                
+
+
                 perPage: 12,
                 perPageValues:[12,25, 50, 75,100,250,500,1000],
             }

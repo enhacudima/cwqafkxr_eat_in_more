@@ -9,32 +9,34 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Carbon\Carbon;
 use App\User;
+use App\UserV;
 use App\EloquentVueTablesUsersList;
 use App\Http\Controllers\Helpers\BackUpUserController;
 use App\CV;
 
 class UserListController extends Controller
 {
-         
+
     public function __construct()
     {
         $this->middleware('auth:api');
-        
+
     }
-    
+
     public function getUsersList()
     {
-        $user =new User();
+        $user =new UserV();
         $data=  new $user();
 
         $Eloq_table = new EloquentVueTablesUsersList();
-        $table_data = $Eloq_table->get(new $data, ["user_type","id","name",	"lastName","dataBrith","prefix_phone_1","phone1","created_at","updated_at","avatar","type","status","email_verified_at"]);
-       
+        $table_data = $Eloq_table->get(new $data, ["user_type","id","name",	"lastName","dataBrith","prefix_phone_1","phone1","created_at","updated_at","avatar","type","status","email_verified_at","key","title"]);
 
-        return response()->json($table_data, 200); 
+
+        return response()->json($table_data, 200);
     }
     public function UserUpdate(Request $request, $key)
     {
+
         $backup= new BackUpUserController($key);
 
         $experienceData=$request->data['userData'];
@@ -50,15 +52,15 @@ class UserListController extends Controller
             'userStatus' => 'nullable|',
         ],
         [
-     	
+
         ]
     	);
-        if ($validator->fails()) { 
-                    return response()->json(['errors'=>$validator->errors()->all()], 422);            
-                } 
-    
-        $input = $myRequest->all(); 
-        
+        if ($validator->fails()) {
+                    return response()->json(['errors'=>$validator->errors()->all()], 422);
+                }
+
+        $input = $myRequest->all();
+
 
         if(isset($myRequest->type['id'])){
             $input['type'] = $myRequest->type['id'];
@@ -68,8 +70,8 @@ class UserListController extends Controller
                     'type'=> $input['type'],
                 ]
             );
-        }  
-        
+        }
+
         if(isset($myRequest->userStatus['id'])){
             $input['userStatus'] =$myRequest->userStatus['id'] ;
             $user=User::where('key',$key)
@@ -78,9 +80,9 @@ class UserListController extends Controller
                     'userStatus'=> $input['userStatus'],
                 ]
             );
-        }   
+        }
 
-                
+
         if(isset($myRequest->chefType['id'])){
             $input['chefType'] = $myRequest->chefType['id'];
             $user=User::where('key',$key)->first();
@@ -92,9 +94,9 @@ class UserListController extends Controller
                     'experience'=> $input['chefType'],
                 ]
             );
-        }  
+        }
 
-        return response()->json(['success'=>'Updated records.'], 200);  
+        return response()->json(['success'=>'Updated records.'], 200);
     }
 
 

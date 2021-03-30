@@ -9,14 +9,14 @@ class EloquentVueTablesUsersList implements VueTablesInterface
     {
         extract(request()->only(['query', 'limit', 'page', 'orderBy', 'ascending', 'byColumn']));
         $data = $model->select($fields);
-        $this->getquery($data);//add query
+        //$this->getquery($data);//add query
         if (isset($query) && $query) {
              $query = is_array($query)?$query:json_decode($query);
              $data = $byColumn == 1 ?
                 $this->filterByColumn($data, $query) :
                 $this->filter($data, $query, $fields);
         }
-        
+
 
         $count = $data->count();
         $data->limit($limit)
@@ -25,7 +25,7 @@ class EloquentVueTablesUsersList implements VueTablesInterface
             $direction = $ascending == 1 ? 'ASC' : 'DESC';
             $data->orderBy($orderBy, $direction);
         }
-        
+
         $results = $data->get()->toArray();
         return [
             'data' => $results,

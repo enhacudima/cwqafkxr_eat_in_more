@@ -51,6 +51,7 @@
                             <img
                                 :src="'storage/'+userAvatar"
                                 alt="avatar"
+                                @click="changeAvatar()"
 
                             >
                             </v-list-item-avatar>
@@ -75,14 +76,22 @@
                         <v-divider></v-divider>
 
                         <v-list dense>
-                        <v-list-item>
-                            <v-list-item-action>
-                            <v-btn icon @click="toggle_dark_mode">
-                                <v-icon>mdi-theme-light-dark</v-icon>
-                            </v-btn>
-                            </v-list-item-action>
-                            <v-list-item-title>Sleep mode</v-list-item-title>
-                        </v-list-item>
+                            <v-list-item>
+                                <v-list-item-action>
+                                <v-btn icon @click="changeAvatar()">
+                                    <v-icon>mdi-camera-account</v-icon>
+                                </v-btn>
+                                </v-list-item-action>
+                                <v-list-item-title>Update avatar</v-list-item-title>
+                            </v-list-item>
+                            <v-list-item>
+                                <v-list-item-action>
+                                <v-btn icon @click="toggle_dark_mode">
+                                    <v-icon>mdi-theme-light-dark</v-icon>
+                                </v-btn>
+                                </v-list-item-action>
+                                <v-list-item-title>Sleep mode</v-list-item-title>
+                            </v-list-item>
 
                         <v-list-item>
                             <v-list-item-action>
@@ -219,16 +228,19 @@
         &copy;{{ new Date().getFullYear() }} — <strong>EatInMore</strong>
       </v-col>
     </v-footer>
-        <!--dialog-->
+    <!--dialog-->
     <dialogo v-model="showDialog" v-bind:show="showDialog"/>
+    <dialogoAvatar v-model="showDialogAvatar" v-bind:show="showDialogAvatar"/>
   </v-app>
 </template>
 
 <script>
   import dialogo from '../../Auth/dialogUser.vue';
+  import dialogoAvatar from '../../Auth/dialogAvatar.vue';
   export default {
-    components: { dialogo },
+    components: { dialogo,dialogoAvatar },
     data: () => ({
+      showDialogAvatar: false,
       showDialog: false,
       fav: false,
       menu: false,
@@ -264,6 +276,9 @@
       modeGet: '',
     }),
   methods: {
+    changeAvatar(){
+        this.showDialogAvatar = true;
+    },
     editUser(){
         this.menu = false;
         this.showDialog = true;

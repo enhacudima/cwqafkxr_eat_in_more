@@ -42,6 +42,10 @@ Route::get('getTimeCurrency','CurrencyController@getCurrency');
 Route::get('getCommonTiming','CommonTimingController@getCommonTiming');
 Route::get('getCurrencyArr','CurrencyController@getCurrencyArr');
 
+Route::group(['namespace' => 'Tools','middleware' => []], function() {
+    Route::get('user/profile/{token}','UserProfileController@userProfile');
+});
+
 Route::group(['namespace' => 'Auth'], function() {
 	Route::post('register', 'RegisterController@register');
 	Route::get('email/verify/{id}', 'VerificationController@verify')->name('verification.verify'); // Make sure to keep this as your route name
@@ -60,6 +64,7 @@ Route::group(['namespace' => 'Auth','middleware' => ['auth.api']], function() {
     Route::get('getUserData','ToolsController@getUserData');
     Route::post('change-password', 'AuthController@changePassword');
     Route::post('userEdit', 'EditUserController@userEdit');
+    Route::post('tools/use/avatar','ToolsController@avatar');
 
 });
 
