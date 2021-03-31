@@ -20,6 +20,10 @@ import { ServerTable, ClientTable, Event } from 'vue-tables-2';
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
+//permission
+import { abilitiesPlugin } from '@casl/vue';
+import {ability} from './ability.js'
+
 
 
 Vue.config.productionTip = false;
@@ -40,6 +44,7 @@ Vue.use(ServerTable, {}, false, 'bootstrap4')
 Vue.use(require('vue-moment'));
 Vue.use(BootstrapVue)
 Vue.use(IconsPlugin)
+Vue.use(abilitiesPlugin, ability);
 
 axios.defaults.baseURL = 'http://localhost/cwqafkxr_eat_in_more/public/api';
 //axios.defaults.baseURL = 'https://greenisle.co.za/api';

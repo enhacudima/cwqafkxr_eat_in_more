@@ -6,6 +6,10 @@ use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Auth;
 use Cookie;
+use App\User;
+//for test
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
 
 class AuthController extends Controller
 {
@@ -28,10 +32,12 @@ class AuthController extends Controller
             };
             $token =  $user->createToken('Personal Access Token')->accessToken;
             $cookie = $this->getCookieDetails($token);
+            $user_2 = clone $user;
             return response()
                 ->json([
                     'logged_in_user' => $user,
                     'token' => $token,
+                    'permissions' =>$user_2->getPermissionNames(),
                 ], 200)
                 ->cookie($cookie['name'], $cookie['value'], $cookie['minutes'], $cookie['path'], $cookie['domain'], $cookie['secure'], $cookie['httponly'], $cookie['samesite']);
         } else {

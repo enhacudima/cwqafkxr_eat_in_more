@@ -241,8 +241,11 @@
   import dialogo from '../../Auth/dialogUser.vue';
   import dialogoAvatar from '../../Auth/dialogAvatar.vue';
   import CookieLaw from 'vue-cookie-law';
+  import { AbilityBuilder, Ability } from '@casl/ability';
+
   export default {
     components: { dialogo,dialogoAvatar, CookieLaw },
+
     data: () => ({
       showDialogAvatar: false,
       showDialog: false,
@@ -350,7 +353,17 @@
         .catch(err => {
             console.log(err);
         })
-    }
+    },
+    abilities(permissions){
+        /*this.$ability.update([
+            {subject:'all', actions:permissions}
+        ])*/
+        const { can, rules } = new AbilityBuilder(Ability);
+
+        can('homes', 'all');
+
+        this.$ability.update(rules);
+    },
 
   },
 
@@ -389,7 +402,8 @@
     this.userName = userName;
     this.userlastName =userlastName;
     this.userAvatar = userData.logged_in_user.avatar;
-    //console.log(userlastName);
+
+    this.abilities(userData.permissions);
 
   },
   }
