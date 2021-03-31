@@ -33,6 +33,7 @@
         "vee-validate": "^3.3.9",
         "vue": "^2.6.11",
         "vue-axios": "^2.1.5",
+        "vue-cookie-law": "^1.13.3",
         "vue-moment": "^4.1.0",
         "vue-router": "^3.3.4",
         "vue-tables-2": "^2.2.0",

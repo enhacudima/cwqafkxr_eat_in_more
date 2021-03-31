@@ -30,7 +30,6 @@
               <v-list-item-title class="headline mb-1">
                 {{experience.position}}
               </v-list-item-title>
-              <v-list-item-subtitle>{{experience.description}}</v-list-item-subtitle>
             </v-list-item-content>
 
           </v-list-item>
@@ -56,7 +55,7 @@
           </v-card-actions>
         </v-card>
       </v-col>
-      
+
     </v-row>
 
     <v-dialog
@@ -97,7 +96,7 @@
                 ></v-text-field>
               </v-col>
               <v-col cols="6">
-                
+
                 <v-menu
                   ref="menu_1"
                   v-model="menu_1"
@@ -152,7 +151,7 @@
               <v-col
                 cols="12"
               >
-                                     
+
               <v-autocomplete
                 v-model="formExperience.location_country"
                 :items="currencys"
@@ -230,7 +229,7 @@
                 ></v-text-field>
               </v-col>
               <v-col cols="6">
-                
+
                 <v-menu
                   ref="menu_3"
                   v-model="menu_3"
@@ -285,7 +284,7 @@
               <v-col
                 cols="12"
               >
-                                     
+
               <v-autocomplete
                 v-model="formEditExperience.location_country"
                 :items="currencys"
@@ -325,7 +324,7 @@
       </v-card>
     </v-dialog>
 
-    
+
     <v-dialog
       v-model="deleteM"
       persistent
@@ -355,13 +354,13 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-    
+
   </div>
 </template>
 <script>
   export default {
     props: {
-        
+
     },
     data () {
       return {
@@ -426,7 +425,7 @@
         this.formEditExperience.description = this.tempExperience.description;
         this.formEditExperience.location_country = this.tempExperience.location_country;
         this.formEditExperience.id = this.tempExperience.key;
-        
+
       },
       deep: true,
     },
@@ -474,7 +473,7 @@
     },
     resetValidation() {
       this.$refs.form.resetValidation();
-    },  
+    },
     sendData(data) {
       axios
       .post("chefe/experience/new", { data: { experienceData: data} })
@@ -485,11 +484,11 @@
           if (response.data.errors) {
               //console.log(response.data.errors);
               response.data.errors.forEach(error => { this.openNotification('error', 'Error on Save', error);});
-              
+
           } else {
-              
+
               this.openNotification('success', 'Save', 'You have been store all data successfully');
-              
+
           }
       })
       .catch((error) => {
@@ -506,7 +505,7 @@
           }
       });
   },
-    
+
     sendDataEit(data) {
       axios
       .post("chefe/experience/update/"+this.formEditExperience.id, { data: { experienceData: data} })
@@ -517,11 +516,11 @@
           if (response.data.errors) {
               //console.log(response.data.errors);
               response.data.errors.forEach(error => { this.openNotification('error', 'Error on Save', error);});
-              
+
           } else {
-              
+
               this.openNotification('success', 'Save', 'You have been update all data successfully');
-              
+
           }
       })
       .catch((error) => {
@@ -538,7 +537,7 @@
           }
       });
   },
-    
+
   openNotification: function (type, m, d) {
       this.$notification.config({
           placement: 'topRight',
@@ -558,6 +557,6 @@
         .get('getCurrencyArr')
         .then(response => (this.currencys = response.data));
       },
-      
+
   }
 </script>

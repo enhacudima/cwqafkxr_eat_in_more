@@ -169,7 +169,7 @@
                     </v-timeline>
 
 
-                    <div>{{meal.details}}</div>
+                    <v-list-item-action-text>{{meal.details}}</v-list-item-action-text>
                 </v-card-text>
                 <v-divider class="mx-4"></v-divider>
 

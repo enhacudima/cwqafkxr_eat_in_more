@@ -31,6 +31,10 @@ class CV extends Model
 
     public function cvExperiences()
     {
-        return $this->hasMany('App\Experiences','user_id','user_id');
+        return $this->hasMany('App\CVExperience','user_id','user_id');
+    }
+        public function cvSchool()
+    {
+        return $this->hasMany('App\CVSchool','user_id','user_id');
     }
 }

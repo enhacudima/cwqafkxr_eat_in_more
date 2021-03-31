@@ -136,8 +136,8 @@
             class="pa-4"
         >
       <v-img
-        src="storage/icons/icon.jpg"
-        lazy-src="storage/icons/icon.jpg"
+        src="storage/icons/110x92px.png"
+        lazy-src="storage/icons/110x92px.png"
         aspect-ratio="2"
         max-height="150"
         max-width="250"
@@ -162,7 +162,7 @@
         align="center"
         justify="center"
         >
-        EatInMore
+
         </v-row>
 
         <v-row
@@ -231,14 +231,18 @@
     <!--dialog-->
     <dialogo v-model="showDialog" v-bind:show="showDialog"/>
     <dialogoAvatar v-model="showDialogAvatar" v-bind:show="showDialogAvatar"/>
+    <div class="main-wrapper">
+        <cookie-law theme="blood-orange--rounded"></cookie-law>
+    </div>
   </v-app>
 </template>
 
 <script>
   import dialogo from '../../Auth/dialogUser.vue';
   import dialogoAvatar from '../../Auth/dialogAvatar.vue';
+  import CookieLaw from 'vue-cookie-law';
   export default {
-    components: { dialogo,dialogoAvatar },
+    components: { dialogo,dialogoAvatar, CookieLaw },
     data: () => ({
       showDialogAvatar: false,
       showDialog: false,

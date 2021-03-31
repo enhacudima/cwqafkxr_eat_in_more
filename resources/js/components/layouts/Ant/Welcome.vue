@@ -133,12 +133,16 @@
         &copy;{{ new Date().getFullYear() }} — <strong>EatInMore</strong>
       </v-col>
     </v-footer>
+    <div class="main-wrapper">
+        <cookie-law theme="blood-orange--rounded"></cookie-law>
+    </div>
   </v-app>
 </template>
 
 <script>
+import CookieLaw from 'vue-cookie-law';
   export default {
-    components: {  },
+    components: { CookieLaw },
     data: () => ({
       states:[],
       drawer: false,
