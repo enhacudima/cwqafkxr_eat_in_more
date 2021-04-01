@@ -2,15 +2,15 @@
   <v-tabs >
       <v-tab>
         <v-icon left>
-          mdi-account-outline
+          mdi-account-supervisor-outline
         </v-icon>
-        My Profile
+        Users
       </v-tab>
       <v-tab>
         <v-icon left>
-          mdi-lock-outline
+          mdi-script-text-outline
         </v-icon>
-        Security
+        Roles
       </v-tab>
       <v-tab>
         <v-icon left>
@@ -18,27 +18,11 @@
         </v-icon>
         Options
       </v-tab>
-      <v-tab>
-        <v-icon left>
-          mdi-account-supervisor-outline
-        </v-icon>
-        Users
-      </v-tab>
 
       <v-tab-item>
         <v-card flat>
           <v-card-text>
-            <p>
-              Sed aliquam ultrices mauris. Donec posuere vulputate arcu. Morbi ac felis. Etiam feugiat lorem non metus. Sed a libero.
-            </p>
-
-            <p>
-              Nam ipsum risus, rutrum vitae, vestibulum eu, molestie vel, lacus. Aenean tellus metus, bibendum sed, posuere ac, mattis non, nunc. Aliquam lobortis. Aliquam lobortis. Suspendisse non nisl sit amet velit hendrerit rutrum.
-            </p>
-
-            <p class="mb-0">
-              Phasellus dolor. Fusce neque. Fusce fermentum odio nec arcu. Pellentesque libero tortor, tincidunt et, tincidunt eget, semper nec, quam. Phasellus blandit leo ut odio.
-            </p>
+              <Users/>
           </v-card-text>
         </v-card>
       </v-tab-item>
@@ -73,12 +57,6 @@
             <ChefConf/>
         </v-card>
       </v-tab-item>
-      <v-tab-item>
-        <v-card flat>
-            <!---->
-            <Users/>
-        </v-card>
-      </v-tab-item>
     </v-tabs>
 </template>
 <script>
@@ -96,9 +74,9 @@ export default {
 
         },
     mounted() {
-     
+
     },
-        
+
     watch: {
     }
 }
