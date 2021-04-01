@@ -355,19 +355,31 @@
         })
     },
     abilities(permissions){
-        /*this.$ability.update([
-            {subject:'all', actions:permissions}
-        ])*/
         const { can, rules } = new AbilityBuilder(Ability);
-
-        can('homes', 'all');
-
+        can(permissions, 'all');
         this.$ability.update(rules);
     },
+    permissions(){
+        const userData = JSON.parse(this.userInfo);
+        axios
+            .get('abilities')
+            .then(response => (this.abilities(response.data),
+            localStorage.setItem('permissions', JSON.stringify(response.data))
+            //console.log(JSON.parse(localStorage.getItem('permissions')))
+            ))
+            .catch(this.abilities(userData.permissions)
+            );
+    }
 
   },
 
     watch: {
+    $route:{
+        handler(){
+            this.permissions();
+        },
+        immediate : true
+    },
     modeGet (val, oldVal) {
     //console.log(this.modeGet)
     if(this.modeGet){
@@ -382,6 +394,7 @@
     },
   mounted() {
     const userData = JSON.parse(this.userInfo);
+    this.permissions();
     this.userModeGet();
     this.darkmode();
 
@@ -403,7 +416,6 @@
     this.userlastName =userlastName;
     this.userAvatar = userData.logged_in_user.avatar;
 
-    this.abilities(userData.permissions);
 
   },
   }

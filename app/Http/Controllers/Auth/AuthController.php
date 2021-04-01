@@ -17,6 +17,7 @@ class AuthController extends Controller
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
+
     }
     public function login(Request $request)
     {
@@ -80,5 +81,4 @@ class AuthController extends Controller
             'message' => 'successful-logout'
         ])->withCookie($cookie);
     }
-
 }

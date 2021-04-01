@@ -56,13 +56,28 @@ const router = new VueRouter({
     routes: routes
 });
 
+
+import { AbilityBuilder, Ability } from '@casl/ability';
+const { can, rules } = new AbilityBuilder(Ability);
 router.beforeEach((to, from, next) => {
   const loggedIn = localStorage.getItem('user')
+  const canNavigate = to.matched.some(route => {
+      if(route.meta.resource){
+          return ability.can(route.meta.resource)
+      }
+    return true
+  })
 
   if (to.matched.some(record => record.meta.auth) && !loggedIn) {
     next('/login')
     return
+  }else{
+
+    if (!canNavigate) {
+        return next('/403')
+    }
   }
+
   next()
 });
 

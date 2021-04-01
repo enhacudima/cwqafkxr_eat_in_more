@@ -1,8 +1,11 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
+import { AbilityBuilder, Ability } from '@casl/ability';
+import {ability} from './ability.js'
 
-Vue.use(Vuex)
+
+Vue.use(Vuex,ability)
 
 axios.defaults.baseURL = 'http://localhost/laravel-passport-vue-sap/public/api'
 //axios.defaults.baseURL = 'https://greenisle.co.za/api';
@@ -16,7 +19,13 @@ export default new Vuex.Store({
     setUserData (state, userData) {
       state.user = userData
       localStorage.setItem('user', JSON.stringify(userData))
+      localStorage.setItem('permissions', JSON.stringify(userData.permissions))
       axios.defaults.headers.common.Authorization = `Bearer ${userData.token}`
+    },
+    setUserPermission(userData){
+        const { can, rules } = new AbilityBuilder(Ability);
+        can(userData.user.permissions, 'all');
+        ability.update(rules);
     },
 
     clearUserData () {
@@ -30,7 +39,8 @@ export default new Vuex.Store({
       return axios
         .post('/login', credentials)
         .then(({ data }) => {
-          commit('setUserData', data)
+          commit('setUserData', data),
+          commit('setUserPermission', data)
         })
     },
 

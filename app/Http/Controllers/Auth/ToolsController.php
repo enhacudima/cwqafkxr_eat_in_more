@@ -52,4 +52,11 @@ class ToolsController extends Controller
         $file->deleteExcept($file_id,'Avatar','Users');
     }
 
+
+    public function abilities()
+    {
+        $data = Auth::user()->getPermissionNames();
+        return response()->json($data,200);
+    }
+
 }

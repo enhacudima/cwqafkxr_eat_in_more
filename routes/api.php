@@ -53,6 +53,7 @@ Route::group(['namespace' => 'Auth'], function() {
 	Route::post('login', 'AuthController@login');
     Route::post('forgot-password', 'ForgotPasswordController@forgotPassword');
     Route::post('reset-password', 'ForgotPasswordController@reset');
+    Route::get('abilities','AbilitiesController@abilities');
 });
 
 

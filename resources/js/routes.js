@@ -17,6 +17,7 @@ import ForgotPasswordResult from './components/Auth/ForgotPasswordResult.vue';
 import NotFound from './components/NotFound';
 import ResetPassword from './components/Auth/ResetPassword.vue';
 import UserProfile from  './components/Profile/User.vue';
+import NoPermission from './components/NoPermission'
 
 
 export const routes = [
@@ -66,6 +67,11 @@ export const routes = [
         component: RegisterResult
     },
     {
+        name: '403',
+        path: '/403',
+        component: NoPermission
+    },
+    {
         name: 'ForgotPasswordResult',
         path: '/ForgotPasswordResult',
         component: ForgotPasswordResult
@@ -110,6 +116,7 @@ export const routes = [
         meta: {
             antMasterLayout: true,
             auth: true,
+            resource: 'homes',
         },
     },
     {
