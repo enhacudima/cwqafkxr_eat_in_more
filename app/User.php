@@ -17,6 +17,9 @@ class User extends Authenticatable implements MustVerifyEmail
      *
      * @var array
      */
+    protected $guard_name = 'api';
+    protected $appends = ['permissions'];
+
     protected $fillable = [
         'name', 'email', 'password','lastName','dataBrith','province','postalCode','phone1','prefix_phone_1','userName','type','status','prefix_id', 'key','mode','location_id','fullAddr',
     ];
@@ -55,5 +58,13 @@ class User extends Authenticatable implements MustVerifyEmail
     public function userLocations()
     {
         return $this->hasMany('App\UserL','location_id','location_id');
+    }
+
+
+    public function getPermissionsAttribute()
+    {
+        return $this->roles->map(function ($role) {
+            return $role->permissions;
+        })->collapse()->pluck('name')->unique();
     }
 }

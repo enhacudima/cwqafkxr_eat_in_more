@@ -16,6 +16,17 @@
                     </v-btn>
             </div>
 
+            <div slot="Roles" slot-scope="props">
+                <v-btn
+                    small
+                    icon
+                    color="green"
+                    @click="userRoles(props.row.name,props.row.key)"
+                >
+                <v-icon small>mdi-folder-open-outline</v-icon>
+                </v-btn>
+            </div>
+
             <div slot="status" slot-scope="props">
                     <v-btn
                     small
@@ -90,14 +101,72 @@
                 {{ props.row.user_type}}
                 </v-btn>
             </div>
+             <div slot="phone1" slot-scope="props">
+                 +{{ props.row.phone1 }}
+             </div>
         </v-server-table>
     </v-col>
+
+    <v-dialog
+        v-model="dialogRoles"
+        max-width="500px"
+        persistent
+    >
+        <v-card>
+        <v-card-title>
+            <span class="headline">{{userName}}'s Roles</span>
+        </v-card-title>
+
+        <v-card-text>
+            <v-container>
+            <v-row>
+                <v-col
+                cols="12"
+                >
+                <v-autocomplete
+                    v-model="editedItem.roles"
+                    :items="roles"
+                    label="Roles"
+                    item-text="name"
+                    item-value="id"
+                    return-object
+                    outlined
+                    dense
+                    chips
+                    small-chips
+                    multiple
+                >
+                </v-autocomplete>
+                </v-col>
+            </v-row>
+            </v-container>
+        </v-card-text>
+
+        <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn
+            color="blue darken-1"
+            text
+            @click="close"
+            >
+            Cancel
+            </v-btn>
+            <v-btn
+            color="blue darken-1"
+            text
+            @click="save"
+            >
+            Save
+            </v-btn>
+        </v-card-actions>
+        </v-card>
+    </v-dialog>
 
 
     <v-dialog
       v-model="dialogType"
       persistent
-      max-width="600px"
+      max-width="500px"
     >
       <v-card>
         <v-form ref="priceForm" v-model="valid" lazy-validation>
@@ -184,11 +253,35 @@
     export default {
 
         mounted() {
-        axios
-            .get('getExperiencesActive')
-            .then(response => (this.experiences = response.data));
+            this.initialize (),
+            axios
+                .get('getExperiencesActive')
+                .then(response => (this.experiences = response.data));
         },
          methods: {
+            userRoles(name,key){
+            axios
+                .get('getUserRoles/'+key)
+                .then(response => (this.editedItem.roles = response.data, this.userKey = key,this.userName=name,this.dialogRoles = true));
+
+            },
+            close () {
+                this.editedItem.roles=null
+                this.userName=null
+                this.dialogRoles = false
+            },
+            save () {
+                axios
+                .post("roles/users/create/"+this.userKey, { data: this.editedItem })
+                .then(response => (this.close()))
+                 this.initialize ()
+            },
+            initialize () {
+                axios
+                .get('getRoles')
+                .then(response => (this.roles = response.data));
+
+            },
             onUpdate() {
              this.$refs.table.refresh();
             },
@@ -264,6 +357,12 @@
 
         data() {
             return {
+                userName:null,
+                userHasRoles:null,
+                editedItem:{
+                    roles:null
+                },
+                roles:[],
                 userKey:null,
                 experiences:[],
                 rules: {
@@ -288,22 +387,24 @@
                     {name:"Active",id:"1"},
                 ],
                 dialogType:false,
-                columns: ["id","name","lastName","dataBrith","prefix_phone_1","phone1","updated_at","email_verified_at","user_type","status"],
+                dialogRoles:false,
+                columns: ["id","name","lastName","dataBrith","country","phone1","updated_at","email_verified_at","user_type","status","Roles"],
                 tableData: [],
                 options: {
                 headings: {
                         name: 'Name',
-                        lastName: 'Last_Name',
-                        dataBrith: 'Data_Brith',
-                        prefix_phone_1: '',
+                        lastName: 'Surname',
+                        dataBrith: 'Data Brith',
+                        country: '',
                         phone1: 'Phone',
-                        updated_at: 'Last_update',
-                        type: 'Type',
+                        updated_at: 'Updated',
+                        user_type: 'Type',
                         status: 'Status',
                         email_verified_at: 'Verified',
+                        id:"#",
 
                     },
-                    filterable: ["id","name","lastName","dataBrith","prefix_phone_1","phone1","updated_at","user_type","status","email_verified_at"],
+                    filterable: ["id","name","lastName","dataBrith","country","phone1","updated_at","user_type","status","email_verified_at"],
                     filterByColumn: true,
                     orderBy: { column: 'updated_at'},
                     setOrder: { ascending:true},

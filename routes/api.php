@@ -132,7 +132,12 @@ Route::group(['namespace' => 'Tools','middleware' => []], function() {
 	Route::post('tools/experience/status/{status}','ExperienceController@status');
 	Route::get('getUsersList','UserListController@getUsersList');
 	Route::post('tools/users/update/{key}','UserListController@UserUpdate');
-
+	Route::get('getRoles','RolesPermissionsController@getRoles');
+	Route::get('getPermissions','RolesPermissionsController@getPermissions');
+    Route::post('role/create','RolesPermissionsController@createRole');
+    Route::get('role/delete/{id}','RolesPermissionsController@deleteRole');
+    Route::get('getUserRoles/{key}','RolesPermissionsController@getUserRoles');
+    Route::post('roles/users/create/{id}','RolesPermissionsController@setUserRoles');
 });
 
 Route::group(['namespace' => 'Meal','middleware' => []], function() {

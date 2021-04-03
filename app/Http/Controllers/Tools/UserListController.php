@@ -29,7 +29,7 @@ class UserListController extends Controller
         $data=  new $user();
 
         $Eloq_table = new EloquentVueTablesUsersList();
-        $table_data = $Eloq_table->get(new $data, ["user_type","id","name",	"lastName","dataBrith","prefix_phone_1","phone1","created_at","updated_at","avatar","type","status","email_verified_at","key","title"]);
+        $table_data = $Eloq_table->get(new $data, ["user_type","id","name",	"lastName","dataBrith","prefix_phone_1","phone1","created_at","updated_at","avatar","type","status","email_verified_at","key","title","country"]);
 
 
         return response()->json($table_data, 200);

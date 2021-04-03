@@ -22,7 +22,7 @@ class AbilitiesController extends Controller
     {
 
         if (Auth::check()) {
-            $data = Auth::user()->getPermissionNames();
+            $data = Auth::user()->getPermissionsAttribute();
         }else{
             $data = [];
         }

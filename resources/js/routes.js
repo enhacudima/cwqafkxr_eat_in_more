@@ -116,7 +116,7 @@ export const routes = [
         meta: {
             antMasterLayout: true,
             auth: true,
-            resource: 'homes',
+            resource: 'home',
         },
     },
     {
