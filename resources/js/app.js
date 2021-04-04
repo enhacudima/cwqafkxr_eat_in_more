@@ -69,7 +69,7 @@ router.beforeEach((to, from, next) => {
       }
     return true
   })
-  console.log(canNavigate)
+
 
   if (to.matched.some(record => record.meta.auth) && !loggedIn) {
     next('/login')
