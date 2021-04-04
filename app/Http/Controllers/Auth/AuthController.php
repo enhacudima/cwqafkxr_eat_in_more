@@ -38,7 +38,7 @@ class AuthController extends Controller
                 ->json([
                     'logged_in_user' => $user,
                     'token' => $token,
-                    'permissions' =>$user_2->getPermissionNames(),
+                    'permissions' =>$user_2->getPermissionsAttribute(),
                 ], 200)
                 ->cookie($cookie['name'], $cookie['value'], $cookie['minutes'], $cookie['path'], $cookie['domain'], $cookie['secure'], $cookie['httponly'], $cookie['samesite']);
         } else {
