@@ -45,6 +45,7 @@ Vue.use(require('vue-moment'));
 Vue.use(BootstrapVue)
 Vue.use(IconsPlugin)
 Vue.use(abilitiesPlugin, ability);
+Vue.component('loading',{ template: '<div>Loading!</div>'})
 
 axios.defaults.baseURL = 'http://localhost/cwqafkxr_eat_in_more/public/api';
 //axios.defaults.baseURL = 'https://greenisle.co.za/api';
@@ -60,6 +61,7 @@ const router = new VueRouter({
 import { AbilityBuilder, Ability } from '@casl/ability';
 const { can, rules } = new AbilityBuilder(Ability);
 router.beforeEach((to, from, next) => {
+
   const loggedIn = localStorage.getItem('user')
   const canNavigate = to.matched.some(route => {
       if(route.meta.resource){

@@ -214,7 +214,8 @@
           <v-col
             cols="12"
           >
-          <slot/>
+           <loading v-if="$root.loading"></loading>
+          <slot v-else/>
           </v-col>
         </v-row>
       </v-container>
