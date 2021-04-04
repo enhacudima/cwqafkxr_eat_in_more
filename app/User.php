@@ -65,6 +65,6 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->roles->map(function ($role) {
             return $role->permissions;
-        })->collapse()->pluck('name')->unique();
+        })->collapse()->pluck('name')->unique()->values();
     }
 }

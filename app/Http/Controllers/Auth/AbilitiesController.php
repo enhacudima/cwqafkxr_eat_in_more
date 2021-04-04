@@ -26,6 +26,8 @@ class AbilitiesController extends Controller
         }else{
             $data = [];
         }
+        //$data=["home","meal_create"];
+        //dd($data);
 
         return response()->json($data,200);
     }
