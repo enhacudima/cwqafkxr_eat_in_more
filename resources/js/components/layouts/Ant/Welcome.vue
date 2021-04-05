@@ -16,7 +16,7 @@
           hide-details
           rounded
           solo-inverted
-          placeholder="Search todos"
+          :placeholder="$t('search')+' todos'"
         ></v-text-field>
       </v-responsive>
       <v-spacer></v-spacer>
@@ -75,14 +75,16 @@
         justify="center"
         >
 
-        <v-col cols="6">
+        <v-col cols="7">
             <v-select
-            :items="states"
+            v-model="my_lang"
+            :items="langs"
             menu-props="auto"
-            label="EN"
+            label="en"
             hide-details
             prepend-icon="mdi-translate"
             single-line
+            @change="changeLocale(my_lang)"
             ></v-select>
         </v-col>
 
@@ -103,7 +105,7 @@
           </v-list-item-icon>
 
           <v-list-item-content>
-            <v-list-item-title>{{ linkName }}</v-list-item-title>
+            <v-list-item-title>{{ $t(linkName) }}</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
       </v-list>
@@ -141,9 +143,21 @@
 
 <script>
 import CookieLaw from 'vue-cookie-law';
+import {i18n} from '../../../i18n.js'
   export default {
     components: { CookieLaw },
+    name: 'locale-changer',
+
+    methods: {
+    changeLocale(locale) {
+        console.log(locale)
+        i18n.locale = locale;
+    }
+    },
+
     data: () => ({
+      my_lang:'en',
+      langs: ['en', 'pt'] ,
       states:[],
       drawer: false,
       iconsFoot: [
@@ -153,10 +167,10 @@ import CookieLaw from 'vue-cookie-law';
         'mdi-instagram',
       ],
       linksNames: [
-        'Welcome',
-        'About US',
-        'Contact',
-        'Terms and Condictions',
+        'welcome',
+        'about_us',
+        'contact',
+        'terms_and_conditions',
       ],
       links:[
         '/',

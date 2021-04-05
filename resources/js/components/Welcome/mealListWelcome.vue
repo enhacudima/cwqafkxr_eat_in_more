@@ -5,7 +5,7 @@
             <v-text-field
             v-model="search"
             append-icon="mdi-magnify"
-            label="Search"
+            :label="$t('search')"
             single-line
             hide-details
             class="pl-10 pr-10"
@@ -127,19 +127,19 @@
                 <v-card-text dense>
                         <div>
                             <div class="font-weight-normal">
-                            <strong>Cuisine</strong>
+                            <strong>{{$t('cusine')}}</strong>
                             </div>
                             <div>{{meal.meal_cuisine.name}}</div>
                         </div>
                         <div>
                             <div class="font-weight-normal">
-                            <strong>Type</strong>
+                            <strong>{{$t('type')}}</strong>
                             </div>
                             <div>{{meal.meal_type.meal_type}}</div>
                         </div>
                         <div>
                             <div class="font-weight-normal">
-                            <strong>Common timing</strong>
+                            <strong>{{$t('common_timing')}}</strong>
                             </div>
                             <div>{{meal.mealtiming.common_timing}}</div>
                         </div>
@@ -150,7 +150,7 @@
                 <v-divider class="mx-4"></v-divider>
 
                 <v-card-text>
-                <strong>Allergies</strong>
+                <strong>{{$t('allergies')}}</strong>
                 <v-chip-group
                     active-class="deep-purple accent-4 white--text"
                     column
