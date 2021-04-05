@@ -2,15 +2,15 @@
   <v-card class="px-4">
       <v-card-text>
           <v-form ref="loginForm" v-model="valid" lazy-validation>
-              <v-row>
+              <v-row class="pt-6">
                   <v-col cols="12">
-                      <v-text-field v-model="loginEmail" :rules="loginEmailRules" label="E-mail" required></v-text-field>
+                      <v-text-field dense outlined  v-model="loginEmail" :rules="loginEmailRules" label="E-mail" required ></v-text-field>
                   </v-col>
                   <v-col cols="12">
-                      <v-text-field autocomplete="off" v-model="loginPassword" :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'" :rules="[rules.required, rules.min]" :type="show1 ? 'text' : 'password'" name="input-10-1" label="Password" hint="At least 8 characters"  :error-messages="loginError" counter @click:append="show1 = !show1"></v-text-field>
+                      <v-text-field dense outlined autocomplete="off" v-model="loginPassword" :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'" :rules="[rules.required, rules.min]" :type="show1 ? 'text' : 'password'" name="input-10-1" label="Password" hint="At least 8 characters"  :error-messages="loginError" counter @click:append="show1 = !show1"></v-text-field>
                   </v-col>
                   <v-col class="d-flex" cols="12" sm="12" xsm="12" align-end>
-                      <v-btn elevation="1" large block  color="success" @click="validate"> Login </v-btn>
+                      <v-btn elevation="1"  block  color="brown lighten-5" @click="validate"> Login </v-btn>
                   </v-col>
                   <v-spacer></v-spacer>
                   <v-row>

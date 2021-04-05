@@ -23,7 +23,8 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 //permission
 import { abilitiesPlugin } from '@casl/vue';
 import {ability} from './ability.js'
-
+//laguang
+import {i18n} from './i18n.js'
 
 
 Vue.config.productionTip = false;
@@ -45,7 +46,6 @@ Vue.use(require('vue-moment'));
 Vue.use(BootstrapVue)
 Vue.use(IconsPlugin)
 Vue.use(abilitiesPlugin, ability);
-Vue.component('loading',{ template: '<div>Loading!</div>'})
 
 axios.defaults.baseURL = 'http://localhost/cwqafkxr_eat_in_more/public/api';
 //axios.defaults.baseURL = 'https://greenisle.co.za/api';
@@ -56,7 +56,6 @@ const router = new VueRouter({
     //base: "/",
     routes: routes
 });
-
 
 import { AbilityBuilder, Ability } from '@casl/ability';
 const { can, rules } = new AbilityBuilder(Ability);
@@ -91,6 +90,7 @@ const app = new Vue({
     el: '#app',
     router: router,
     store,
+    i18n,
     created () {
 	    const userInfo = localStorage.getItem('user')
 	    if (userInfo) {

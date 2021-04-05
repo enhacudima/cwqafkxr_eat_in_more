@@ -1,34 +1,46 @@
 <template>
-    <v-app>
-    <v-dialog v-model="dialog" persistent max-width="600px" min-width="360px">
-        <div>
-            <v-tabs v-model="tab" show-arrows background-color="grey darken-3" icons-and-text dark grow>
-                <v-tabs-slider color="purple darken-4"></v-tabs-slider>
-                <v-tab v-for="(i,index) in tabs" :key="index">
-                    <v-icon large>{{ i.icon }}</v-icon>
-                    <div class="caption py-1">{{ i.name }}</div>
-                </v-tab>
-                    <v-tab-item>
-                        <slot/>
-                    </v-tab-item>
-            </v-tabs>
-        </div>
-    </v-dialog>
-    </v-app>
-</template>
-<script>
-export default {
-  data() {
-    return {
-      dialog: true,
-      tab: 0,
-      tabs: [
-          {name:"Login to EatInMore", icon:"mdi-account"},
-      ],
-    }
-  }
-  }
-</script> 
-<style>
+  <v-app id="inspire">
 
-</style>
+    <v-main class="grey lighten-3">
+      <v-container>
+            <v-row align="center" justify="center" class="pt-16 pt-md-16 mt-md-16" >
+                <v-img
+                    src="storage/icons/110x92px.png"
+                    lazy-src="storage/icons/110x92px.png"
+                    aspect-ratio="2"
+                    max-height="200"
+                    max-width="130"
+                    contain
+                    class="pt-md-16 mt-md-16"
+                >
+                </v-img>
+            </v-row>
+            <v-row align="center" justify="center" >
+
+            <v-col
+                cols="12"
+                sm="5"
+                class="pt-6"
+
+            >
+                <div
+                min-height="30vh"
+                rounded="lg"
+                >
+                 <slot/>
+
+                </div>
+            </v-col>
+            </v-row>
+
+      </v-container>
+    </v-main>
+  </v-app>
+</template>
+
+<script>
+  export default {
+    data: () => ({
+    }),
+  }
+</script>

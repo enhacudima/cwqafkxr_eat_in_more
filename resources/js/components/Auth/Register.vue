@@ -1,5 +1,5 @@
 <template>
-<v-dialog v-model="dialog" persistent max-width="600px" min-width="360px">
+<div max-width="600px" min-width="360px">
             <div>
                 <v-tabs v-model="tab" show-arrows background-color="grey darken-3" icons-and-text dark grow>
                     <v-tabs-slider color="purple darken-4"></v-tabs-slider>
@@ -16,13 +16,13 @@
                                 <v-form ref="registerForm" v-model="valid" lazy-validation>
                                     <v-row>
                                         <v-col cols="12" sm="6" md="6">
-                                            <v-text-field v-model="formReg.name"  label="First Name" maxlength="255" :counter="255" required :rules="[rules.required]"></v-text-field>
+                                            <v-text-field dense v-model="formReg.name"  label="First Name" maxlength="255" :counter="255" required :rules="[rules.required]"></v-text-field>
                                         </v-col>
                                         <v-col cols="12" sm="6" md="6">
-                                            <v-text-field v-model="formReg.lastName"  label="Last Name" maxlength="255" :counter="255" :rules="[rules.required]" required></v-text-field>
+                                            <v-text-field dense v-model="formReg.lastName"  label="Last Name" maxlength="255" :counter="255" :rules="[rules.required]" required></v-text-field>
                                         </v-col>
                                         <v-col cols="12">
-                                            <v-text-field v-model="formReg.email" :rules="emailRules" label="E-mail" :counter="255" required></v-text-field>
+                                            <v-text-field dense v-model="formReg.email" :rules="emailRules" label="E-mail" :counter="255" required></v-text-field>
                                         </v-col>
                                         <v-col cols="12" sm="4" md="4">
                                           <v-autocomplete
@@ -33,11 +33,12 @@
                                             item-text="phone"
                                             return-object
                                             :rules="[rules.required]"
+                                            dense
                                           >
                                           </v-autocomplete>
                                         </v-col>
                                         <v-col cols="12" sm="8" md="8">
-                                            <v-text-field v-model="formReg.phone1" type="number"  :rules="[rulesPhone.required,rulesPhone.min]" label="Phone Number" maxlength="9" :counter="9" required></v-text-field>
+                                            <v-text-field dense v-model="formReg.phone1" type="number"  :rules="[rulesPhone.required,rulesPhone.min]" label="Phone Number" maxlength="9" :counter="9" required></v-text-field>
                                         </v-col>
                                         <v-col cols="12">
                                           <v-menu
@@ -47,6 +48,7 @@
                                             transition="scale-transition"
                                             offset-y
                                             min-width="auto"
+                                            dense
                                           >
                                             <template v-slot:activator="{ on, attrs }">
                                               <v-text-field
@@ -57,6 +59,7 @@
                                                 v-bind="attrs"
                                                 v-on="on"
                                                 :rules="[rules.required]"
+                                                dense
                                               ></v-text-field>
                                             </template>
                                             <v-date-picker
@@ -65,17 +68,18 @@
                                               :max="new Date(new Date().setFullYear(new Date().getFullYear() - 18)).toISOString().substr(0, 10)"
                                               min="1950-01-01"
                                               @change="save"
+                                              dense
                                             ></v-date-picker>
                                           </v-menu>
                                         </v-col>
                                         <v-col cols="12">
-                                            <v-text-field v-model="formReg.password" :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'" :rules="[rules.required, rules.min]" :type="show1 ? 'text' : 'password'" name="input-10-1" label="Password" hint="At least 8 characters" counter @click:append="show1 = !show1"></v-text-field>
+                                            <v-text-field dense v-model="formReg.password" :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'" :rules="[rules.required, rules.min]" :type="show1 ? 'text' : 'password'" name="input-10-1" label="Password" hint="At least 8 characters" counter @click:append="show1 = !show1"></v-text-field>
                                         </v-col>
                                         <v-col cols="12">
-                                            <v-text-field block v-model="formReg.password_confirmation" :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'" :rules="[rules.required, passwordMatch]" :type="show1 ? 'text' : 'password'" name="input-10-1" label="Confirm Password" counter @click:append="show1 = !show1"></v-text-field>
+                                            <v-text-field dense block v-model="formReg.password_confirmation" :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'" :rules="[rules.required, passwordMatch]" :type="show1 ? 'text' : 'password'" name="input-10-1" label="Confirm Password" counter @click:append="show1 = !show1"></v-text-field>
                                         </v-col>
                                         <v-col cols="12">
-                                          <v-checkbox v-model="formReg.terms_conditions" :rules="[rules.required]">
+                                          <v-checkbox dense v-model="formReg.terms_conditions" :rules="[rules.required]">
                                             <template v-slot:label>
                                               <div>
                                                 I have read and agree to the
@@ -97,8 +101,8 @@
                                           </v-checkbox>
                                         </v-col>
                                         <v-spacer></v-spacer>
-                                        <v-col class="d-flex ml-auto" cols="12" sm="3" xsm="12">
-                                            <v-btn elevation="1" large :disabled="!valid" color="success" @click="validate">Register</v-btn>
+                                        <v-col class="d-flex" cols="12" sm="12" xsm="12" align-end>
+                                            <v-btn elevation="1" block :disabled="!valid" color="brown lighten-5" @click="validate">Register</v-btn>
                                         </v-col>
                                     </v-row>
                                 </v-form>
@@ -107,7 +111,7 @@
                     </v-tab-item>
                 </v-tabs>
             </div>
-        </v-dialog>
+        </div>
 </template>
 
 <script>
@@ -200,7 +204,7 @@ export default {
     countrys:[],
     terms_conditions: false,
     dialog: true,
-    tab: 0,
+    tab: 1,
     tabs: [
         {name:"Login", icon:"mdi-account"},
         {name:"Register", icon:"mdi-account-outline"}

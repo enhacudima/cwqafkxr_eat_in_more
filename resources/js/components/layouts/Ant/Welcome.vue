@@ -22,7 +22,7 @@
       <v-spacer></v-spacer>
 
         <div class="pr-2">
-            <router-link to="/register" tag="button">
+            <router-link to="/login" tag="button">
             <v-btn
             icon
             >
