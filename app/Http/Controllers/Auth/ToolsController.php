@@ -59,4 +59,12 @@ class ToolsController extends Controller
         return response()->json($data,200);
     }
 
+    public function locale($locale)
+    {
+        $user_id=Auth::user()->id;
+        $user = User::where('id',$user_id)->update(["locale"=>$locale]);
+        return response()->json(['success'=>'Success locale update.'], 200);
+
+    }
+
 }

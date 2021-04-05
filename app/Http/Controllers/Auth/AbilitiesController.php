@@ -14,22 +14,20 @@ class AbilitiesController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth:api');
 
     }
 
     public function abilities()
     {
 
-        if (Auth::check()) {
-            $data = Auth::user()->getPermissionsAttribute();
+        if (Auth::guard('api')->check()) {
+            $permissions = Auth::guard('api')->user()->getPermissionsAttribute();
+            $locale = Auth::guard('api')->user()->locale;
         }else{
-            $data = [];
+            $permissions = [];
+            $locale = 'en';
         }
-        //$data=["home","meal_create"];
-        //dd($data);
-
-        return response()->json($data,200);
+        return response()->json(['permissions'=>$permissions,'locale'=>$locale],200);
     }
 
 }

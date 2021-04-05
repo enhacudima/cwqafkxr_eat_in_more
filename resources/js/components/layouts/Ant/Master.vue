@@ -16,7 +16,7 @@
           hide-details
           rounded
           solo-inverted
-          placeholder="Search todos"
+          :placeholder="$t('search')+' todos'"
         ></v-text-field>
       </v-responsive>
       <v-spacer></v-spacer>
@@ -171,15 +171,24 @@
         justify="center"
         >
 
-        <v-col cols="6">
+        <v-col cols="8">
             <v-select
-            :items="states"
+            v-model="new_lang"
+            :items="langs"
             menu-props="auto"
-            label="EN"
+            label="en"
             hide-details
             prepend-icon="mdi-translate"
             single-line
-            ></v-select>
+            @change="changeLocale(new_lang)"
+            >
+                <template v-slot:selection="{ item }">
+                  {{ item.replaceAll('_', ' ').toUpperCase() }}
+                </template>
+                <template  v-slot:item="{ item }">
+                  {{ item.replaceAll('_', ' ').toUpperCase()}}
+                </template>
+            </v-select>
         </v-col>
 
         </v-row>
@@ -243,11 +252,15 @@
   import dialogoAvatar from '../../Auth/dialogAvatar.vue';
   import CookieLaw from 'vue-cookie-law';
   import { AbilityBuilder, Ability } from '@casl/ability';
+  import {i18n} from '../../../i18n.js'
 
   export default {
     components: { dialogo,dialogoAvatar, CookieLaw },
 
     data: () => ({
+      new_lang:null,
+      my_lang:null,
+      langs: ['en', 'pt_BR'] ,
       showDialogAvatar: false,
       showDialog: false,
       fav: false,
@@ -284,6 +297,19 @@
       modeGet: '',
     }),
   methods: {
+    changeLocale(new_lang) {
+        if(new_lang != this.my_lang){
+            i18n.locale = new_lang;
+            this.my_lang=new_lang
+            this.setLocale();
+        }
+    },
+    setLocale(){
+
+      axios
+        .get('userLocale/'+this.my_lang)
+        .then();
+    },
     changeAvatar(){
         this.showDialogAvatar = true;
     },
@@ -355,21 +381,20 @@
             console.log(err);
         })
     },
-    abilities(permissions){
+    permissions(permissions){
         const { can, rules } = new AbilityBuilder(Ability);
         can(permissions, 'all');
         this.$ability.update(rules);
     },
-    permissions(){
-        const userData = JSON.parse(this.userInfo);
+    abilities(){
         axios
             .get('abilities')
-            .then(response => (this.abilities(response.data),
-            localStorage.setItem('permissions', JSON.stringify(response.data))
-            //console.log(JSON.parse(localStorage.getItem('permissions')))
-            ))
-            .catch(this.abilities(userData.permissions)
-            );
+            .then(response => (
+            localStorage.setItem('permissions', JSON.stringify(response.data.permissions)),
+            this.new_lang=response.data.locale,
+            this.changeLocale(this.new_lang),
+            this.permissions(response.data.permissions)
+            ));
     }
 
   },
@@ -377,7 +402,7 @@
     watch: {
     $route:{
         handler(){
-            this.permissions();
+            this.abilities();
         },
         immediate : true
     },
@@ -395,7 +420,7 @@
     },
   mounted() {
     const userData = JSON.parse(this.userInfo);
-    this.permissions();
+    this.abilities();
     this.userModeGet();
     this.darkmode();
 
@@ -416,7 +441,6 @@
     this.userName = userName;
     this.userlastName =userlastName;
     this.userAvatar = userData.logged_in_user.avatar;
-
 
   },
   }

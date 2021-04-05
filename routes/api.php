@@ -61,6 +61,8 @@ Route::group(['namespace' => 'Auth','middleware' => ['auth.api']], function() {
     Route::post('logout', 'AuthController@logout');
     Route::post('logoutAll', 'AuthController@logoutAll');
     Route::get('userMode/{mode}','ToolsController@mode');
+    Route::get('userLocale/{locale}','ToolsController@locale');
+    Route::get('userGetLocale','ToolsController@getLocale');
     Route::get('userModeGet','ToolsController@getMode');
     Route::get('getUserData','ToolsController@getUserData');
     Route::post('change-password', 'AuthController@changePassword');

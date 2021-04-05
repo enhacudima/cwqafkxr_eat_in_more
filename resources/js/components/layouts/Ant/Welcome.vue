@@ -75,7 +75,7 @@
         justify="center"
         >
 
-        <v-col cols="7">
+        <v-col cols="8">
             <v-select
             v-model="my_lang"
             :items="langs"
@@ -85,7 +85,14 @@
             prepend-icon="mdi-translate"
             single-line
             @change="changeLocale(my_lang)"
-            ></v-select>
+            >
+                <template v-slot:selection="{ item }">
+                  {{ item.replaceAll('_', ' ').toUpperCase() }}
+                </template>
+                <template  v-slot:item="{ item }">
+                  {{ item.replaceAll('_', ' ').toUpperCase()}}
+                </template>
+            </v-select>
         </v-col>
 
         </v-row>
@@ -150,14 +157,13 @@ import {i18n} from '../../../i18n.js'
 
     methods: {
     changeLocale(locale) {
-        console.log(locale)
         i18n.locale = locale;
     }
     },
 
     data: () => ({
       my_lang:'en',
-      langs: ['en', 'pt'] ,
+      langs: ['en', 'pt_BR'] ,
       states:[],
       drawer: false,
       iconsFoot: [

@@ -57,7 +57,7 @@ class Kernel extends HttpKernel
             'auth:api',
             \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
         ],
-        
+
     ];
 
     /**
@@ -81,5 +81,6 @@ class Kernel extends HttpKernel
         'CheckStatus' => \App\Http\Middleware\CheckStatus::class,
         'CheckChefe'=>\App\Http\Middleware\CheckChefe::class,
         'UserType'=>\App\Http\Middleware\UserType::class,
+        'setlocale' => \App\Http\Middleware\SetLocale::class,
     ];
 }

@@ -18,7 +18,7 @@ const messages = {
         type:'Type',
         allergies:'Allergies',
     },
-    'pt': {
+    'pt_BR': {
         login:'Faça login para iniciar sua sessão',
         search: 'Pesquisa',
         welcome: 'Bem Vindo',
@@ -34,7 +34,7 @@ const messages = {
 
 const i18n = new VueI18n({
     locale: 'en', // set locale
-    fallbackLocale: 'pt', // set fallback locale
+    fallbackLocale: 'pt_BR', // set fallback locale
     messages, // set locale messages
 });
 
