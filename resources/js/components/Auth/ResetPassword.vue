@@ -1,5 +1,5 @@
 <template>
-  <v-card class="px-4">
+  <v-card class="px-4" outlined>
       <v-card-text>
           <v-form ref="loginForm" v-model="valid" lazy-validation>
               <v-row>
@@ -7,10 +7,10 @@
                       <v-text-field v-model="email" :rules="loginEmailRules" label="E-mail" required :error-messages="loginError"></v-text-field>
                   </v-col>
                 <v-col cols="12">
-                    <v-text-field v-model="password" :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'" :rules="[rules.required, rules.min]" :type="show1 ? 'text' : 'password'" name="input-10-1" label="Password" hint="At least 8 characters" counter @click:append="show1 = !show1" ></v-text-field>
+                    <v-text-field v-model="password" :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'" :rules="[rules.required, rules.min]" :type="show1 ? 'text' : 'password'" name="input-10-1" :label="$t('password')" hint="At least 8 characters" counter @click:append="show1 = !show1" ></v-text-field>
                 </v-col>
                 <v-col cols="12">
-                    <v-text-field block v-model="password_confirmation" :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'" :rules="[rules.required, passwordMatch]" :type="show1 ? 'text' : 'password'" name="input-10-1" label="Confirm Password" counter @click:append="show1 = !show1"></v-text-field>
+                    <v-text-field block v-model="password_confirmation" :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'" :rules="[rules.required, passwordMatch]" :type="show1 ? 'text' : 'password'" name="input-10-1" :label="$t('password_confirm')" counter @click:append="show1 = !show1"></v-text-field>
                 </v-col>
                   <v-col class="d-flex" cols="12" sm="12" xsm="12" align-end>
                       <v-btn elevation="1" large block  color="success" @click="validate"> Reset</v-btn>

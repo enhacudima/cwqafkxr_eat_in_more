@@ -1,8 +1,14 @@
 <template>
-  <v-card class="px-4" outlined>
+  <v-card class="" outlined>
+
+    <v-progress-linear
+      :active="dialogW"
+      indeterminate
+      color="primary"
+    ></v-progress-linear>
 
       <v-card-text>
-          <v-form ref="loginForm" v-model="valid" lazy-validation>
+          <v-form ref="loginForm" v-model="valid" lazy-validation @submit.prevent="validate">
               <v-row class="pt-6">
                   <v-col cols="12">
                       <v-text-field dense outlined  v-model="loginEmail" :rules="loginEmailRules" :error-messages="loginError" label="E-mail" required ></v-text-field>
@@ -32,32 +38,11 @@
                   </v-col>
                   <v-spacer></v-spacer>
                   <v-col class="d-flex" cols="6" sm="6" xsm="12" align-end>
-                      <v-btn elevation="1"  block  color="primary" @click="validate"> {{$t('login')}} </v-btn>
+                      <v-btn elevation="1"  block  color="primary" type="submit"> {{$t('login')}} </v-btn>
                   </v-col>
               </v-row>
           </v-form>
       </v-card-text>
-
-    <v-dialog
-      v-model="dialogW"
-      hide-overlay
-      persistent
-      width="300"
-    >
-      <v-card
-        color="primary"
-        dark
-      >
-        <v-card-text>
-          Please stand by
-          <v-progress-linear
-            indeterminate
-            color="white"
-            class="mb-0"
-          ></v-progress-linear>
-        </v-card-text>
-      </v-card>
-    </v-dialog>
   </v-card>
 </template>
 

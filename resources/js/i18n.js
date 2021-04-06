@@ -35,6 +35,9 @@ const messages = {
         terms_service:"Terms of Service",
         open_terms_and_conditions:"Open Terms and condition",
         register:"Register",
+
+        send_link: "Send Link",
+        reset: "Reset",
     },
     'pt_BR': {
         login:'Iniciar sessão',
@@ -65,6 +68,9 @@ const messages = {
         terms_service:"Termos de serviço",
         open_terms_and_conditions:"Termos e condições abertos",
         register:"Criar conta",
+
+        send_link: "Enviar Link",
+        reset: "Redifinir",
     }
 };
 
