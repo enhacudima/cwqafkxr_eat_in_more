@@ -13,8 +13,8 @@
                   <v-col class="d-flex" cols="12" sm="12" xsm="12" align-end>
                       <v-btn elevation="1"  block  color="brown lighten-5" @click="validate"> Login </v-btn>
                   </v-col>
-                  <v-spacer></v-spacer>
-                  <v-row>
+
+                  <v-row class="pl-4">
                     <v-col class="d-flex" cols="12" sm="12" xsm="12">
                         <v-tooltip bottom >
                         <template v-slot:activator="{ on }">

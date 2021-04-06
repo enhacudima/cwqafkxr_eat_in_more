@@ -7,11 +7,13 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
+use Yadahan\AuthenticationLog\AuthenticationLogable;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
     use Notifiable, HasApiTokens;
     use HasRoles;
+    use AuthenticationLogable;
     /**
      * The attributes that are mass assignable.
      *
@@ -66,5 +68,10 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->roles->map(function ($role) {
             return $role->permissions;
         })->collapse()->pluck('name')->unique()->values();
+    }
+
+    public function notifyAuthenticationLogVia()
+    {
+        return [ 'mail'];
     }
 }
