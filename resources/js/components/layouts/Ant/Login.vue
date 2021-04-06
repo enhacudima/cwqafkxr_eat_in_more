@@ -28,6 +28,25 @@
                 rounded="lg"
                 >
                  <slot/>
+                 <v-row class="mt-6">
+                    <v-col cols="4">
+                        <v-select
+                        v-model="my_lang"
+                        :items="langs"
+                        :label="$t('language')"
+                        dense
+                        outlined
+                        @change="changeLocale(my_lang)"
+                        >
+                            <template v-slot:selection="{ item }">
+                            {{ item.replaceAll('_', ' ').toUpperCase() }}
+                            </template>
+                            <template  v-slot:item="{ item }">
+                            {{ item.replaceAll('_', ' ').toUpperCase()}}
+                            </template>
+                        </v-select>
+                    </v-col>
+                 </v-row>
 
                 </div>
             </v-col>
@@ -39,8 +58,16 @@
 </template>
 
 <script>
+import {i18n} from '../../../i18n.js'
   export default {
+     methods: {
+    changeLocale(locale) {
+        i18n.locale = locale;
+    }
+    },
     data: () => ({
+      my_lang:'en',
+      langs: ['en', 'pt_BR'] ,
     }),
   }
 </script>

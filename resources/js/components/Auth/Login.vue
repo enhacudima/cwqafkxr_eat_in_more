@@ -1,5 +1,5 @@
 <template>
-  <v-card class="px-4">
+  <v-card class="px-4" outlined>
 
       <v-card-text>
           <v-form ref="loginForm" v-model="valid" lazy-validation>
@@ -8,15 +8,9 @@
                       <v-text-field dense outlined  v-model="loginEmail" :rules="loginEmailRules" :error-messages="loginError" label="E-mail" required ></v-text-field>
                   </v-col>
                   <v-col cols="12">
-                      <v-text-field dense outlined autocomplete="off" v-model="loginPassword" :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'" :rules="[rules.required, rules.min]" :type="show1 ? 'text' : 'password'" name="input-10-1" label="Password" hint="At least 8 characters"   @click:append="show1 = !show1"></v-text-field>
-                  </v-col>
-                  <v-col class="d-flex" cols="12" sm="12" xsm="12" align-end>
-                      <v-btn elevation="1"  block  color="brown lighten-5" @click="validate"> Login </v-btn>
-                  </v-col>
+                      <v-text-field dense outlined autocomplete="off" v-model="loginPassword" :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'" :rules="[rules.required, rules.min]" :type="show1 ? 'text' : 'password'" name="input-10-1" :label="$t('password')" :hint="$t('at_least_8_characters')"   @click:append="show1 = !show1"></v-text-field>
 
-                  <v-row class="pl-4">
-                    <v-col class="d-flex" cols="12" sm="12" xsm="12">
-                        <v-tooltip bottom >
+                        <v-tooltip bottom class="mt-n1">
                         <template v-slot:activator="{ on }">
                             <a
                             target="_blank"
@@ -24,22 +18,22 @@
                             @click.stop
                             v-on="on"
                             >
-                            Forgot password
+                            {{$t('forgot_password')}}
                             </a>
                         </template>
-                        Use this link to reset you password
+                        {{$t('use_link_reset')}}
                         </v-tooltip>
-                        <div class="pl-3">
-                        Or
+                  </v-col>
 
-                        </div>
-                        <div class="pl-3">
-                        <router-link to="/register" class="">
-                            Register now!
+                  <v-col class="d-flex" cols="6" sm="6" xsm="12" align-end>
+                        <router-link to="/register" class="pt-3">
+                            {{$t('register_now')}}
                         </router-link>
-                        </div>
-                    </v-col>
-                  </v-row>
+                  </v-col>
+                  <v-spacer></v-spacer>
+                  <v-col class="d-flex" cols="6" sm="6" xsm="12" align-end>
+                      <v-btn elevation="1"  block  color="primary" @click="validate"> {{$t('login')}} </v-btn>
+                  </v-col>
               </v-row>
           </v-form>
       </v-card-text>

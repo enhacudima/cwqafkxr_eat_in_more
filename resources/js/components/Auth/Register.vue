@@ -1,11 +1,11 @@
 <template>
-<div max-width="600px" min-width="360px">
+<div max-width="600px" min-width="360px" outlined>
             <div>
                 <v-tabs v-model="tab" show-arrows background-color="grey darken-3" icons-and-text dark grow>
                     <v-tabs-slider color="purple darken-4"></v-tabs-slider>
                     <v-tab v-for="(i,index) in tabs" :key="index">
                         <v-icon large>{{ i.icon }}</v-icon>
-                        <div class="caption py-1">{{ i.name }}</div>
+                        <div class="caption py-1">{{ $t(i.name) }}</div>
                     </v-tab>
                     <v-tab-item>
                       <loginView/>
@@ -16,10 +16,10 @@
                                 <v-form ref="registerForm" v-model="valid" lazy-validation>
                                     <v-row>
                                         <v-col cols="12" sm="6" md="6">
-                                            <v-text-field dense v-model="formReg.name"  label="First Name" maxlength="255" :counter="255" required :rules="[rules.required]"></v-text-field>
+                                            <v-text-field dense v-model="formReg.name"  :label="$t('f_name')" maxlength="255" :counter="255" required :rules="[rules.required]"></v-text-field>
                                         </v-col>
                                         <v-col cols="12" sm="6" md="6">
-                                            <v-text-field dense v-model="formReg.lastName"  label="Last Name" maxlength="255" :counter="255" :rules="[rules.required]" required></v-text-field>
+                                            <v-text-field dense v-model="formReg.lastName"  :label="$t('l_name')" maxlength="255" :counter="255" :rules="[rules.required]" required></v-text-field>
                                         </v-col>
                                         <v-col cols="12">
                                             <v-text-field dense v-model="formReg.email" :rules="emailRules" label="E-mail" :counter="255" required></v-text-field>
@@ -28,7 +28,7 @@
                                           <v-autocomplete
                                             v-model="formReg.prefix_phone_1"
                                             :items="countrys"
-                                            label="Prefix"
+                                            :label="$t('prefix_')"
                                             required
                                             item-text="phone"
                                             return-object
@@ -38,7 +38,7 @@
                                           </v-autocomplete>
                                         </v-col>
                                         <v-col cols="12" sm="8" md="8">
-                                            <v-text-field dense v-model="formReg.phone1" type="number"  :rules="[rulesPhone.required,rulesPhone.min]" label="Phone Number" maxlength="9" :counter="9" required></v-text-field>
+                                            <v-text-field dense v-model="formReg.phone1" type="number"  :rules="[rulesPhone.required,rulesPhone.min]" :label="$t('phone_number')" maxlength="9" :counter="9" required></v-text-field>
                                         </v-col>
                                         <v-col cols="12">
                                           <v-menu
@@ -53,7 +53,7 @@
                                             <template v-slot:activator="{ on, attrs }">
                                               <v-text-field
                                                 v-model="formReg.dataBrith"
-                                                label="Birthday date"
+                                                :label="$t('b_date')"
                                                 prepend-icon="mdi-calendar"
                                                 readonly
                                                 v-bind="attrs"
@@ -73,16 +73,16 @@
                                           </v-menu>
                                         </v-col>
                                         <v-col cols="12">
-                                            <v-text-field dense v-model="formReg.password" :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'" :rules="[rules.required, rules.min]" :type="show1 ? 'text' : 'password'" name="input-10-1" label="Password" hint="At least 8 characters" counter @click:append="show1 = !show1"></v-text-field>
+                                            <v-text-field dense v-model="formReg.password" :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'" :rules="[rules.required, rules.min]" :type="show1 ? 'text' : 'password'" name="input-10-1" :label="$t('password')" hint="At least 8 characters" counter @click:append="show1 = !show1"></v-text-field>
                                         </v-col>
                                         <v-col cols="12">
-                                            <v-text-field dense block v-model="formReg.password_confirmation" :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'" :rules="[rules.required, passwordMatch]" :type="show1 ? 'text' : 'password'" name="input-10-1" label="Confirm Password" counter @click:append="show1 = !show1"></v-text-field>
+                                            <v-text-field dense block v-model="formReg.password_confirmation" :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'" :rules="[rules.required, passwordMatch]" :type="show1 ? 'text' : 'password'" name="input-10-1" :label="$t('password_confirm')" counter @click:append="show1 = !show1"></v-text-field>
                                         </v-col>
                                         <v-col cols="12">
                                           <v-checkbox dense v-model="formReg.terms_conditions" :rules="[rules.required]">
                                             <template v-slot:label>
                                               <div>
-                                                I have read and agree to the
+                                                {{$t('i_have_read_and_agree')}}
                                                 <v-tooltip bottom>
                                                   <template v-slot:activator="{ on }">
                                                     <a
@@ -91,10 +91,10 @@
                                                       @click.stop
                                                       v-on="on"
                                                     >
-                                                      Terms of Service
+                                                      {{$t('terms_service')}}
                                                     </a>
                                                   </template>
-                                                  Open Terms and condition
+                                                  {{$t('open_terms_and_conditions')}}
                                                 </v-tooltip>
                                               </div>
                                             </template>
@@ -102,7 +102,7 @@
                                         </v-col>
                                         <v-spacer></v-spacer>
                                         <v-col class="d-flex" cols="12" sm="12" xsm="12" align-end>
-                                            <v-btn elevation="1" block :disabled="!valid" color="brown lighten-5" @click="validate">Register</v-btn>
+                                            <v-btn elevation="1" block :disabled="!valid" color="primary" @click="validate">{{$t('register')}}</v-btn>
                                         </v-col>
                                     </v-row>
                                 </v-form>
@@ -206,8 +206,8 @@ export default {
     dialog: true,
     tab: 1,
     tabs: [
-        {name:"Login", icon:"mdi-account"},
-        {name:"Register", icon:"mdi-account-outline"}
+        {name:"login", icon:"mdi-account"},
+        {name:"register", icon:"mdi-account-outline"}
     ],
     valid: true,
     verify: "",
