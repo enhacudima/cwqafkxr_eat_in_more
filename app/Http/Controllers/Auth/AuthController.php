@@ -7,9 +7,6 @@ use Illuminate\Http\Request;
 use Auth;
 use Cookie;
 use App\User;
-//for test
-use Spatie\Permission\Models\Role;
-use Spatie\Permission\Models\Permission;
 
 class AuthController extends Controller
 {
@@ -19,13 +16,32 @@ class AuthController extends Controller
         $this->middleware('guest')->except('logout');
 
     }
+
+    protected function hasTooManyLoginAttempts(Request $request)
+    {
+
+       $maxLoginAttempts = 3;
+       $lockoutTime = 2; // In minutes
+
+       return $this->limiter()->tooManyAttempts(
+           $this->throttleKey($request), $maxLoginAttempts, $lockoutTime
+       );
+    }
     public function login(Request $request)
     {
+
         $request->validate([
             'email' => 'required|string|email',
             'password' => 'required|string',
         ]);
         $credentials = request(['email', 'password']);
+
+        if ($this->hasTooManyLoginAttempts($request)) {
+            $this->fireLockoutEvent($request);
+
+            return $this->sendLockoutResponse($request);
+        }
+
         if (Auth::attempt($credentials)) {
             $user = Auth::user();
             if(!$user->email_verified_at){
@@ -42,8 +58,9 @@ class AuthController extends Controller
                 ], 200)
                 ->cookie($cookie['name'], $cookie['value'], $cookie['minutes'], $cookie['path'], $cookie['domain'], $cookie['secure'], $cookie['httponly'], $cookie['samesite']);
         } else {
+            $this->incrementLoginAttempts($request);
             return response()->json(
-                ['error' => 'Invalid-credentials'], 422);
+                ['error' => 'These credentials do not match our records.'], 422);
         }
     }
     private function getCookieDetails($token)
