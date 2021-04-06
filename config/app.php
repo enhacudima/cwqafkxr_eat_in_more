@@ -178,6 +178,8 @@ return [
         Laravel\Passport\PassportServiceProvider::class,
         Axlon\PostalCodeValidation\ValidationServiceProvider::class,
 
+        Arcanedev\LogViewer\LogViewerServiceProvider::class,
+
     ],
 
     /*
