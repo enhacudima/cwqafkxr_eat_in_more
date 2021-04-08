@@ -55,7 +55,7 @@ class ForgotPasswordController extends Controller
             $validator = Validator::make($input, [
                 'token' => 'required',
                 'email' => 'required|email|exists:users,email',
-                'password' => 'required|confirmed|min:8',
+                'password' => 'required|confirmed|min:8|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/',
             ]);
 
              if ($validator->fails()) {

@@ -7,13 +7,13 @@
                       <v-text-field v-model="email" :rules="loginEmailRules" label="E-mail" required :error-messages="loginError"></v-text-field>
                   </v-col>
                 <v-col cols="12">
-                    <v-text-field v-model="password" :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'" :rules="[rules.required, rules.min]" :type="show1 ? 'text' : 'password'" name="input-10-1" :label="$t('password')" hint="At least 8 characters" counter @click:append="show1 = !show1" ></v-text-field>
+                    <v-text-field v-model="password" :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'" :rules="[rules.required, rules.min,rules.password]" :type="show1 ? 'text' : 'password'" name="input-10-1" :label="$t('password')" hint="At least 8 characters" counter @click:append="show1 = !show1" ></v-text-field>
                 </v-col>
                 <v-col cols="12">
                     <v-text-field block v-model="password_confirmation" :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'" :rules="[rules.required, passwordMatch]" :type="show1 ? 'text' : 'password'" name="input-10-1" :label="$t('password_confirm')" counter @click:append="show1 = !show1"></v-text-field>
                 </v-col>
                   <v-col class="d-flex" cols="12" sm="12" xsm="12" align-end>
-                      <v-btn elevation="1" large block  color="success" @click="validate"> Reset</v-btn>
+                      <v-btn elevation="1" large block  color="success" @click="validate"> {{$t('reset')}}</v-btn>
                   </v-col>
                   <v-spacer></v-spacer>
               </v-row>
@@ -74,7 +74,14 @@ export default {
       ],
       rules: {
         required: value => !!value || "Required.",
-        min: v => (v && v.length >= 8) || "Min 8 characters"
+        min: v => (v && v.length >= 8) || "Min 8 characters",
+        password: value => {
+          const pattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/;
+          return (
+            pattern.test(value) ||
+            "Min. 8 characters with at least one capital letter, a number and a special character."
+          );
+        }
       },
       testError:'',
       country:'',

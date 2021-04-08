@@ -73,7 +73,7 @@
                                           </v-menu>
                                         </v-col>
                                         <v-col cols="12">
-                                            <v-text-field dense v-model="formReg.password" :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'" :rules="[rules.required, rules.min]" :type="show1 ? 'text' : 'password'" name="input-10-1" :label="$t('password')" hint="At least 8 characters" counter @click:append="show1 = !show1"></v-text-field>
+                                            <v-text-field dense v-model="formReg.password" :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'" :rules="[rules.required, rules.min,rules.password]" :type="show1 ? 'text' : 'password'" name="input-10-1" :label="$t('password')" hint="At least 8 characters" counter @click:append="show1 = !show1"></v-text-field>
                                         </v-col>
                                         <v-col cols="12">
                                             <v-text-field dense block v-model="formReg.password_confirmation" :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'" :rules="[rules.required, passwordMatch]" :type="show1 ? 'text' : 'password'" name="input-10-1" :label="$t('password_confirm')" counter @click:append="show1 = !show1"></v-text-field>
@@ -225,11 +225,18 @@ export default {
     show1: false,
     rules: {
       required: value => !!value || "Required.",
-      min: v => (v && v.length >= 8) || "Min 8 characters"
+      min: v => (v && v.length >= 8) || "Min 8 characters",
+      password: value => {
+          const pattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/;
+          return (
+            pattern.test(value) ||
+            "Min. 8 characters with at least one capital letter, a number and a special character."
+          );
+        }
     },
     rulesPhone: {
       required: value => !!value || "Required.",
-      min: v => (v && v.length >= 9) || "Min 9 characters"
+      min: v => (v && v.length >= 9) || "Min 9 characters",
     }
   }),
 

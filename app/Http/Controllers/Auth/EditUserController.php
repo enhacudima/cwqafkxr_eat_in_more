@@ -92,7 +92,7 @@ class EditUserController extends Controller
         $userid = Auth::guard('api')->user()->id;
         $rules = array(
             'old_password' => 'required',
-            'password' => 'required|min:8|confirmed',
+            'password' => 'required|min:8|confirmed|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/',
         );
 
         $validator = Validator::make($input, $rules);

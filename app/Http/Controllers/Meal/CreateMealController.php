@@ -18,22 +18,23 @@ use App\MealPrices;
 
 class CreateMealController extends Controller
 {
-    
+
     public function __construct()
     {
         $this->middleware('auth:api');
+        $this->middleware('role_or_permission:meal_create', ['only' => ['newMeal']]);
     }
-    
+
     public function newMeal(Request $request)
-    { 
+    {
 
     	$mealData=$request->data['mealData'];
         $tags=$request->data['tags'];
         $file_id=null;
         if(isset($request->data['fileData']['file_id'])){
-            $file_id = $request->data['fileData']['file_id']; 
+            $file_id = $request->data['fileData']['file_id'];
         }
-        $mealData['tags'] = $tags; 
+        $mealData['tags'] = $tags;
         $mealData['file_id'] = $file_id;
 
         $myRequest = new Request();
@@ -46,9 +47,9 @@ class CreateMealController extends Controller
             'details' => 'required|string|max:255',
             'commonTiming'=>'required',
             'time' => 'required|numeric',
-            'people' => 'required|numeric', 
+            'people' => 'required|numeric',
             'experience' => 'required|numeric|exists:experiences,id',
-            'tags' => 'required', 
+            'tags' => 'required',
             'file_id' => 'required|numeric',
             'mealType' => 'required|numeric',
         ],
@@ -56,12 +57,12 @@ class CreateMealController extends Controller
      	    'file_id.required'=>'Please add a picture of meal.'
         ]
     	);
-    if ($validator->fails()) { 
-                return response()->json(['errors'=>$validator->errors()->all()], 422);            
-            } 
+    if ($validator->fails()) {
+                return response()->json(['errors'=>$validator->errors()->all()], 422);
+            }
 
-    $input = $myRequest->all(); 
-            $input['user_id'] = Auth::user()->id; 
+    $input = $myRequest->all();
+            $input['user_id'] = Auth::user()->id;
             $input['key'] = md5(time()).Auth::user()->id;
 
             $meal=Meals::Create(
@@ -81,9 +82,9 @@ class CreateMealController extends Controller
             	]
             );
 
-                    
-            $file = new FilesController; 
-            $file_id = $myRequest['file_id'];      
+
+            $file = new FilesController;
+            $file_id = $myRequest['file_id'];
             $file->useFile($file_id,$meal->id, 'meals', 0);
 
            foreach($input['ingredients'] as $key => $ingredient){
@@ -95,7 +96,7 @@ class CreateMealController extends Controller
 
            }
 
-           
+
            foreach($input['options'] as $key => $option){
             //add options to meal
             $optiKey = md5(time()).Auth::user()->id;
@@ -124,16 +125,16 @@ class CreateMealController extends Controller
                     ]);
                }
            }
-           
 
-    return response()->json(['success'=>'Added new records.'], 200); 
+
+    return response()->json(['success'=>'Added new records.'], 200);
     }
 
     public function addprices(Request $request,$idMeal)
     {
         $priceData=$request->data['priceData'];
         $priceData['currency'] = $priceData['currency']['id'];
-        
+
         $myRequest = new Request();
         $myRequest->setMethod('POST');
         $myRequest->request->add($priceData);
@@ -146,12 +147,12 @@ class CreateMealController extends Controller
             'currency.exists'=>'please select a valid currency.'
         ]
     	);
-        if ($validator->fails()) { 
-            return response()->json(['errors'=>$validator->errors()->all()], 422);            
-        } 
+        if ($validator->fails()) {
+            return response()->json(['errors'=>$validator->errors()->all()], 422);
+        }
         $oldMel=MealPrices::where('currency_id',$myRequest->currency)->where('meal_id',$idMeal)->where('amount',$myRequest->price)->first();
         if($oldMel){
-            return response()->json(['errors'=>['You cannot override a same price']], 422); 
+            return response()->json(['errors'=>['You cannot override a same price']], 422);
         }
         MealPrices::where('currency_id',$myRequest->currency)->where('meal_id',$idMeal)
                 ->update([
@@ -168,9 +169,9 @@ class CreateMealController extends Controller
 
 
 
-      
-        
-        return response()->json(['success'=>'Added new records.'], 200); 
+
+
+        return response()->json(['success'=>'Added new records.'], 200);
     }
 
     public function pricesStatus(Request $request, $status)

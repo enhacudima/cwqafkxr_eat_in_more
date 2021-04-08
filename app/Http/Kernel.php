@@ -82,5 +82,8 @@ class Kernel extends HttpKernel
         'CheckChefe'=>\App\Http\Middleware\CheckChefe::class,
         'UserType'=>\App\Http\Middleware\UserType::class,
         'setlocale' => \App\Http\Middleware\SetLocale::class,
+        'role' => \Spatie\Permission\Middlewares\RoleMiddleware::class,
+        'permission' => \Spatie\Permission\Middlewares\PermissionMiddleware::class,
+        'role_or_permission' => \Spatie\Permission\Middlewares\RoleOrPermissionMiddleware::class,
     ];
 }

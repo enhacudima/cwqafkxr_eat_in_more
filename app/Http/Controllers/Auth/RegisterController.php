@@ -12,6 +12,7 @@ use Auth;
 use App\CountryStates;
 use App\ProvinceStates;
 use App\Http\Controllers\Helpers\LocationController;
+use App\Http\Controllers\Tools\RolesPermissionsController;
 
 class RegisterController extends Controller
 {
@@ -38,7 +39,7 @@ class RegisterController extends Controller
             'name' => 'required|string|max:255',
             'lastName' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email|max:255',
-            'password' => 'required|string|min:8|confirmed',
+            'password' => 'required|string|min:8|confirmed|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/',
             'dataBrith' => 'required|date|date_format:Y-m-d|before:18 years ago',
             'phone1'=>'required|numeric|unique:users,phone1',
             //'prefix_phone_1'=>'required', //removed
@@ -78,6 +79,13 @@ class RegisterController extends Controller
 
         $success['token'] =  $user->createToken('MyApp')-> accessToken;
         $success['name'] =  $user->name;
+        //difine user role for basic
+        $role = new RolesPermissionsController();
+        if($user){
+            $role->setUserRole("basic", $user->key);
+        }
+
+
     return response()->json(['success'=>'Added new records.'], 200);
     }
 }

@@ -13,6 +13,7 @@ use App\UserV;
 use App\EloquentVueTablesUsersList;
 use App\Http\Controllers\Helpers\BackUpUserController;
 use App\CV;
+use App\Http\Controllers\Tools\RolesPermissionsController;
 
 class UserListController extends Controller
 {
@@ -20,6 +21,7 @@ class UserListController extends Controller
     public function __construct()
     {
         $this->middleware('auth:api');
+        $this->middleware('role_or_permission:admin_users', ['only' => ['getUsersList']]);
 
     }
 
@@ -70,6 +72,12 @@ class UserListController extends Controller
                     'type'=> $input['type'],
                 ]
             );
+
+            //difine user role for basic
+            $role = new RolesPermissionsController();
+            if($user){
+                $role->setUserRole($input['type'], $key);
+            }
         }
 
         if(isset($myRequest->userStatus['id'])){
@@ -77,7 +85,7 @@ class UserListController extends Controller
             $user=User::where('key',$key)
             ->update(
                 [
-                    'userStatus'=> $input['userStatus'],
+                    'status'=> $input['userStatus'],
                 ]
             );
         }

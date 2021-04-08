@@ -61,10 +61,17 @@
                         return-object
                         outlined
                         dense
-                        chips
-                        small-chips
                         multiple
                     >
+                        <template v-slot:selection="{ item }">
+                            <v-chip
+                                class="ma-2"
+                                small>
+                                {{ item.name.replaceAll('_', ' ').toUpperCase() }}
+                            </v-chip>
+
+                        </template>
+
                     </v-autocomplete>
                   </v-col>
                 </v-row>
@@ -146,6 +153,7 @@
 <script>
   export default {
     data: () => ({
+      selected:[],
       permissions:[],
       roles:[],
       dialog: false,

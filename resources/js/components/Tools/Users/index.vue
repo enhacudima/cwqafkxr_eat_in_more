@@ -366,7 +366,14 @@
                 userKey:null,
                 experiences:[],
                 rules: {
-                required: value => !!value || "Required.",
+                    required: value => !!value || "Required.",
+                    password: value => {
+                    const pattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/;
+                    return (
+                        pattern.test(value) ||
+                        "Min. 8 characters with at least one capital letter, a number and a special character."
+                    );
+                    }
                 },
                 valid: true,
                 formList:{
@@ -395,7 +402,7 @@
                         name: 'Name',
                         lastName: 'Surname',
                         dataBrith: 'Data Brith',
-                        country: '',
+                        country: 'Country',
                         phone1: 'Phone',
                         updated_at: 'Updated',
                         user_type: 'Type',

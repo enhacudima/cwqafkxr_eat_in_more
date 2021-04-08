@@ -48,6 +48,7 @@
 
 <script>
 export default {
+name: 'locale-changer',
   data() {
     return {
       dialogW:false,

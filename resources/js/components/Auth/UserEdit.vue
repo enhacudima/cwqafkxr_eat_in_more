@@ -236,7 +236,14 @@ export default {
     show1: false,
     rules: {
       required: value => !!value || "Required.",
-      min: v => (v && v.length >= 8) || "Min 8 characters"
+      min: v => (v && v.length >= 8) || "Min 8 characters",
+      password: value => {
+          const pattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/;
+          return (
+            pattern.test(value) ||
+            "Min. 8 characters with at least one capital letter, a number and a special character."
+          );
+        }
     },
     rulesPhone: {
       required: value => !!value || "Required.",

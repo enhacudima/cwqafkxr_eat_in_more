@@ -17,6 +17,7 @@ class RolesPermissionsController extends Controller
     public function __construct()
     {
         $this->middleware('auth:api');
+        $this->middleware('role_or_permission:admin_roles_permissions');
 
     }
 
@@ -138,5 +139,17 @@ class RolesPermissionsController extends Controller
             }
         }
         return response()->json(['success'=>'Remove records.'], 200);
+    }
+
+    public function setUserRole($role, $key){
+        $user = User::where('key',$key)->first();
+        $role = Role::where('name',$role)->first();
+
+        if(isset($user) || isset($role)){
+            $user->syncPermissions([]);
+            $user->syncRoles([]);
+            $user->assignRole($role);
+        }
+
     }
 }
