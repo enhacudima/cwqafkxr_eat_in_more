@@ -41,66 +41,11 @@
                     xl="4"
                     align="center"
                     >
-                    <v-row>
-                        <v-col
-                        xs="6"
-                        sm="6"
-                        md="6"
-                        lg="6"
-                        xl="6"
-                        >
-                            <v-img
-                                src="storage/icons/android.png"
-                                lazy-src="storage/icons/android.png"
-                                max-height="500"
-                                max-width="250"
-                            >
-                                <template v-slot:placeholder>
-                                <v-row
-                                    class="fill-height ma-0"
-                                    align="center"
-                                    justify="center"
-                                >
-                                    <v-progress-circular
-                                    indeterminate
-                                    color="grey lighten-5"
-                                    ></v-progress-circular>
-                                </v-row>
-                                </template>
-                            </v-img>
-                        </v-col>
+                   <!-- <v-row>
+                        <v-co
+                        -->
 
-
-                        <v-col
-                        xs="6"
-                        sm="6"
-                        md="6"
-                        lg="6"
-                        xl="6"
-                        >
-                            <v-img
-                                src="storage/icons/qrcod.png"
-                                lazy-src="storage/icons/qrcod.png"
-                                max-height="500"
-                                max-width="250"
-                            >
-                                <template v-slot:placeholder>
-                                <v-row
-                                    class="fill-height ma-0"
-                                    align="center"
-                                    justify="center"
-                                >
-                                    <v-progress-circular
-                                    indeterminate
-                                    color="grey lighten-5"
-                                    ></v-progress-circular>
-                                </v-row>
-                                </template>
-                            </v-img>
-                        </v-col>
-                    </v-row>
-
-                    <v-subheader>It is currently not possible to process your order, please use the android application</v-subheader>
+                    <v-subheader>It is currently not possible to process your order, please login</v-subheader>
 
                     </v-col>
 

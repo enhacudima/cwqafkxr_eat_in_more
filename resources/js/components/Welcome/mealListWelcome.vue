@@ -76,9 +76,9 @@
 
             <v-card-subtitle>
             <div class="overline mb-1">
-            <strong>{{meal.name}}</strong>
+            <strong>{{meal.name && meal.name.length < 10 ? meal.name : meal.name.substring(0,10)+".." }}</strong>
             </div>
-                <div> {{meal.alias}}</div>
+                <div> <v-list-item-action-text >{{meal.alias && meal.alias.length < 38 ? meal.alias : meal.alias.substring(0,38)+".." }}</v-list-item-action-text> </div>
                 <v-row
                     align="center"
                     class="mx-0 pt-2"
@@ -108,7 +108,7 @@
                     @click.stop="modfShowDialog(meal.id)"
                 >
                     <v-icon
-
+                    small
                     >mdi-cart</v-icon>
                 </v-btn>
 
@@ -145,7 +145,7 @@
                         </div>
 
 
-                    <v-list-item-action-text>-{{meal.details}}</v-list-item-action-text>
+                    <v-list-item-action-text>{{meal.details}}</v-list-item-action-text>
                 </v-card-text>
                 <v-divider class="mx-4"></v-divider>
 

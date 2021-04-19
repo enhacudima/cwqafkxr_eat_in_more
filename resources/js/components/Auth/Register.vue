@@ -11,8 +11,8 @@
                       <loginView/>
                     </v-tab-item>
                     <v-tab-item>
-                        <v-card class="px-4">
-                            <v-card-text>
+                        <v-card >
+                            <v-card-text class="px-4">
                                 <v-form ref="registerForm" v-model="valid" lazy-validation>
                                     <v-row>
                                         <v-col cols="12" sm="6" md="6">
@@ -107,6 +107,25 @@
                                     </v-row>
                                 </v-form>
                             </v-card-text>
+                            <v-divider></v-divider>
+
+                            <v-card-actions>
+                                <v-btn text>
+                                    <div class="locale-changer">
+                                        <select v-model="$i18n.locale">
+                                        <option v-for="(lang, i) in langs" :key="`Lang${i}`" :value="lang">
+                                            {{ lang.replaceAll('_', ' ').toUpperCase()}}
+                                        </option>
+                                        </select>
+                                    </div>
+                                </v-btn>
+                            <v-spacer></v-spacer>
+                            <v-btn text
+                            to="/"
+                            >
+                                Cancel
+                            </v-btn>
+                            </v-card-actions>
                         </v-card>
                     </v-tab-item>
                 </v-tabs>
@@ -117,6 +136,7 @@
 <script>
 
 import loginView from './Login.vue';
+import {i18n} from '../../i18n.js'
 
 export default {
   components: {loginView},
@@ -126,6 +146,9 @@ export default {
     }
   },
   methods: {
+    changeLocale(locale) {
+        i18n.locale = locale;
+    },
       save (date) {
         //this.$refs.menu.save(formReg.dataBrith)
       },
@@ -186,6 +209,8 @@ export default {
 
   },
   data: () => ({
+    my_lang:'en',
+    langs: ['en', 'pt_BR'] ,
     formReg:{
       name:null,
       lastName:null,

@@ -11,12 +11,12 @@
           <v-form ref="loginForm" v-model="valid" lazy-validation @submit.prevent="validate">
               <v-row class="pt-6">
                   <v-col cols="12">
-                      <v-text-field dense outlined  v-model="loginEmail" :rules="loginEmailRules" :error-messages="loginError" label="E-mail" required ></v-text-field>
+                      <v-text-field dense outlined autocomplete="off"  v-model="loginEmail" :rules="loginEmailRules" :error-messages="loginError" label="E-mail" required ></v-text-field>
                   </v-col>
-                  <v-col cols="12">
+                  <v-col cols="12"  class="pt-1  pb-1 mb-0">
                       <v-text-field dense outlined autocomplete="off" v-model="loginPassword" :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'" :rules="[rules.required, rules.min]" :type="show1 ? 'text' : 'password'" name="input-10-1" :label="$t('password')" :hint="$t('at_least_8_characters')"   @click:append="show1 = !show1"></v-text-field>
 
-                        <v-tooltip bottom class="mt-n1">
+                        <v-tooltip bottom class="mt-n7">
                         <template v-slot:activator="{ on }">
                             <a
                             target="_blank"
@@ -43,14 +43,37 @@
               </v-row>
           </v-form>
       </v-card-text>
+    <v-divider></v-divider>
+
+    <v-card-actions>
+        <v-btn text>
+            <div class="locale-changer">
+                <select v-model="$i18n.locale">
+                <option v-for="(lang, i) in langs" :key="`Lang${i}`" :value="lang">
+                    {{ lang.replaceAll('_', ' ').toUpperCase()}}
+                </option>
+                </select>
+            </div>
+        </v-btn>
+      <v-spacer></v-spacer>
+      <v-btn text
+       to="/"
+      >
+        Cancel
+      </v-btn>
+    </v-card-actions>
+
   </v-card>
 </template>
 
 <script>
+import {i18n} from '../../i18n.js'
 export default {
-name: 'locale-changer',
+    name: 'locale-changer',
   data() {
     return {
+      my_lang:'en',
+      langs: ['en', 'pt_BR'] ,
       dialogW:false,
       loginError:null,
       dialog: true,
@@ -85,6 +108,10 @@ name: 'locale-changer',
     this.form = this.$form.createForm(this, { name: 'normal_login' });
   },
   methods: {
+
+    changeLocale(locale) {
+        i18n.locale = locale;
+    },
     validate() {
       if (this.$refs.loginForm.validate()) {
         // submit form to server/API here...

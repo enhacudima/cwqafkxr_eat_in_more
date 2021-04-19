@@ -16,6 +16,7 @@ class ToolsController extends Controller
     {
         $this->middleware('auth:api');
 
+
     }
     public function mode($mode) {
         $user_id=Auth::user()->id;

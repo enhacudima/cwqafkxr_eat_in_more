@@ -169,8 +169,8 @@ export const routes = [
         },
     },
     {
-        name: '/',
-        path: '/:token',
+        name: '/profile/',
+        path: '/profile/:token',
         component: UserProfile,
         props: true,
     },

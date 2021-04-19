@@ -9,7 +9,7 @@
                         small
                         icon
                         color="green"
-                        :to="'/'+props.row.key"
+                        :to="'profile/'+props.row.key"
                         target="_blank"
                     >
                     <v-icon small>mdi-eye-outline</v-icon>

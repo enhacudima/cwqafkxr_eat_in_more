@@ -9,6 +9,7 @@ use Auth;
 use App\User;
 use App\UserL;
 use App\CountryStates;
+use App\Http\Controllers\Helpers\CurrencyController;
 
 class LocationController extends Controller
 {
@@ -51,6 +52,7 @@ class LocationController extends Controller
 
         );
         User::where('id',$this->user_id)->update(['location_id'=>$states->id]);
+        $currece = new CurrencyController(Auth::user()->id,$states->id);
     }
 
     public function get()

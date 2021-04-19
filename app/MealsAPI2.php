@@ -12,22 +12,22 @@ class MealsAPI2 extends Model
 
     public function mealAllergies()
     {
-        return $this->hasMany('App\SyncMealAllergies','meal_id','id');
+        return $this->hasMany('App\SyncMealAllergies','meal_id','meal_id');
     }
 
     public function mealPrices()
     {
-        return $this->hasMany('App\MealPrices','meal_id','id');
+        return $this->hasMany('App\MealPrices','meal_id','meal_id');
     }
 
     public function mealTags()
     {
-        return $this->hasMany('App\SyncTags','meal_id','id');
+        return $this->hasMany('App\SyncTags','meal_id','meal_id');
     }
 
     public function mealOptions()
     {
-        return $this->hasMany('App\Options','meal_id','id');
+        return $this->hasMany('App\Options','meal_id','meal_id');
     }
 
 }

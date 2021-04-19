@@ -20,13 +20,13 @@ class GetMealWelcomeController extends Controller
 
     public function getPagmMals()
     {
-    	$data=Meals::with('mealCuisine','mealUser.userType','mealAllergies.allergiesSync','mealAllergies.allergiesIngredients','mealtiming','mealPrices','mealPrices.priceCurrency','mealType','mealFiles','mealFile','mealChefs','mealTags.tagName')->orderby('id','desc')->paginate(12);
+    	$data=Meals::with('mealCuisine','mealUser.userType','mealAllergies.allergiesSync','mealAllergies.allergiesIngredients','mealtiming','mealPrices','mealPrices.priceCurrency','mealType','mealFiles','mealFile','mealChefs','mealTags.tagName')->orderby('id','desc')->paginate(50);
 
         return response()->json($data, 200);
     }
     public function searchMeals($search)
     {
-        $data=Meals::limit(20)
+        $data=Meals::limit(50)
         ->where('name','like',"%".$search."%")
         ->orwhere('alias','like',"%".$search."%")
         ->with('mealCuisine','mealUser.userType','mealAllergies.allergiesSync','mealAllergies.allergiesIngredients','mealtiming','mealPrices','mealPrices.priceCurrency','mealType','mealFiles','mealFile','mealChefs','mealTags.tagName')

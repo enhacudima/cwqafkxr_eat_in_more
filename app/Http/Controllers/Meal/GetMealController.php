@@ -59,7 +59,7 @@ class GetMealController extends Controller
     }
 
     public function selectCurrency($currency_id,$data){
-        $data->leftjoin('meal_prices','meal_prices.meal_id','meal_v_api2.id')
+        $data->join('meal_prices','meal_prices.meal_id','meal_v_api2.meal_id')
              ->where('meal_prices.currency_id',$currency_id)
              ->where('meal_prices.status',1)
              ->leftjoin('currency','currency.id','meal_prices.currency_id');
@@ -69,17 +69,30 @@ class GetMealController extends Controller
 
     public function getPagmMals()
     {
-    	$data=Meals::with('mealCuisine','mealUser.userType','mealAllergies.allergiesSync','mealAllergies.allergiesIngredients','mealtiming','mealPrices','mealPrices.priceCurrency','mealType','mealFiles','mealFile','mealChefs')->orderby('id','desc')->paginate(9);
+        $currency_id = Auth::guard('api')->user()->currency_id;
+
+    	$data=MealsAPI2::with('mealAllergies.allergiesIngredients','mealTags.tagName','mealOptions');
+        $data=$this->selectCurrency($currency_id,$data)
+        ->orderby('meal_v_api2.meal_updated_at','desc')
+        ->paginate(50);
 
         return response()->json($data, 200);
     }
     public function searchMeals($search)
     {
-        $data=Meals::limit(20)
-        ->where('name','like',"%".$search."%")
-        ->orwhere('alias','like',"%".$search."%")
-        ->with('mealCuisine','mealUser.userType','mealAllergies.allergiesSync','mealAllergies.allergiesIngredients','mealtiming','mealPrices','mealPrices.priceCurrency','mealType','mealFiles','mealFile','mealChefs')
-        ->get();
+        $currency_id = Auth::guard('api')->user()->currency_id;
+
+        $data=MealsAPI2::where('meal_name','like',"%".$search."%")
+        ->orwhere('meal_alias','like',"%".$search."%")
+        ->orwhere('cuisine','like',"%".$search."%")
+        ->orwhere('meal_type','like',"%".$search."%")
+        ->orwhere('common_timing','like',"%".$search."%")
+        ->with('mealAllergies.allergiesIngredients','mealTags.tagName','mealOptions');
+
+        $data=$this->selectCurrency($currency_id,$data)
+        ->orderby('meal_v_api2.meal_updated_at','desc')
+        ->paginate(50);
+
     	return response()->json($data, 200);
     }
 

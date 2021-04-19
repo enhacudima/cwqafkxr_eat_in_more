@@ -11,15 +11,15 @@
         class="d-block text-center mx-auto mb-9"
       >
       <img
-        src="storage/icons/40x40px.png"
-        lazy-src="storage/icons/40x40px.png"
+        :src="baseUrl+'storage/icons/40x40px.png'"
+        :lazy-src="baseUrl+'storage/icons/40x40px.png'"
         alt="logo"
       ></v-avatar>
     </v-navigation-drawer>
 
     <v-main>
         <v-card class="mx-auto" max-width="1000" tile>
-            <v-img height="200" src="storage/icons/fundo.jpeg"
+            <v-img height="200" :src="baseUrl+'storage/icons/fundo.jpeg'"
             lazy-src="storage/icons/fundo.jpeg"
             ></v-img>
             <v-row style="margin:2.5%;position:absolute; top: 130px">
@@ -27,8 +27,8 @@
                         <v-list-item dense>
                         <v-list-item-avatar size="100">
                             <img
-                                :src="'storage/'+profile.avatar"
-                                :lazy-src="'storage/'+profile.avatar"
+                                :src="baseUrl+'storage/'+profile.avatar"
+                                :lazy-src="baseUrl+'storage/'+profile.avatar"
                             >
                             </v-list-item-avatar>
                             <v-list-item-content>
@@ -99,8 +99,8 @@
                         <v-list-item dense>
                             <v-list-item-content v-if="chef.picture">
                                 <v-img
-                                :lazy-src="'storage/'+chef.picture.path+chef.picture.name"
-                                :src="'storage/'+chef.picture.path+chef.picture.name"
+                                :lazy-src="baseUrl+'storage/'+chef.picture.path+chef.picture.name"
+                                :src="baseUrl+'storage/'+chef.picture.path+chef.picture.name"
                                 max-height="150"
                                 max-width="250"
                                 aspect-ratio="1"
@@ -203,11 +203,16 @@
 </template>
 
 <script>
+import pdf from 'vue-pdf'
   export default {
+    components: {
+        pdf
+    },
 
     data() {
 
         return {
+            baseUrl:'http://localhost/cwqafkxr_eat_in_more/public/',
             drawer:true,
             user:[],
             profile:[],

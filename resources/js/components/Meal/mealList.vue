@@ -50,11 +50,12 @@
        <v-card
             class="mx-auto"
             max-width="344"
+            v-if="index>=0"
         >
             <v-img
-            v-if="meal.meal_file"
-            :src="'storage/'+meal.meal_file.path+meal.meal_file.name"
-            :lazy-src="'storage/'+meal.meal_file.path+meal.meal_file.name"
+            v-if="meal.file"
+            :src="'storage/'+meal.file"
+            :lazy-src="'storage/'+meal.file"
             aspect-ratio="1"
             class="white--text align-end"
             gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
@@ -74,12 +75,11 @@
             </template>
             </v-img>
 
-            <v-card-title>
-            {{meal.name}}
-            </v-card-title>
-
             <v-card-subtitle>
-                <div> {{meal.alias}}</div>
+            <div class="overline mb-1">
+            <strong>{{meal.meal_name && meal.meal_name.length < 20 ? meal.meal_name : meal.meal_name.substring(0,20)+".." }}</strong>
+            </div>
+                <div> <v-list-item-action-text >{{meal.meal_alias && meal.meal_alias.length < 38 ? meal.meal_alias : meal.meal_alias.substring(0,38)+".." }}</v-list-item-action-text> </div>
                 <v-row
                     align="center"
                     class="mx-0 pt-2"
@@ -97,24 +97,42 @@
                     4.5 (413)
                     </div>
                 </v-row>
-            </v-card-subtitle>
+                <div class="my-2 subtitle-1">
+                   <v-list-item-action-text > $ • {{meal.amount}} {{meal.alphabetic_code}}, {{meal.currency}} </v-list-item-action-text>
+                </div>
 
+                <div class="my-2 subtitle-1">
+                    <v-chip
+                    label
+                    small
+                    class="ma-2"
+                    color="indigo"
+                    text-color="white"
+                    >
+                    <v-avatar left>
+                        <v-icon small>mdi-account-multiple</v-icon>
+                    </v-avatar>
+                    {{meal.meal_people}}
+                    </v-chip>
+                </div>
+
+            </v-card-subtitle>
 
             <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn
                     small
                     icon
-
+                    @click.stop="modfShowDialogAdd(meal.meal_id,meal.meal_people)"
                 >
                     <v-icon
                     small
-                    >mdi-thumb-up</v-icon>
+                    >mdi-cart</v-icon>
                 </v-btn>
                 <v-btn
                     small
                     icon
-                    @click.stop="modfShowDialog(meal.id)"
+                    @click.stop="modfShowDialog(meal.meal_id)"
                 >
                     <v-icon
                     small
@@ -123,64 +141,53 @@
 
             <v-btn
                 icon
-                @click="postUserId = meal.id; show = !show"
+                @click="postUserId = meal.meal_id; show = !show"
             >
-                <v-icon>{{ show && postUserId == meal.id ? 'mdi-chevron-up' : 'mdi-chevron-down' }}</v-icon>
+                <v-icon>{{ show && postUserId == meal.meal_id ? 'mdi-chevron-up' : 'mdi-chevron-down' }}</v-icon>
             </v-btn>
             </v-card-actions>
 
             <v-expand-transition>
-            <div v-show="show && postUserId == meal.id">
+            <div v-show="show && postUserId == meal.meal_id">
                 <v-divider></v-divider>
 
-                <v-card-text>
-
-                    <v-timeline
-                        dense
-                    >
-                        <v-timeline-item
-                        small
-                        >
+                <v-card-text dense>
                         <div>
                             <div class="font-weight-normal">
-                            <strong>Cuisine</strong>
+                            <strong>{{$t('cusine')}}</strong>
                             </div>
-                            <div>{{meal.meal_cuisine.name}}</div>
+                            <div>{{meal.cuisine}}</div>
                         </div>
-                        </v-timeline-item><v-timeline-item
-                        small
-                        >
                         <div>
                             <div class="font-weight-normal">
-                            <strong>Type</strong>
+                            <strong>{{$t('type')}}</strong>
                             </div>
-                            <div>{{meal.meal_type.meal_type}}</div>
+                            <div>{{meal.meal_type}}</div>
                         </div>
-                        </v-timeline-item><v-timeline-item
-                        small
-                        >
                         <div>
                             <div class="font-weight-normal">
-                            <strong>Common timing</strong>
+                            <strong>{{$t('common_timing')}}</strong>
                             </div>
-                            <div>{{meal.mealtiming.common_timing}}</div>
+                            <div>{{meal.common_timing}}</div>
                         </div>
-                        </v-timeline-item>
-                    </v-timeline>
 
 
-                    <v-list-item-action-text>{{meal.details}}</v-list-item-action-text>
+                    <v-list-item-action-text>{{meal.meal_details}}</v-list-item-action-text>
                 </v-card-text>
                 <v-divider class="mx-4"></v-divider>
 
-                <v-card-title>Allergies</v-card-title>
-
                 <v-card-text>
+                <strong>{{$t('allergies')}}</strong>
                 <v-chip-group
                     active-class="deep-purple accent-4 white--text"
                     column
+                    small
                 >
                     <v-chip
+                    color="indigo"
+                    small
+                    label
+                    text-color="white"
                     v-for="(allergies, index) in meal.meal_allergies"
                     :key="index"
                     >
@@ -189,7 +196,31 @@
                 </v-chip-group>
                 </v-card-text>
 
+                <v-card-text>
+                <strong>Tags</strong>
+                <v-chip-group
+                    active-class="deep-purple accent-4 white--text"
+                    column
+                    small
+                >
 
+
+                    <v-chip
+                    class="ma-2"
+                    color="pink"
+                    small
+                    label
+                    text-color="white"
+                    v-for="(allergies, index) in meal.meal_tags"
+                    :key="index"
+                    >
+                    <v-icon left>
+                        mdi-label
+                    </v-icon>
+                    {{allergies.tag_name.name}}
+                    </v-chip>
+                </v-chip-group>
+                </v-card-text>
 
             </div>
             </v-expand-transition>
@@ -200,6 +231,7 @@
 
     <!--dialog-->
     <dialogView v-model="showDialog" v-bind:codMeal="mealIDShow"/>
+     <dialogStoreAdd v-model="showDialogStoreAdd" v-bind:codMeal="[mealIDShow,mealPeoShow]"/>
 
 
     </v-responsive>
@@ -215,11 +247,13 @@
 </template>
 <script>
   import dialogView from './dialog.vue';
+  import dialogStoreAdd from './dialogStoreAdd.vue';
 export default {
-    components: { dialogView },
+    components: { dialogView,dialogStoreAdd },
     data() {
         return {
             showDialog: false,
+            showDialogStoreAdd: false,
             mealIDShow: null,
             columuns:4,
             showNew:false,
@@ -227,6 +261,7 @@ export default {
             isLoadingSearch: false,
             search: null,
             show:false,
+            mealPeoShow:0,
             postUserId: null,
             meals: [],
             pagination: {
@@ -241,11 +276,17 @@ export default {
             this.mealIDShow=mealId;
             //console.log(this.mealIDShow);
         },
+        modfShowDialogAdd(mealId,mealPeo){
+            this.showDialogStoreAdd=true;
+            this.mealIDShow=mealId;
+            this.mealPeoShow=mealPeo;
+            //console.log(this.mealIDShow);
+        },
         getMeals() {
                 window.axios.get('/getPagmMals?page=' + this.pagination.current)
                     .then(response => {
                         this.meals = response.data.data;
-                        this.isSearch = true;
+                        this.isSearch = false;
                         this.pagination.current = response.data.current_page;
                         this.pagination.total = response.data.last_page;
                     });
@@ -268,8 +309,10 @@ export default {
             this.isLoadingSearch = true;
             axios.get('/getPagmMalsSearch/'+val)
                 .then(response => {
-                    this.meals = response.data;
+                    this.meals = response.data.data;
                     this.isSearch = false;
+                    this.pagination.current = response.data.current_page;
+                    this.pagination.total = response.data.last_page;
                     this.isLoadingSearch = false;
                 })
                 .catch((error) => {

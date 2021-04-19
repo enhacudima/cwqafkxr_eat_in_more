@@ -75,6 +75,7 @@ class EditUserController extends Controller
         ]);
 
         $location= new LocationController(Auth::user()->id,$prefix_phone_1, null, null, null);
+
         if( $input['isEditing']){
             $message=$this->changePassword($myRequest);
             return ($message);
