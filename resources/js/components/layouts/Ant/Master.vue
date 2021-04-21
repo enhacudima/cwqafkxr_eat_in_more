@@ -229,7 +229,7 @@
         </v-row>
       </v-container>
     </v-main>
-    <v-footer padless fixed >
+    <v-footer padless fixed app >
 
       <v-col
         class="text-center"
@@ -270,18 +270,21 @@
       linksNames: [
         'Dashboard',
         'Meals',
+        'Cart',
         'Chef',
         'Tools',
       ],
       links:[
         'home',
         'mealIndex',
+        'cart',
         'chefeNew',
         'tools',
       ],
       icons: [
         'mdi-view-dashboard',
         'mdi-noodles',
+        'mdi-cart',
         'mdi-chef-hat',
         'mdi-hammer-screwdriver',
       ],

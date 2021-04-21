@@ -76,7 +76,7 @@
 
             <v-card-subtitle>
             <div class="overline mb-1">
-            <strong>{{meal.name && meal.name.length < 10 ? meal.name : meal.name.substring(0,10)+".." }}</strong>
+            <strong>{{meal.name && meal.name.length < 20 ? meal.name : meal.name.substring(0,20)+".." }}</strong>
             </div>
                 <div> <v-list-item-action-text >{{meal.alias && meal.alias.length < 38 ? meal.alias : meal.alias.substring(0,38)+".." }}</v-list-item-action-text> </div>
                 <v-row
@@ -96,6 +96,21 @@
                     4.5 (413)
                     </div>
                 </v-row>
+                <div class="my-2 subtitle-1">
+                    <v-chip
+                    label
+                    small
+                    class="ma-2"
+                    color="indigo"
+                    text-color="white"
+                    >
+                    <v-avatar left>
+                        <v-icon small>mdi-account-multiple</v-icon>
+                    </v-avatar>
+                    {{meal.people}}
+                    </v-chip>
+                </div>
+
             </v-card-subtitle>
 
 
@@ -157,6 +172,10 @@
                     small
                 >
                     <v-chip
+                    color="indigo"
+                    small
+                    label
+                    text-color="white"
                     v-for="(allergies, index) in meal.meal_allergies"
                     :key="index"
                     >
@@ -172,12 +191,21 @@
                     column
                     small
                 >
-                    <v-chip
-                    v-for="(allergies, index) in meal.meal_tags"
-                    :key="index"
-                    >
-                     {{allergies.tag_name.name}}
-                    </v-chip>
+                <v-chip
+                class="ma-2"
+                color="pink"
+                small
+                label
+                text-color="white"
+                v-for="(allergies, index) in meal.meal_tags"
+                :key="index"
+                >
+                <v-icon left>
+                    mdi-label
+                </v-icon>
+                {{allergies.tag_name.name}}
+                </v-chip>
+
                 </v-chip-group>
                 </v-card-text>
 
@@ -216,7 +244,7 @@ export default {
             columuns:4,
             showNew:false,
             isSearch:true,
-            isLoadingSearch: false,
+            isLoadingSearch: true,
             search: null,
             show:false,
             postUserId: null,
@@ -237,7 +265,8 @@ export default {
                 window.axios.get('/getPagmMalsW?page=' + this.pagination.current)
                     .then(response => {
                         this.meals = response.data.data;
-                        this.isSearch = true;
+                        this.isSearch = false;
+                        this.isLoadingSearch = false;
                         this.pagination.current = response.data.current_page;
                         this.pagination.total = response.data.last_page;
                     });

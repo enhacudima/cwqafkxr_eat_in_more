@@ -123,7 +123,7 @@
                 <v-btn
                     small
                     icon
-                    @click.stop="modfShowDialogAdd(meal.meal_id,meal.meal_people)"
+                    @click.stop="modfShowDialogAdd(meal.meal_id,meal.meal_people,meal.meal_name)"
                 >
                     <v-icon
                     small
@@ -231,18 +231,73 @@
 
     <!--dialog-->
     <dialogView v-model="showDialog" v-bind:codMeal="mealIDShow"/>
-     <dialogStoreAdd v-model="showDialogStoreAdd" v-bind:codMeal="[mealIDShow,mealPeoShow]"/>
+     <dialogStoreAdd v-model="showDialogStoreAdd" v-bind:codMeal="[mealIDShow,mealPeoShow,mealName]"/>
 
 
     </v-responsive>
         <v-pagination
+            class="pt=6"
             v-model="pagination.current"
             :length="pagination.total"
             @input="onPageChange"
             v-show="isSearch"
         ></v-pagination>
-
     </v-container>
+
+    <v-navigation-drawer
+      app
+      clipped
+      right
+      dense
+    >
+
+      <v-list-item>
+        <v-list-item-content>
+          <v-list-item-title class="title">
+            Filters
+          </v-list-item-title>
+        </v-list-item-content>
+      </v-list-item>
+    <v-divider></v-divider>
+      <v-list dense>
+            <v-list-item-group
+                color="primary"
+            >
+
+                <v-list-item
+                >
+                    <v-list-item-content>
+                        <v-list-item-title>
+                            <v-autocomplete
+                                v-model="currency"
+                                :items="currencys"
+                                label="Country"
+                                required
+                                :rules="[]"
+                                item-text="entity"
+                                item-value="id"
+                                return-object
+                            >
+                            </v-autocomplete>
+                        </v-list-item-title>
+                    </v-list-item-content>
+                </v-list-item>
+            </v-list-item-group>
+      </v-list>
+      <v-divider class="mx-4"></v-divider>
+            <v-row  dense justify="center" align="center">
+                <v-btn
+                v-for="icon in icons"
+                :key="icon"
+                class="mx-1"
+                icon
+                >
+                <v-icon size="24px">
+                    {{ icon }}
+                </v-icon>
+                </v-btn>
+            </v-row>
+    </v-navigation-drawer>
 </div>
 </template>
 <script>
@@ -252,18 +307,26 @@ export default {
     components: { dialogView,dialogStoreAdd },
     data() {
         return {
+            currencys:[],
+            icons: [
+                'mdi-facebook',
+                'mdi-twitter',
+                'mdi-linkedin',
+                'mdi-instagram',
+            ],
             showDialog: false,
             showDialogStoreAdd: false,
             mealIDShow: null,
             columuns:4,
             showNew:false,
             isSearch:true,
-            isLoadingSearch: false,
+            isLoadingSearch: true,
             search: null,
             show:false,
             mealPeoShow:0,
             postUserId: null,
             meals: [],
+            mealName:null,
             pagination: {
                 current: 1,
                 total: 0
@@ -276,10 +339,11 @@ export default {
             this.mealIDShow=mealId;
             //console.log(this.mealIDShow);
         },
-        modfShowDialogAdd(mealId,mealPeo){
+        modfShowDialogAdd(mealId,mealPeo,mealName){
             this.showDialogStoreAdd=true;
             this.mealIDShow=mealId;
             this.mealPeoShow=mealPeo;
+            this.mealName=mealName;
             //console.log(this.mealIDShow);
         },
         getMeals() {
@@ -287,6 +351,7 @@ export default {
                     .then(response => {
                         this.meals = response.data.data;
                         this.isSearch = false;
+                        this.isLoadingSearch = false;
                         this.pagination.current = response.data.current_page;
                         this.pagination.total = response.data.last_page;
                     });
@@ -297,6 +362,10 @@ export default {
         },
     mounted() {
         this.getMeals();
+        axios
+            .get('getCurrencyArr')
+            .then(response => (this.currencys = response.data));
+
     },
     changeShow: function(idx) {
       this.list[idx].show = !this.list[idx].show;

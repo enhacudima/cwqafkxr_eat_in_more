@@ -3,47 +3,33 @@
     <v-dialog
       v-model="showDialogStoreAdd"
       max-width="400px"
-      transition="dialog-bottom-transition"
     >
       <v-card>
-        <v-card-title>Portion ({{portion}} People)</v-card-title>
+        <v-card-title v-if="mealName"> {{mealName && mealName.length < 15 ? mealName : mealName.substring(0,15)+".." }} Portion ({{portion}} People)</v-card-title>
         <v-divider></v-divider>
         <v-card-text style="">
             <v-row
-                class="mb-4"
-                justify="space-between"
+                class="text-center"
             >
-                <v-col class="text-left">
-                <span
-                    class="display-3 font-weight-light"
-                    v-text="bpm"
-                ></span>
-                <span class="subheading font-weight-light mr-1">Portion</span>
-                <v-fade-transition>
-                    <v-avatar
-                    v-if="isPlaying"
-                    :color="color"
-                    :style="{
-                        animationDuration: animationDuration
-                    }"
-                    class="mb-1 v-avatar--metronome"
-                    size="12"
-                    ></v-avatar>
-                </v-fade-transition>
-                </v-col>
-                <v-col class="text-right">
-                <v-btn
-                    :color="color"
-                    dark
-                    depressed
-                    fab
-                    @click="toggle"
+                <v-col
+                cols="4"
+                ></v-col>
+                <v-col
+                cols="4"
+
                 >
-                    <v-icon large>
-                        mdi-noodles
-                    </v-icon>
-                </v-btn>
+                    <v-text-field
+                    dense
+                        v-model="bpm"
+                        type="number"
+                        class="centered-input display-1 font-weight-light "
+                    >
+                    </v-text-field>
                 </v-col>
+                <v-col
+                cols="4"
+                ></v-col>
+
             </v-row>
 
 
@@ -74,6 +60,7 @@
                 </template>
             </v-slider>
 
+
         </v-card-text>
         <v-divider></v-divider>
         <v-card-actions>
@@ -88,9 +75,9 @@
           <v-btn
             color="blue darken-1"
             text
-            @click="dialog = false"
+            @click="add()"
           >
-            Save
+            Add to Cart
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -112,11 +99,15 @@
     },
     data() {
         return {
+        updated:false,
         bpm: 1,
         interval: null,
         isPlaying: true,
         portion:1,
         multpl:1,
+        mealName:'',
+        mealID:null,
+        userID:null,
         }
     },
 
@@ -130,10 +121,10 @@
         }
         },
         color () {
-            if (this.bpm < 5) return 'indigo'
-            if (this.bpm < 10) return 'teal'
-            if (this.bpm < 20) return 'green'
-            if (this.bpm < 30) return 'orange'
+            if (this.bpm < 3) return 'indigo'
+            if (this.bpm < 6) return 'teal'
+            if (this.bpm < 12) return 'green'
+            if (this.bpm < 24) return 'orange'
             return 'red'
         },
         animationDuration () {
@@ -141,6 +132,52 @@
         },
     },
     methods: {
+        add(){
+           this.showDialogStoreAdd = false
+          //get from localy store
+          //localStorage.removeItem('cart')
+          var cache = localStorage.getItem("cart");
+          if(cache){
+              var projects = JSON.parse(cache)
+              this.changeDesc(projects, this.mealID,this.bpm)
+          }
+          // new val
+          var newVal ={
+            value:this.mealID,
+            desc:this.bpm,
+            user:this.userID,
+          }
+          // Get the existing data
+          var existing = cache;
+          var index = 0;
+          // If no existing data, create an array
+          // Otherwise, convert the localStorage string to an array
+          existing = existing ? projects : {};
+          index = projects ? Object.keys(existing).length: 0;
+
+          if(!this.updated){
+            // Add new data to localStorage Array
+            existing[index] = newVal;
+          }
+
+          // Save back to localStorage
+          localStorage.setItem('cart', JSON.stringify(existing));
+
+          existing = localStorage.getItem('cart');
+          //console.log(JSON.parse(existing))
+
+        },
+        changeDesc(projects, value, desc ) {
+            for (var i in projects) {
+                if (projects[i].value == value && projects[i].user == this.userID) {
+                  projects[i].desc = desc,
+                  this.updated=true
+                  break; //Stop this loop, we found it!
+                }
+                this.updated=false
+            }
+        },
+
       decrement () {
         this.bpm --
       },
@@ -152,15 +189,18 @@
       },
     },
     mounted() {
-      //console.log(this.codMeal)
+        const userData = JSON.parse(localStorage.getItem('user'));
+        this.userID = userData.logged_in_user.id;
 
     },
     watch: {
     codMeal (val, oldVal) {
+        this.mealID=val[0];
         this.bpm=1;
         this.multpl=val[1];
         this.portion=this.bpm*this.multpl;
-      //console.log(val[1])
+        this.mealName=val[2];
+      //console.log(val[2])
     },
     bpm(val,oldVal){
         this.portion = this.bpm*this.multpl
@@ -186,4 +226,12 @@
     animation-iteration-count: infinite;
     animation-direction: alternate;
   }
+  .v-input input {
+    max-height: 50px;
+  }
+</style>
+<style scoped>
+    .centered-input >>> input {
+      text-align: center
+    }
 </style>
