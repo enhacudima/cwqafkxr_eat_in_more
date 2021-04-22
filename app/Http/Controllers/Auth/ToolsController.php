@@ -68,4 +68,11 @@ class ToolsController extends Controller
 
     }
 
+    public function setCurrency($id)
+    {
+        $user_id=Auth::user()->id;
+        $user = User::where('id',$user_id)->update(["currency_id"=>$id]);
+        return response()->json(['success'=>'Success Currency update.'], 200);
+    }
+
 }

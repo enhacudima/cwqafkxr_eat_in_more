@@ -68,6 +68,7 @@ Route::group(['namespace' => 'Auth','middleware' => ['auth.api']], function() {
     Route::post('change-password', 'AuthController@changePassword');
     Route::post('userEdit', 'EditUserController@userEdit');
     Route::post('tools/use/avatar','ToolsController@avatar');
+    Route::get('setCurrency/{id}','ToolsController@setCurrency');
 
 });
 

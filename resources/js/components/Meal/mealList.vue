@@ -98,7 +98,7 @@
                     </div>
                 </v-row>
                 <div class="my-2 subtitle-1">
-                   <v-list-item-action-text > $ • {{meal.amount}} {{meal.alphabetic_code}}, {{meal.currency}} </v-list-item-action-text>
+                   <v-list-item-action-text > $ • {{meal.amount}} {{meal.currency && meal.currency.length < 20 ? meal.currency : meal.currency.substring(0,20)+".." }}, {{meal.alphabetic_code}} </v-list-item-action-text>
                 </div>
 
                 <div class="my-2 subtitle-1">
@@ -269,17 +269,21 @@
                     <v-list-item-content>
                         <v-list-item-title>
                             <v-autocomplete
-                                v-model="currency"
+                                v-model="currency_x"
                                 :items="currencys"
-                                label="Country"
+                                label="Currency"
                                 required
                                 :rules="[]"
                                 item-text="entity"
                                 item-value="id"
-                                return-object
+
                             >
+                                <template v-slot:selection="{ item }">
+                                    <v-list-item-action-text >{{item.entity && item.entity.length < 38 ? item.entity : item.entity.substring(0,38)+".." }}</v-list-item-action-text>
+                                </template>
                             </v-autocomplete>
                         </v-list-item-title>
+                        <v-list-item-action-text >By selecting different currency, we are only deliver services to the country are you selected.</v-list-item-action-text>
                     </v-list-item-content>
                 </v-list-item>
             </v-list-item-group>
@@ -307,6 +311,7 @@ export default {
     components: { dialogView,dialogStoreAdd },
     data() {
         return {
+            currency_x:null,
             currencys:[],
             icons: [
                 'mdi-facebook',
@@ -334,6 +339,10 @@ export default {
         }
     },
     methods: {
+        updateCurrency(){
+            axios.get('/setCurrency/'+this.currency_x)
+            .then(response => (this.getMeals()))
+        },
         modfShowDialog(mealId){
             this.showDialog=true;
             this.mealIDShow=mealId;
@@ -392,6 +401,11 @@ export default {
 
 
 
+        },
+        currency_x(val){
+            this.updateCurrency()
+            this.isSearch = true;
+            this.isLoadingSearch = true;
         }
     }
 }

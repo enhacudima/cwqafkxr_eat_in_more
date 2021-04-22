@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Currency;
+use DB;
 
 class CurrencyController extends Controller
 {
@@ -17,7 +18,7 @@ class CurrencyController extends Controller
 
     public function getCurrencyArr ()
     {
-        $data=Currency::select('currency','id','entity')->where('status',1)->orderby('entity','asc')->get()->toArray();
+        $data=Currency::select(DB::raw("CONCAT(currency.entity,' (',currency.alphabetic_code,')') AS entity"),'currency','id','alphabetic_code')->where('status',1)->orderby('entity','asc')->get()->toArray();
     	return response()->json($data, 200);
     }
 }
