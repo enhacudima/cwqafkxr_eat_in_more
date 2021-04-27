@@ -191,6 +191,7 @@ Route::group(['namespace' => 'Kitchen','middleware' => []], function() {
 
 Route::group(['namespace' => 'Booking','middleware' => []], function() {
 	Route::post('createBooking','BookingController@createBooking');
+    Route::post('cart/get','CartController@cartget');
 
 });
 

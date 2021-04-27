@@ -20,6 +20,24 @@
         ></v-text-field>
       </v-responsive>
       <v-spacer></v-spacer>
+        <div class="pr-2">
+            <v-btn
+            icon
+            color="warning"
+            @click="showDialogCart = true"
+            >
+
+                <v-badge
+                    color="error"
+                    overlap
+                    dot
+                    :value=badgeShow
+                >
+                    <v-icon>mdi-cart-outline</v-icon>
+                </v-badge>
+            </v-btn>
+
+        </div>
 
         <div class="pr-2">
 
@@ -235,11 +253,18 @@
         class="text-center"
         cols="12"
       >
+       <div
+            :class="[`text-caption`]"
+            class="transition-swing"
+        >
         &copy;{{ new Date().getFullYear() }} — <strong>EatInMore</strong>
+       </div>
       </v-col>
     </v-footer>
     <!--dialog-->
     <dialogo v-model="showDialog" v-bind:show="showDialog"/>
+    <dialogViewCart v-model="showDialogCart" v-bind:showBadge="badgeShow" />
+
     <dialogoAvatar v-model="showDialogAvatar" v-bind:show="showDialogAvatar"/>
     <div class="main-wrapper">
         <cookie-law theme="blood-orange--rounded"></cookie-law>
@@ -253,11 +278,15 @@
   import CookieLaw from 'vue-cookie-law';
   import { AbilityBuilder, Ability } from '@casl/ability';
   import {i18n} from '../../../i18n.js'
+  import dialogViewCart from '../../Cart/dialogCart.vue';
+
 
   export default {
-    components: { dialogo,dialogoAvatar, CookieLaw },
+    components: { dialogo,dialogoAvatar, CookieLaw, dialogViewCart },
 
     data: () => ({
+      badgeShow:true,
+      showDialogCart:false,
       new_lang:null,
       my_lang:null,
       langs: ['en', 'pt_BR'] ,
@@ -270,21 +299,18 @@
       linksNames: [
         'Dashboard',
         'Meals',
-        'Cart',
         'Chef',
         'Tools',
       ],
       links:[
         'home',
         'mealIndex',
-        'cart',
         'chefeNew',
         'tools',
       ],
       icons: [
         'mdi-view-dashboard',
         'mdi-noodles',
-        'mdi-cart',
         'mdi-chef-hat',
         'mdi-hammer-screwdriver',
       ],

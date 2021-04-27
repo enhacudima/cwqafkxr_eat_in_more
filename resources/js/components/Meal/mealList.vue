@@ -107,7 +107,7 @@
                     small
                     class="ma-2"
                     color="indigo"
-                    text-color="white"
+                    outlined
                     >
                     <v-avatar left>
                         <v-icon small>mdi-account-multiple</v-icon>
@@ -123,20 +123,21 @@
                 <v-btn
                     small
                     icon
-                    @click.stop="modfShowDialogAdd(meal.meal_id,meal.meal_people,meal.meal_name)"
-                >
-                    <v-icon
-                    small
-                    >mdi-cart</v-icon>
-                </v-btn>
-                <v-btn
-                    small
-                    icon
                     @click.stop="modfShowDialog(meal.meal_id)"
                 >
                     <v-icon
                     small
                     >mdi-pencil</v-icon>
+                </v-btn>
+                <v-btn
+                    small
+                    outlined
+                    color="warning"
+                    @click.stop="modfShowDialogAdd(meal.meal_id,meal.meal_people,meal.meal_name)"
+                >
+                    <v-icon
+                    small
+                    >mdi-cart-plus</v-icon>
                 </v-btn>
 
             <v-btn
@@ -283,7 +284,13 @@
                                 </template>
                             </v-autocomplete>
                         </v-list-item-title>
-                        <v-list-item-action-text >By selecting different currency, we are only deliver services to the country are you selected.</v-list-item-action-text>
+                        <v-list-item-action-text >
+                        <div
+                                :class="[`text-caption`]"
+                                class="transition-swing"
+                            >By selecting different currency, we are only deliver services to the country are you selected.
+                        </div>
+                        </v-list-item-action-text>
                     </v-list-item-content>
                 </v-list-item>
             </v-list-item-group>

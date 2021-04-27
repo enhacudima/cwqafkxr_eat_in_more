@@ -15,18 +15,22 @@ use App\CvChefeV;
 
 class SelectChefController extends Controller
 {
-    
+
 
     public function choice($chefs_meal)
     {
-        $best_chef = $this->mode($chefs_meal['chefs']);
+        $best_chef=null;
+        if($chefs_meal['chefs']!=[]){
+
+            $best_chef = $this->mode($chefs_meal['chefs']);
+        }
         $out_of_meal = $this->out($chefs_meal, $best_chef);
         return ['best_chef'=>$best_chef, 'out_of_meal' => $out_of_meal];
     }
 
     public function mode($chefs){
         $valueArray = $chefs;
-        $values = array_count_values($valueArray); 
+        $values = array_count_values($valueArray);
         $mode = array_search(max($values), $values);
         return $mode;
     }
@@ -46,22 +50,22 @@ class SelectChefController extends Controller
         $getMeal=Meals::find($meal);
         $experence=$getMeal->experience_id;
         $getMeal=$getMeal->mealChefs;
-        $end=3;//numbers of trying 
+        $end=3;//numbers of trying
         for ($i=0; $i < $end; $i++) {
             if (isset($experence)) {
                $randomChefe=CvChefeV::where('exy_id',$experence)->inRandomOrder()->first();//my chef
             }
-            if (isset($randomChefe)) {//check is he is availeble 
+            if (isset($randomChefe)) {//check is he is availeble
                 $ChefCalendar=ChefCalendar::where('id',$randomChefe->id)
                                             ->where('start_date','<=',$start_date)
                                             ->where('end_date','>=',$end_date)
                                             ->first();
             }
             if (!isset($ChefCalendar)) {
-                break;//break if is availeble 
+                break;//break if is availeble
             }
         }
-        
+
         return $randomChefe;
 
 

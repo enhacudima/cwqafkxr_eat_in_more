@@ -73,16 +73,31 @@
           </v-btn>
           <v-spacer></v-spacer>
           <v-btn
-            color="blue darken-1"
-            text
+            dark
+            color="warning"
             @click="add()"
           >
+            <v-icon
+                left
+                >mdi-cart-plus
+            </v-icon>
+
             Add to Cart
           </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
+
+    <v-snackbar
+      v-model="snackbar"
+      :multi-line="multiLine"
+      :timeout="timeout"
+      color="info"
+    >
+      {{ text }}
+    </v-snackbar>
   </v-row>
+
 </template>
 
 <script>
@@ -99,6 +114,11 @@
     },
     data() {
         return {
+        snackbar: false,
+        text: 'Add to cart!',
+        timeout: 1000,
+        multiLine: false,
+        counter: 0,
         updated:false,
         bpm: 1,
         interval: null,
@@ -133,6 +153,7 @@
     },
     methods: {
         add(){
+            this.snackbar=true
            this.showDialogStoreAdd = false
           //get from localy store
           //localStorage.removeItem('cart')
@@ -143,8 +164,8 @@
           }
           // new val
           var newVal ={
-            value:this.mealID,
-            desc:this.bpm,
+            meal_id:this.mealID,
+            quantity:this.bpm,
             user:this.userID,
           }
           // Get the existing data
@@ -162,15 +183,28 @@
 
           // Save back to localStorage
           localStorage.setItem('cart', JSON.stringify(existing));
-
-          existing = localStorage.getItem('cart');
+          //existing = localStorage.getItem('cart');
           //console.log(JSON.parse(existing))
 
+  /*          this.$ls.set('counter', JSON.stringify(existing))
+
+            this.counter = this.$ls.get('counter', 0);
+            var _this = this;
+            this.$ls.on('counter', function(val) {
+             _this.counter = val;
+            });
+    */
+            //console.log(_this.counter);
+
+
+
+
+
         },
-        changeDesc(projects, value, desc ) {
+        changeDesc(projects, meal_id, quantity ) {
             for (var i in projects) {
-                if (projects[i].value == value && projects[i].user == this.userID) {
-                  projects[i].desc = desc,
+                if (projects[i].meal_id == meal_id && projects[i].user == this.userID) {
+                  projects[i].quantity = quantity,
                   this.updated=true
                   break; //Stop this loop, we found it!
                 }

@@ -16,9 +16,9 @@ use App\BookingSyncMeal;
 
 class BookingController extends Controller
 {
-    
+
     public function createBooking(Request $request)
-    { 
+    {
     	$booking=$request->data['booking'];
         $bookingRequest = new Request();
         $bookingRequest->setMethod('POST');
@@ -26,15 +26,15 @@ class BookingController extends Controller
 
         $validatorBooking = Validator::make($bookingRequest->all(), [
             'location_x' => 'required|numeric',
-            'location_y' => 'required|numeric', 
+            'location_y' => 'required|numeric',
             'location_z' => 'nullable|string',
-            'cook_start_date' => 'required|date|date_format:Y-m-d|after:yesterday', 
-            'Cook_start_time' => 'required|date_format:H:i', 
-            'kitchen_id' => 'required|numeric|exists:kitchen_details,id', 
+            'cook_start_date' => 'required|date|date_format:Y-m-d|after:yesterday',
+            'Cook_start_time' => 'required|date_format:H:i',
+            'kitchen_id' => 'required|numeric|exists:kitchen_details,id',
             'user_id' => 'required|numeric|exists:users,id',
         ],
         [
-     	
+
         ]
     	);
 
@@ -43,11 +43,11 @@ class BookingController extends Controller
         $mealsRequest=$this->getMealData($meals,$bookingRequest->cook_start_date, $bookingRequest->Cook_start_time);
 
 
- 
-    if ($validatorBooking->fails()) { 
-                return response()->json(['errors'=>$validatorBooking->errors()->all()], 422);            
-    }      
-    
+
+    if ($validatorBooking->fails()) {
+                return response()->json(['errors'=>$validatorBooking->errors()->all()], 422);
+    }
+
     $select_chef = new SelectChefController();
     $best_chef = $select_chef->choice(['meals'=>$mealsRequest['meal_id'], 'chefs'=>$mealsRequest['chefs_user_id']]);
     $best_chef = $best_chef['best_chef'];
@@ -70,7 +70,7 @@ class BookingController extends Controller
     }
 
 
-    return response()->json(['success'=>'Added new records.'], 200); 
+    return response()->json(['success'=>'Added new records.'], 200);
     }
 
     public function createBookingMeal($mealsRequest,$key,$best_chef,$user_id,$booking_id,$booking_key)
@@ -101,12 +101,12 @@ class BookingController extends Controller
                             ->with('userKitchen')
                             ->get();
 
-    return response()->json($data, 200); 
+    return response()->json($data, 200);
 
     }
     public function getMealData($meals,$start_date, $start_time)
     {
-        //we validate meals 
+        //we validate meals
         $this->validateMeals($meals);
         $select_chef = new SelectChefController();
         $arry_chefs=[];
@@ -116,8 +116,14 @@ class BookingController extends Controller
             if (isset($meal)) {
                 $end_date = $this->getEndDate($start_date, $start_time, $meal->time_to);
                 $bestExperience=$select_chef->bestExperience($meal_id,$start_date,$end_date);
-                $arry_chefs[$key]=$bestExperience->id;
-                $arry_chefs_user[$key]=$bestExperience->user_id;
+                if(isset($bestExperience)){
+                    $arry_chefs[$key]=$bestExperience->id;
+                    $arry_chefs_user[$key]=$bestExperience->user_id;
+                }else{
+
+                    $arry_chefs[$key]=0;
+                    $arry_chefs_user[$key]=0;
+                }
             }
 
         }
@@ -136,20 +142,20 @@ class BookingController extends Controller
 
         $validatorMeals = Validator::make($mealsRequest->all(), [
             'meal_id.*' => 'required|numeric|exists:meals,id',
-            'quantity.*' => 'required|numeric', 
+            'quantity.*' => 'required|numeric',
         ],
-        [ 
+        [
         ]
         );
 
 
-        if ($validatorMeals->fails()) { 
-                    return response()->json(['errors'=>$validatorMeals->errors()->all()], 422);            
+        if ($validatorMeals->fails()) {
+                    return response()->json(['errors'=>$validatorMeals->errors()->all()], 422);
         }
     }
 
     public function getEndDate($start_date, $start_time,$time_to)
-    {   
+    {
         $waiting = 0.5;//time shift 30min
         $end_date = Carbon::createFromFormat('Y-m-d H:i', $start_date . ' '. $start_time)->toDateTimeString();
         //$end_date = $end_date->addHour($time_to+$waiting);

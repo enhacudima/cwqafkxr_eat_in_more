@@ -17,7 +17,8 @@ import ForgotPasswordResult from './components/Auth/ForgotPasswordResult.vue';
 import NotFound from './components/NotFound';
 import ResetPassword from './components/Auth/ResetPassword.vue';
 import UserProfile from  './components/Profile/User.vue';
-import NoPermission from './components/NoPermission'
+import NoPermission from './components/NoPermission';
+import Cart from './components/Cart/index.vue';
 
 
 export const routes = [
@@ -174,6 +175,17 @@ export const routes = [
         component: UserProfile,
         props: true,
     },
+    {
+        name: 'cart',
+        path: '/cart',
+        component: Cart,
+        props: true,
+        meta: {
+            antMasterLayout: true,
+            auth: true,
+        },
+    },
+
 ];
 
 

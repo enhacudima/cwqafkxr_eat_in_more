@@ -24,10 +24,13 @@
         <div class="pr-2">
             <router-link to="/login" tag="button">
             <v-btn
-            icon
+            tile
+            small
             >
             <v-icon>mdi-login</v-icon>
+            {{$t('login')}}
             </v-btn>
+
             </router-link>
         </div>
     </v-app-bar>
@@ -139,7 +142,12 @@
         class="text-center"
         cols="12"
       >
+       <div
+            :class="[`text-caption`]"
+            class="transition-swing"
+        >
         &copy;{{ new Date().getFullYear() }} — <strong>EatInMore</strong>
+       </div>
       </v-col>
     </v-footer>
     <div class="main-wrapper">

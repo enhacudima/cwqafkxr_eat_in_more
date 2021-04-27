@@ -35,17 +35,63 @@
                 >
                     <v-col
                     xs="12"
-                    sm="4"
-                    md="4"
-                    lg="4"
-                    xl="4"
+                    sm="12"
+                    md="12"
+                    lg="12"
+                    xl="12"
                     align="center"
                     >
-                   <!-- <v-row>
-                        <v-co
-                        -->
 
-                    <v-subheader>It is currently not possible to process your order, please login</v-subheader>
+                        <template >
+                                <v-row
+                                justify="center"
+                                align="center"
+                                >
+                                    <v-col cols="2">
+
+                                        <v-img src="storage/icons/cart_blank.png" lazy-src="storage/icons/cart_blank.png"
+                                        aspect-ratio="1.4"
+                                        contain
+                                        ></v-img>
+                                    </v-col>
+                                </v-row>
+                                <v-col cols="12"
+                                    justify="center"
+                                    align="center"
+                                    >
+                                        <div class="title">
+                                            Cart is Blank
+                                        </div>
+                                    </v-col>
+                                <v-col cols="12"
+                                    justify="center"
+                                    align="center"
+                                    >
+                                        <div class="subheading">
+                                            Sorry, You cart is blank, It is currently not possible to process your order, please login.
+                                        </div>
+                                </v-col>
+
+                                <v-col cols="12"
+                                    justify="center"
+                                    align="center"
+                                    >
+
+                                    <div class="pr-2">
+                                        <router-link to="/login" tag="button">
+                                        <v-btn
+                                        tile
+                                        small
+                                        color="primary"
+                                        >
+                                        <v-icon>mdi-login</v-icon>
+                                        {{$t('login')}}
+                                        </v-btn>
+
+                                        </router-link>
+                                    </div>
+                                </v-col>
+                        </template>
 
                     </v-col>
 

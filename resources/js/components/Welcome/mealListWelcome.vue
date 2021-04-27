@@ -102,7 +102,7 @@
                     small
                     class="ma-2"
                     color="indigo"
-                    text-color="white"
+                    outlined
                     >
                     <v-avatar left>
                         <v-icon small>mdi-account-multiple</v-icon>
@@ -119,12 +119,13 @@
                 <v-spacer></v-spacer>
                 <v-btn
                     small
-                    icon
+                    outlined
+                    color="warning"
                     @click.stop="modfShowDialog(meal.id)"
                 >
                     <v-icon
                     small
-                    >mdi-cart</v-icon>
+                    >mdi-cart-plus</v-icon>
                 </v-btn>
 
             <v-btn
