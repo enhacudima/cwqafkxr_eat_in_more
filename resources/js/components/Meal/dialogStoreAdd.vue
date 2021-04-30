@@ -114,6 +114,8 @@
     },
     data() {
         return {
+        loader: null,
+        loading: false,
         snackbar: false,
         text: 'Add to cart!',
         timeout: 1000,
@@ -228,17 +230,25 @@
 
     },
     watch: {
-    codMeal (val, oldVal) {
-        this.mealID=val[0];
-        this.bpm=1;
-        this.multpl=val[1];
-        this.portion=this.bpm*this.multpl;
-        this.mealName=val[2];
-      //console.log(val[2])
-    },
-    bpm(val,oldVal){
-        this.portion = this.bpm*this.multpl
-    }
+        loader () {
+            const l = this.loader
+            this[l] = !this[l]
+
+            setTimeout(() => (this[l] = false), 3000)
+
+            this.loader = null
+        },
+        codMeal (val, oldVal) {
+            this.mealID=val[0];
+            this.bpm=1;
+            this.multpl=val[1];
+            this.portion=this.bpm*this.multpl;
+            this.mealName=val[2];
+        //console.log(val[2])
+        },
+        bpm(val,oldVal){
+            this.portion = this.bpm*this.multpl
+        }
     }
 
   }

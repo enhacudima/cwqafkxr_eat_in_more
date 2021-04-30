@@ -133,7 +133,9 @@
                     small
                     outlined
                     color="warning"
-                    @click.stop="modfShowDialogAdd(meal.meal_id,meal.meal_people,meal.meal_name)"
+                    :loading="loading"
+                    :disabled="loading"
+                    @click.stop="modfShowDialogAdd(meal.meal_id,meal.meal_people,meal.meal_name);"
                 >
                     <v-icon
                     small
@@ -318,6 +320,8 @@ export default {
     components: { dialogView,dialogStoreAdd },
     data() {
         return {
+            loader: null,
+            loading: false,
             currency_x:null,
             currencys:[],
             icons: [
@@ -388,6 +392,14 @@ export default {
     },
 
     watch: {
+        loader () {
+            const l = this.loader
+            this[l] = !this[l]
+
+            setTimeout(() => (this[l] = false), 3000)
+
+            this.loader = null
+        },
         search (val){
             //console.log(val.length);
             if (val.length == 0) return this.getMeals();

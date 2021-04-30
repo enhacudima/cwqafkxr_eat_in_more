@@ -32,16 +32,21 @@ class CartController extends Controller
         $cartRequest = new Request();
         $cartRequest->setMethod('POST');
         $cartRequest->request->add($cart);
+
+        $meals=[];
+        $mealPrice=[];
+        $newKey=-1;
+        $totalPrice=0;
+        $numMeals=0;
+        $totalTime=0;
+
         if(!$cartRequest->all()){
-            return response()->json(null, 200);
+            return response()->json(['data'=>[],'totalPrice'=>null,'numMeals'=>null, 'totalTime'=>null], 200);
         }
 
 
         $getMeal = new GetMealController();
 
-        $meals=[];
-        $mealPrice=[];
-        $newKey=-1;
         foreach ($cartRequest->all() as $key => $value) {
             if(Auth::user()->id == $value['user'] ){
                 $newKey=$newKey+1;
@@ -50,6 +55,10 @@ class CartController extends Controller
 
                 $mealPrice[$newKey]=$getMeal->getOneMealsV2(Auth::user()->currency_id, $value['meal_id'])->first();
                 $mealPrice[$newKey]['quantity_to_book'] = $value['quantity'];
+                $totalPrice=$totalPrice+$mealPrice[$newKey]->amount*$quantity[$newKey];
+                $numMeals=$numMeals+$quantity[$newKey];
+                $totalTime=$totalTime+$mealPrice[$newKey]->time_min*$quantity[$newKey];
+
             }
         }
         $meals=['meal_id'=>$meals,'quantity'=>$quantity];
@@ -62,7 +71,7 @@ class CartController extends Controller
         }
         //dd($newMealPrice);
 
-        return response()->json($newMealPrice, 200);
+        return response()->json(['data'=>$newMealPrice,'totalPrice'=>$totalPrice,'numMeals'=>$numMeals, 'totalTime'=>$totalTime], 200);
     }
     public function getChefName($validity,$meal_id){
         $meals=$validity["meal_id"];

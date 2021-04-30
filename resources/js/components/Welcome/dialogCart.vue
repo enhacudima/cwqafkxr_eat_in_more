@@ -68,7 +68,7 @@
                                     align="center"
                                     >
                                         <div class="subheading">
-                                            Sorry, You cart is blank, It is currently not possible to process your order, please login.
+                                            Sorry, Your cart is blank, It is currently not possible to process your order, please login.
                                         </div>
                                 </v-col>
 

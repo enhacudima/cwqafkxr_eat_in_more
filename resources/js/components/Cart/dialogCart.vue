@@ -59,14 +59,15 @@
                             </v-list-item-avatar>
 
                             <v-list-item-content>
-                                <v-list-item-title  class=" blue--text text--lighten-2" v-html="item.meal_name"></v-list-item-title>
+                                <v-list-item-title  class=" blue--text text--darken-4" v-html="item.meal_name"></v-list-item-title>
                                 <v-list-item-subtitle v-html="item.meal_alias"></v-list-item-subtitle>
                                 <v-list-item-subtitle v-html="item.meal_details"></v-list-item-subtitle>
 
-                                <v-list-item-title class="pt-2 orange--text text--darken-2"> ${{numberFormat(item.amount)}} {{item.currency}}</v-list-item-title>
-                                <v-list-item-title >Quantity {{item.quantity_to_book}}</v-list-item-title>
-                                <v-list-item-subtitle >People {{item.quantity_to_book * item.meal_people}}</v-list-item-subtitle>
-                                <v-list-item-title  class="red--text text--darken-2" >Total {{numberFormat(item.quantity_to_book*item.amount)}}</v-list-item-title>
+                                <v-list-item-title class="pt-2 orange--text text--darken-2"> ${{numberFormat(item.amount)}}, {{item.currency}}/portion</v-list-item-title>
+                                <v-list-item-title ><v-icon small>mdi-noodles</v-icon> {{item.quantity_to_book}}</v-list-item-title>
+                                <v-list-item-subtitle > <v-icon small>mdi-account-multiple</v-icon> {{item.quantity_to_book * item.meal_people}}</v-list-item-subtitle>
+                                <v-list-item-subtitle ><v-icon small>mdi-clock</v-icon> ~{{item.quantity_to_book * item.time_min}} min/portion</v-list-item-subtitle>
+                                <v-list-item-title  class="red--text text--darken-2" ><v-icon small>mdi-currency-usd</v-icon> {{numberFormat(item.quantity_to_book*item.amount)}}</v-list-item-title>
 
                                 <v-list-item-title class="pt-2" v-if="item.chef_to_cook">
                                     <v-chip
@@ -97,6 +98,34 @@
                             :key="index"
                           ></v-divider>
                         </template>
+                        <template v-if="items.length">
+                            <v-list three-line dense >
+                                <v-subheader>Summary</v-subheader>
+                                <v-list-item
+                                >
+                                    <v-list-item-content>
+                                        <v-list-item-title ><v-icon small>mdi-noodles</v-icon> {{allData.numMeals}}</v-list-item-title>
+                                        <v-list-item-title ><v-icon small>mdi-clock</v-icon> ~{{allData.totalTime}} min</v-list-item-title>
+                                        <v-list-item-title  class="red--text text--darken-2" ><v-icon small>mdi-currency-usd</v-icon> {{numberFormat(allData.totalPrice)}}</v-list-item-title>
+                                    </v-list-item-content>
+
+                                </v-list-item>
+                            </v-list>
+
+                            <v-btn
+                            depressed
+                            small
+                            color="primary"
+                            @click="dialogBooking=true"
+                            >
+
+                            <v-icon left>
+                                mdi-calendar-plus
+                            </v-icon>
+                            Book
+                            </v-btn>
+
+                        </template>
                         <template v-if="!items.length" >
                                 <v-row
                                 justify="center"
@@ -123,7 +152,7 @@
                                     align="center"
                                     >
                                         <div class="subheading" >
-                                            Sorry, You cart is blank, close it and try to add any meal.
+                                            Sorry, Your cart is blank, close it and try to add any meal.
                                         </div>
                                 </v-col>
                         </template>
@@ -162,15 +191,17 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+    <booking v-model="dialogBooking" v-bind:dialogBooking="dialogBooking"/>
   </v-row>
 </template>
 
 <script>
 
 import numeral from 'numeral';
+import booking from './booking.vue';
 
   export default {
-    components: { },
+    components: {booking },
     props: {
         value: Boolean,
         codMeal: {
@@ -182,10 +213,12 @@ import numeral from 'numeral';
     },
     data() {
         return {
+         dialogBooking:false,
          dialogW:false,
          items: null,
          userID:null,
          cacheData:[],
+         allData:null,
 
         }
     },
@@ -236,7 +269,7 @@ import numeral from 'numeral';
             this.getData();
                 axios
                 .post("cart/get", { data: { cart: this.cacheData,} })
-                .then(response => { this.items = response.data, this.dialogW=false
+                .then(response => { this.items = response.data.data,this.allData = response.data, this.dialogW=false
                 })
                 .catch((error) => {
                 });
