@@ -27,13 +27,22 @@ import {ability} from './ability.js'
 import {i18n} from './i18n.js'
 //local storage
 import Storage from "vue-ls";
-
 const options = {
   namespace: 'vuejs__', // key prefix
   name: 'ls', // name variable Vue.[ls] or this.[$ls],
   storage: 'local', // storage name session, local, memory
 };
 Vue.use(Storage, options);
+
+//VueGoogleMaps
+import * as VueGoogleMaps from "vue2-google-maps";
+
+Vue.use(VueGoogleMaps, {
+  load: {
+    key: "AIzaSyDYU9QZbgp6ctkbFIpHR0km9Lu7kh0Z2Ac",
+  },
+  installComponents: true,
+});
 
 
 

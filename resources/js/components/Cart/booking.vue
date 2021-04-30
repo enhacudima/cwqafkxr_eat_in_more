@@ -7,10 +7,10 @@
 
       <v-card>
         <v-card-title class="headline grey lighten-2">
-          Booking Details
+          Booking Confirmation
         </v-card-title>
 
-        <v-card-text class="px-4 pt-6">
+        <v-card-text class="px-4 pt-6" v-if="existe_kitchen">
 
             <v-form ref="bookingForm" v-model="valid" lazy-validation>
                 <v-row>
@@ -112,6 +112,29 @@
                         >
                         </v-autocomplete>
                     </v-col>
+
+                    <v-col cols="12">
+                        <v-checkbox dense v-model="bookingForm.terms_conditions" :rules="[rules.required]">
+                        <template v-slot:label>
+                            <div>
+                            {{$t('i_have_read_and_agree')}}
+                            <v-tooltip bottom>
+                                <template v-slot:activator="{ on }">
+                                <a
+                                    target="_blank"
+                                    href="/terms"
+                                    @click.stop
+                                    v-on="on"
+                                >
+                                    {{$t('terms_service')}}
+                                </a>
+                                </template>
+                                {{$t('open_terms_and_conditions')}}
+                            </v-tooltip>
+                            </div>
+                        </template>
+                        </v-checkbox>
+                    </v-col>
                 </v-row>
 
                 <v-spacer></v-spacer>
@@ -120,12 +143,25 @@
                 </v-col>
 
             </v-form>
-         </v-card-text>
+        </v-card-text>
+
+        <v-card-text class="px-4 pt-6" v-if="!existe_kitchen">
+            <newkitchen/>
+        </v-card-text>
 
 
         <v-divider></v-divider>
 
         <v-card-actions>
+          <v-btn
+            color="primary"
+            text
+
+          >
+            <v-icon small>mdi-plus</v-icon>
+            Kitchen
+          </v-btn>
+
           <v-spacer></v-spacer>
           <v-btn
             color="primary"
@@ -141,24 +177,37 @@
 </template>
 
 <script>
+import newkitchen from './kitchen.vue';
   export default {
+    components:{newkitchen},
     props: {
         value: Boolean,
     },
     data () {
       return {
+        kitchenForm:[
+            {full_address:null},
+            {type_stove_power_source:null},
+            {back_up_gererator:null},
+            {grill_available:null}
+        ] ,
         bookingForm:[
             {kitchen_id:null},
             {data:null},
             {time:null},
-            {bookingData:null}
+            {bookingData:null},
+            {terms_conditions:true}
         ],
+        existe_kitchen:false,
         kitchen:[],
         valid: true,
         modal:false,
         date: new Date().toISOString().substr(0, 10),
         time: null,
         modal2: false,
+        rules: {
+            required: value => !!value || "Required.",
+        },
       }
     },
     methods:{

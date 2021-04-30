@@ -43,6 +43,7 @@
         "vue-pdf": "^4.2.0",
         "vue-router": "^3.3.4",
         "vue-tables-2": "^2.2.0",
+        "vue2-google-maps": "^0.10.7",
         "vuelidate": "^0.7.6",
         "vuetify": "^2.4.0",
         "vuetify-loader": "^1.6.0",
