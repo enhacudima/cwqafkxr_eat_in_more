@@ -13,41 +13,53 @@ use Illuminate\Validation\Rule;
 
 class KitchenController extends Controller
 {
-    
+
+    public function __construct()
+    {
+        $this->middleware('auth:api');
+    }
+
     public function createKitchen(Request $request)
-    { 
-    	$kitchen=$request->data['kitchen'];
+    {
+    	$kitchen=$request->data['kitchenData'];
         $myRequest = new Request();
         $myRequest->setMethod('POST');
         $myRequest->request->add($kitchen);
 
         $validator = Validator::make($myRequest->all(), [
-            'type_stove' => 'required|string',
-            'type_power_source' => 'required|string', 
-            'back_up_gererator' => 'required|string',
-            'grill_available' => 'required|string', 
-            'user_id' => 'required|numeric|exists:users,id',
+            'aliase' => 'required|string|max:45',
+            'full_address' => 'required|string|max:255',
+            'type_stove_power_source' => 'required|string',
+            'stove_backup' => 'nullable|string',
+            'grill_available' => 'required|string',
+            'oven_available' => 'required|string',
+            'lat' => 'required|numeric',
+            'lng' => 'required|numeric',
         ],
         [
-     	
+
         ]
     	);
-    if ($validator->fails()) { 
-                return response()->json(['errors'=>$validator->errors()->all()], 422);            
-    }      
-       
+    if ($validator->fails()) {
+                return response()->json(['errors'=>$validator->errors()->all()], 422);
+    }
+    $user_id=Auth::user()->id;
     Kitchen::create([
-        'type_stove' => $myRequest['type_stove'],
-        'type_power_source' => $myRequest['type_power_source'],
-        'back_up_gererator' => $myRequest['back_up_gererator'],
+        'aliase' => $myRequest['aliase'],
+        'full_address' => $myRequest['full_address'],
+        'type_stove_power_source' => $myRequest['type_stove_power_source'],
+        'stove_backup' =>$myRequest['stove_backup'],
         'grill_available' =>$myRequest['grill_available'],
+        'oven_available' =>$myRequest['oven_available'],
+        'lat' =>$myRequest['lat'],
+        'lng' =>$myRequest['lng'],
         'key' => md5(time()),
-        'user_id' => $myRequest['user_id'],
+        'user_id' => $user_id,
 
 
     ]);
 
-    return response()->json(['success'=>'Added new records.'], 200); 
+    return response()->json(['success'=>'Added new records.'], 200);
     }
 
 
@@ -55,10 +67,10 @@ class KitchenController extends Controller
     {
 
     	$data =  Kitchen::where('kitchen_details.user_id',$user_id)
-                            ->with('userKitchen')
+                            //->with('userKitchen')
                             ->get();
 
-    return response()->json($data, 200); 
+    return response()->json($data, 200);
 
     }
 }

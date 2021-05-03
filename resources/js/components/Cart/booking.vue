@@ -7,10 +7,34 @@
 
       <v-card>
         <v-card-title class="headline grey lighten-2">
-          Booking Confirmation
+          <div v-if="existeKitchen">Booking Confirmation</div>
+          <div v-else>Kitchen</div>
         </v-card-title>
+        <v-card-text  class="px-4 pt-6" v-if="waiting">
+            <v-row
 
-        <v-card-text class="px-4 pt-6" v-if="existe_kitchen">
+                class="fill-height"
+                align-content="center"
+                justify="center"
+            >
+                <v-col
+                class="subtitle-1 text-center"
+                cols="12"
+                >
+                Getting read..
+                </v-col>
+                <v-col cols="6">
+                <v-progress-linear
+                    color="deep-purple accent-4"
+                    indeterminate
+                    rounded
+                    height="6"
+                ></v-progress-linear>
+                </v-col>
+            </v-row>
+        </v-card-text>
+
+        <v-card-text class="px-4 pt-6" v-else-if="existeKitchen">
 
             <v-form ref="bookingForm" v-model="valid" lazy-validation>
                 <v-row>
@@ -102,12 +126,12 @@
                     <v-col cols="12" sm="12" md="12">
                         <v-autocomplete
                         prepend-icon="mdi-map-marker-outline"
-                        v-model="bookingForm.kitchen"
+                        v-model="bookingForm.kitchen_id"
                         :items="kitchen"
                         label="Kitchen"
                         required
-                        item-text="name"
-                        return-object
+                        item-text="aliase"
+                        item-value="id"
                         dense
                         >
                         </v-autocomplete>
@@ -145,8 +169,8 @@
             </v-form>
         </v-card-text>
 
-        <v-card-text class="px-4 pt-6" v-if="!existe_kitchen">
-            <newkitchen/>
+        <v-card-text class="px-4 pt-6" v-else>
+            <newkitchen  v-bind:existeKitchen.sync="existeKitchen" />
         </v-card-text>
 
 
@@ -156,10 +180,17 @@
           <v-btn
             color="primary"
             text
-
+            @click="existeKitchen= !existeKitchen"
           >
-            <v-icon small>mdi-plus</v-icon>
-            Kitchen
+
+            <div v-if="existeKitchen">
+                <v-icon small>mdi-plus</v-icon>
+                Kitchen
+            </div>
+            <div v-else>
+                Cancel
+            </div>
+
           </v-btn>
 
           <v-spacer></v-spacer>
@@ -179,18 +210,13 @@
 <script>
 import newkitchen from './kitchen.vue';
   export default {
+
     components:{newkitchen},
     props: {
         value: Boolean,
     },
     data () {
       return {
-        kitchenForm:[
-            {full_address:null},
-            {type_stove_power_source:null},
-            {back_up_gererator:null},
-            {grill_available:null}
-        ] ,
         bookingForm:[
             {kitchen_id:null},
             {data:null},
@@ -198,7 +224,8 @@ import newkitchen from './kitchen.vue';
             {bookingData:null},
             {terms_conditions:true}
         ],
-        existe_kitchen:false,
+        waiting:true,
+        existeKitchen:false,
         kitchen:[],
         valid: true,
         modal:false,
@@ -217,14 +244,35 @@ import newkitchen from './kitchen.vue';
             var existing = cache ? JSON.parse(cache) : {};
             this.bookingForm.bookingData=existing;
         },
+        getkitchen(){
+            var userID = JSON.parse(localStorage.getItem('user')).logged_in_user.id ;
+            axios
+                .get('getKitchen/'+userID)
+                .then(response => {
+                    this.kitchen = response.data;
+                    this.waiting =false;
+                    if(this.kitchen.length){
+                        this.existeKitchen = true
+                    }else{
+                        this.existeKitchen = false
+                    }
+                });
+
+        }
 
     },
     watch:{
         showDialogCart(val){
             if(val)
-                this.getData()
+                this.getData();
+                this.getkitchen()
 
         },
+        existeKitchen(val){
+            if(val===true)
+                this.getkitchen()
+
+        }
 
     },
     computed: {

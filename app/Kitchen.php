@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Kitchen extends Model
 {
-    
+
     //
     protected $table = 'kitchen_details';
 
@@ -15,7 +15,7 @@ class Kitchen extends Model
     public $timestamps=true;
 
     protected $fillable = [
-        'type_stove', 'type_power_source', 'back_up_gererator','grill_available','user_id','key','status',
+        'aliase','full_address','type_stove_power_source', 'stove_backup', 'grill_available','oven_available','lat','lng','user_id','key','status',
     ];
 
 
