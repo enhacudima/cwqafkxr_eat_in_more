@@ -7,7 +7,7 @@
 
       <v-card>
         <v-card-title class="headline grey lighten-2">
-          <div v-if="existeKitchen">Booking Confirmation</div>
+          <div v-if="existeKitchen">Booking </div>
           <div v-else>Kitchen</div>
         </v-card-title>
         <v-card-text  class="px-4 pt-6" v-if="waiting">
@@ -36,91 +36,88 @@
 
         <v-card-text class="px-4 pt-6" v-else-if="existeKitchen">
 
-            <v-form ref="bookingForm" v-model="valid" lazy-validation>
+            <v-form ref="formBooking" v-model="valid" lazy-validation>
                 <v-row>
-                    <v-col cols="12" sm="12" md="12">
-                        <v-dialog
-                            ref="dialog"
-                            v-model="modal"
-                            :return-value.sync="date"
-                            persistent
-                            width="290px"
-                        >
-                            <template v-slot:activator="{ on, attrs }">
-                            <v-text-field
-                                v-model="date"
-                                label="Picker date"
-                                prepend-icon="mdi-calendar"
-                                readonly
-                                v-bind="attrs"
-                                v-on="on"
-                                required
-                            ></v-text-field>
-                            </template>
-                            <v-date-picker
-                            v-model="bookingForm.date"
-                            scrollable
-                            >
-                            <v-spacer></v-spacer>
-                            <v-btn
-                                text
-                                color="primary"
-                                @click="modal = false"
-                            >
-                                Cancel
-                            </v-btn>
-                            <v-btn
-                                text
-                                color="primary"
-                                @click="$refs.dialog.save(date)"
-                            >
-                                OK
-                            </v-btn>
-                            </v-date-picker>
-                        </v-dialog>
-                    </v-col>
 
-                    <v-col cols="12" sm="12" md="12">
-                        <v-dialog
-                            ref="dialog"
-                            v-model="modal2"
+                    <v-col
+                        cols="12"
+                        sm="6"
+                        md="6"
+                        >
+                       <v-menu
+                                ref="menu"
+                                v-model="menu"
+                                :close-on-content-click="false"
+                                :return-value.sync="date"
+                                transition="scale-transition"
+                                offset-y
+                                min-width="auto"
+                            >
+                                <template v-slot:activator="{ on, attrs }">
+                                <v-text-field
+                                    v-model="date"
+                                    label="Picker in menu"
+                                    prepend-icon="mdi-calendar"
+                                    readonly
+                                    v-bind="attrs"
+                                    v-on="on"
+                                ></v-text-field>
+                                </template>
+                                <v-date-picker
+                                v-model="date"
+                                no-title
+                                scrollable
+                                >
+                                <v-spacer></v-spacer>
+                                <v-btn
+                                    text
+                                    color="primary"
+                                    @click="menu = false"
+                                >
+                                    Cancel
+                                </v-btn>
+                                <v-btn
+                                    text
+                                    color="primary"
+                                    @click="$refs.menu.save(date)"
+                                >
+                                    OK
+                                </v-btn>
+                                </v-date-picker>
+                            </v-menu>
+                        </v-col>
+
+                    <v-col cols="12" sm="6" md="6">
+                        <v-menu
+                            ref="menu2"
+                            v-model="menu2"
+                            :close-on-content-click="false"
+                            :nudge-right="40"
                             :return-value.sync="time"
-                            persistent
-                            width="290px"
+                            transition="scale-transition"
+                            offset-y
+                            max-width="290px"
+                            min-width="290px"
                         >
                             <template v-slot:activator="{ on, attrs }">
                             <v-text-field
                                 v-model="time"
+                                required
+                                :rules="[rules.required]"
                                 label="Picker time"
-                                prepend-icon="mdi-clock-outline"
+                                prepend-icon="mdi-clock-time-four-outline"
                                 readonly
                                 v-bind="attrs"
                                 v-on="on"
-                                required
                             ></v-text-field>
                             </template>
                             <v-time-picker
-                            v-if="modal2"
-                            v-model="bookingForm.time"
+                            v-if="menu2"
+                            v-model="time"
                             full-width
-                            >
-                            <v-spacer></v-spacer>
-                            <v-btn
-                                text
-                                color="primary"
-                                @click="modal2 = false"
-                            >
-                                Cancel
-                            </v-btn>
-                            <v-btn
-                                text
-                                color="primary"
-                                @click="$refs.dialog.save(time)"
-                            >
-                                OK
-                            </v-btn>
-                            </v-time-picker>
-                        </v-dialog>
+                            @click:minute="$refs.menu2.save(time)"
+                            ></v-time-picker>
+                        </v-menu>
                     </v-col>
 
                     <v-col cols="12" sm="12" md="12">
@@ -130,6 +127,7 @@
                         :items="kitchen"
                         label="Kitchen"
                         required
+                        :rules="[rules.required]"
                         item-text="aliase"
                         item-value="id"
                         dense
@@ -163,7 +161,7 @@
 
                 <v-spacer></v-spacer>
                 <v-col class="d-flex" cols="12" sm="12" xsm="12" align-end>
-                    <v-btn elevation="1" block :disabled="!valid" color="primary" @click="validate">Confirm Booking</v-btn>
+                    <v-btn elevation="1" block :loading="loading" :disabled="!valid || loading" color="primary" @click="validate">Continue Booking</v-btn>
                 </v-col>
 
             </v-form>
@@ -204,6 +202,26 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+
+    <v-snackbar
+      v-model="snackbar"
+      :vertical="vertical"
+      :multi-line="multiLine"
+       color="info"
+    >
+      {{ text }}
+
+      <template v-slot:action="{ attrs }">
+        <v-btn
+          color="red"
+          text
+          v-bind="attrs"
+          @click="snackbar = false"
+        >
+          Close
+        </v-btn>
+      </template>
+    </v-snackbar>
   </div>
 </template>
 
@@ -214,22 +232,29 @@ import newkitchen from './kitchen.vue';
     components:{newkitchen},
     props: {
         value: Boolean,
+        showDialogCartProp:Boolean,
     },
     data () {
       return {
-        bookingForm:[
-            {kitchen_id:null},
-            {data:null},
-            {time:null},
-            {bookingData:null},
-            {terms_conditions:true}
-        ],
+        multiLine: true,
+        snackbar: false,
+        text: null,
+        loading: false,
+        menu: false,
+        menu2: false,
+        date: new Date().toISOString().substr(0, 10),
+        bookingForm:{
+            kitchen_id:null,
+            cook_start_date:null,
+            Cook_start_time:null,
+            bookingData:null,
+            terms_conditions:true,
+        },
         waiting:true,
         existeKitchen:false,
         kitchen:[],
         valid: true,
         modal:false,
-        date: new Date().toISOString().substr(0, 10),
         time: null,
         modal2: false,
         rules: {
@@ -238,6 +263,74 @@ import newkitchen from './kitchen.vue';
       }
     },
     methods:{
+    reset() {
+      this.$refs.formBooking.reset();
+    },
+    resetValidation() {
+      this.$refs.formBooking.resetValidation();
+    },
+
+    validate() {
+      if (this.$refs.formBooking.validate()) {
+          this.bookingForm.cook_start_date=this.date;
+          this.bookingForm.Cook_start_time=this.time;
+        // submit form to server/API here...
+        //console.log(this.formReg);
+
+        this.loading = true
+        this.sendData(this.bookingForm);
+      }
+    },
+    sendData(data) {
+
+      axios
+      .post("createBooking", { data: { bookingData: data} })
+      .then(response => {
+          this.allerros = [];
+          this.sucess = true;
+          this.loading = false
+          if (response.data.errors) {
+              //console.log(response.data.errors);
+              response.data.errors.forEach(error => { this.openNotification('error', 'Error on Save', error);});
+
+          } else {
+            this.text="Congratulations, you just booked a chef to "+this.date+', You can see it on your Dashboard.'
+            this.snackbar=true
+            localStorage.removeItem('cart');
+            this.$emit('update:showDialogCartProp', false)
+            this.reset()
+            this.resetValidation()
+            this.showDialogCart=false;
+
+          }
+      })
+      .catch((error) => {
+        this.loading = false
+        this.success = false;
+        var errors =null;
+        var status=error.response.status;
+        //console.log(status);
+            if (status == 422){
+            errors=error.response.data.errors;
+            //console.log(errors);
+            errors.forEach(error => { this.openNotification('error', 'Error on Save', error);});
+          }else{
+            this.openNotification('error','Error on Save',error);
+          }
+      });
+    },
+
+  openNotification: function (type, m, d) {
+      this.$notification.config({
+          placement: 'topRight',
+          top: 35,
+          duration: 8,
+      });
+      this.$notification[type]({
+        message: m,
+        description: d,
+      });
+  },
 
         getData(){
             var cache = localStorage.getItem("cart");

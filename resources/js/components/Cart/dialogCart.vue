@@ -191,7 +191,7 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-    <booking v-model="dialogBooking" v-bind:dialogBooking="dialogBooking"/>
+    <booking v-model="dialogBooking" v-bind:dialogBooking="dialogBooking" :showDialogCartProp.sync="showDialogCart"/>
   </v-row>
 </template>
 

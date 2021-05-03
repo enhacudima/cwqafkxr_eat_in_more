@@ -89,7 +89,7 @@
                         <v-layout column>
                             <GmapMap
                                 :center="center"
-                                :zoom="4"
+                                :zoom="6"
                                 map-style-id="roadmap"
                                 :options="mapOptions"
                                 style="width: 100%; height: 40vmin"

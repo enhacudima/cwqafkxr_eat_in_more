@@ -28,7 +28,7 @@ class GetMealController extends Controller
         $data=MealsAPI2::with('mealAllergies.allergiesIngredients','mealTags.tagName','mealOptions');
         $data->where('meal_v_api2.meal_id',$meal_id);
         $data=$this->selectCurrency($currency_id,$data)
-        ->select('meal_v_api2.*','meal_prices.amount','currency.currency')
+        ->select('meal_v_api2.*','meal_prices.amount','currency.currency','meal_prices.id as meal_prices_id')
         ->distinct();
 
         return $data;
@@ -39,7 +39,7 @@ class GetMealController extends Controller
         $currency_id=$currency_id;
         $data=MealsAPI2::with('mealAllergies.allergiesIngredients','mealTags.tagName','mealOptions');
         $data=$this->selectCurrency($currency_id,$data)
-        ->select('meal_v_api2.*','meal_prices.amount','currency.currency')
+        ->select('meal_v_api2.*','meal_prices.amount','currency.currency','meal_prices.id as meal_prices_id')
         ->distinct();
         $data=$data->get()->toArray();
         $dataRemove=([

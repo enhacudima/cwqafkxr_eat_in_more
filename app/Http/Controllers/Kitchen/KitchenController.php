@@ -67,7 +67,7 @@ class KitchenController extends Controller
     {
 
     	$data =  Kitchen::where('kitchen_details.user_id',$user_id)
-                            //->with('userKitchen')
+                            ->orderby('id','desc')
                             ->get();
 
     return response()->json($data, 200);
