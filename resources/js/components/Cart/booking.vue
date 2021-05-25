@@ -56,7 +56,7 @@
                                 <template v-slot:activator="{ on, attrs }">
                                 <v-text-field
                                     v-model="date"
-                                    label="Picker in menu"
+                                    label="Picker a date"
                                     prepend-icon="mdi-calendar"
                                     readonly
                                     v-bind="attrs"
@@ -104,7 +104,7 @@
                                 v-model="time"
                                 required
                                 :rules="[rules.required]"
-                                label="Picker time"
+                                label="Picker a time"
                                 prepend-icon="mdi-clock-time-four-outline"
                                 readonly
                                 v-bind="attrs"
@@ -294,7 +294,7 @@ import newkitchen from './kitchen.vue';
               response.data.errors.forEach(error => { this.openNotification('error', 'Error on Save', error);});
 
           } else {
-            this.text="Congratulations, you just booked a chef to "+this.date+', You can see it on your Dashboard.'
+            this.text="Congratulations, you just booked a chef on the "+this.date+', You can see it on your Dashboard.'
             this.snackbar=true
             localStorage.removeItem('cart');
             this.$emit('update:showDialogCartProp', false)

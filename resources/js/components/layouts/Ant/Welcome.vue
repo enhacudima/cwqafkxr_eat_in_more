@@ -24,7 +24,7 @@
         <div class="pr-2">
             <router-link to="/login" tag="button">
             <v-btn
-            tile
+            text
             small
             >
             <v-icon>mdi-login</v-icon>
