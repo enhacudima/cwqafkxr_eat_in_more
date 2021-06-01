@@ -10,6 +10,15 @@
         "prod": "npm run production",
         "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js"
     },
+    "name": "eatinmore",
+    "description": "a really cool app",
+    "version": "1.0.0",
+    "engines": {
+        "node": "15.x",
+        "npm": "7.x"
+
+    },
+
     "devDependencies": {
         "axios": "^0.19.2",
         "case-sensitive-paths-webpack-plugin": "^2.3.0",
