@@ -1,7 +1,6 @@
 {
     "private": true,
     "scripts": {
-
         "dev": "npm run development",
         "development": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
         "watch": "npm run development -- --watch",
@@ -48,6 +47,7 @@
         "vue-i18n": "^8.24.2",
         "vue-ls": "^3.2.2",
         "vue-moment": "^4.1.0",
+        "vue-nprogress": "^0.2.0",
         "vue-pdf": "^4.2.0",
         "vue-router": "^3.3.4",
         "vue-tables-2": "^2.2.0",

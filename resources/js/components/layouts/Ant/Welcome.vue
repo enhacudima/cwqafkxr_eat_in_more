@@ -1,4 +1,6 @@
 <template>
+<div>
+  <nprogress-container></nprogress-container>
   <v-app id="inspire">
     <v-app-bar
       app
@@ -153,13 +155,15 @@
         <cookie-law theme="blood-orange--rounded"></cookie-law>
     </div>
   </v-app>
+  </div>
 </template>
 
 <script>
+import NprogressContainer from 'vue-nprogress/src/NprogressContainer'
 import CookieLaw from 'vue-cookie-law';
 import {i18n} from '../../../i18n.js'
   export default {
-    components: { CookieLaw },
+    components: { NprogressContainer,CookieLaw },
     name: 'locale-changer',
 
     methods: {

@@ -36,6 +36,8 @@ Vue.use(Storage, options);
 
 //VueGoogleMaps
 import * as VueGoogleMaps from "vue2-google-maps";
+//nprocesss
+import NProgress from 'vue-nprogress'
 
 Vue.use(VueGoogleMaps, {
   load: {
@@ -77,6 +79,16 @@ const router = new VueRouter({
     routes: routes
 });
 
+
+const options = {
+  latencyThreshold: 200, // Number of ms before progressbar starts showing, default: 100,
+  router: true, // Show progressbar when navigating routes, default: true
+  http: true // Show progressbar when doing Vue.http, default: true
+};
+Vue.use(NProgress, options)
+
+const nprogress = new NProgress()
+
 import { AbilityBuilder, Ability } from '@casl/ability';
 const { can, rules } = new AbilityBuilder(Ability);
 router.beforeEach((to, from, next) => {
@@ -111,6 +123,7 @@ const app = new Vue({
     router: router,
     store,
     i18n,
+    nprogress,
     created () {
 	    const userInfo = localStorage.getItem('user')
 	    if (userInfo) {
