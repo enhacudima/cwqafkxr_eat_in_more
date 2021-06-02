@@ -20,6 +20,7 @@ class LocationController extends Controller
     public $z;
     public $location_id;
     public $user_id;
+
     public function __construct($user_id,$location_id, $x, $y, $z)
     {
         $this->middleware('auth:api');
@@ -37,6 +38,8 @@ class LocationController extends Controller
     public function create()
     {
         $states = CountryStates::where('phone',$this->location_id)->first();
+        dd($states);
+
         UserL::updateOrCreate(
 
             [
