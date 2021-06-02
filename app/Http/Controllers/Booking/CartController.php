@@ -91,7 +91,7 @@ class CartController extends Controller
         $validator = new Check();
 
 
-        $date=Carbon::now()->add(1,'day')->isoFormat('Y-m-d');
+        $date=Carbon::now()->add(1,'day')->Format('Y-m-d');
         $time=Carbon::now()->add(1,'day')->Format('H:i');
         $mealsCheked=$validator->getMealData($meals,$date,$time);
 
