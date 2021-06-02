@@ -54,7 +54,7 @@ class LocationController extends Controller
 
         );
         User::where('id',$this->user_id)->update(['location_id'=>$states->id]);
-        $currece = new CurrencyController(Auth::user()->id,$states->id);
+        $currece = new CurrencyController($this->user_id,$states->id);//remove auth
     }
 
     public function get()
