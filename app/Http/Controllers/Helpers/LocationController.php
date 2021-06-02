@@ -38,7 +38,7 @@ class LocationController extends Controller
     public function create()
     {
         $states = CountryStates::where('phone',$this->location_id)->first();
-        dd($states);
+        dd($states->id);
 
         UserL::updateOrCreate(
 
