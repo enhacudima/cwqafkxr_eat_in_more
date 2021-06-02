@@ -67,13 +67,13 @@ Vue.use(BootstrapVue)
 Vue.use(IconsPlugin)
 Vue.use(abilitiesPlugin, ability);
 
-axios.defaults.baseURL = 'http://localhost/cwqafkxr_eat_in_more/public/api';
-//axios.defaults.baseURL = 'https://greenisle.co.za/api';
+//axios.defaults.baseURL = 'http://localhost/cwqafkxr_eat_in_more/public/api';
+axios.defaults.baseURL = 'https://cwqafkxreatinmore.herokuapp.com/api';
 
 const router = new VueRouter({
     mode: 'history',
-    base: "/cwqafkxr_eat_in_more/public/",
-    //base: "/",
+    //base: "/cwqafkxr_eat_in_more/public/",
+    base: "/",
     routes: routes
 });
 
