@@ -28,7 +28,6 @@
             small
             >
             <v-icon>mdi-login</v-icon>
-            {{$t('login')}}
             </v-btn>
 
             </router-link>
