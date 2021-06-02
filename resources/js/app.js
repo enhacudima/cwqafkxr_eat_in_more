@@ -80,12 +80,12 @@ const router = new VueRouter({
 });
 
 
-const options = {
+const optionsNProgress = {
   latencyThreshold: 200, // Number of ms before progressbar starts showing, default: 100,
   router: true, // Show progressbar when navigating routes, default: true
   http: true // Show progressbar when doing Vue.http, default: true
 };
-Vue.use(NProgress, options)
+Vue.use(NProgress, optionsNProgress)
 
 const nprogress = new NProgress()
 
