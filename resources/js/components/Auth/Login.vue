@@ -1,5 +1,5 @@
 <template>
-  <v-card class="" outlined>
+  <v-card  outlined>
 
     <v-progress-linear
       :active="dialogW"
@@ -7,7 +7,7 @@
       color="primary"
     ></v-progress-linear>
 
-      <v-card-text>
+      <v-card-text class="px-4">
           <v-form ref="loginForm" v-model="valid" lazy-validation @submit.prevent="validate">
               <v-row class="pt-6">
                   <v-col cols="12">
@@ -38,7 +38,7 @@
                   </v-col>
                   <v-spacer></v-spacer>
                   <v-col class="d-flex" cols="6" sm="6" xsm="12" align-end>
-                      <v-btn elevation="1"  block  color="primary" type="submit"> {{$t('login')}} </v-btn>
+                      <v-btn elevation="1"  block  :loading="dialogW" :disabled="dialogW" color="primary" type="submit"> {{$t('login')}} </v-btn>
                   </v-col>
               </v-row>
           </v-form>
