@@ -202,6 +202,7 @@ export default {
           description: d,
         });
     },
+
   },
   mounted() {
     const userData = JSON.parse(this.userInfo);
@@ -212,7 +213,10 @@ export default {
 
   axios
       .get('getCVData/'+this.userID)
-      .then(response => (this.chefeCV = response.data,this.imageUrl = 'storage/'+response.data.picture.path+response.data.picture.name));
+      .then(response => (
+          this.chefeCV = response.data,
+          this.imageUrl = 'storage/'+this.chefeCV.picture.path+this.chefeCV.picture.name
+      ));
   },
 };
 </script>
