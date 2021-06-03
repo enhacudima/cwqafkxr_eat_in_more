@@ -24,11 +24,14 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+
+
+        if(env('App_ENV') !== 'local'){
+            URL::forceScheme('https');
+        }
+
         ResetPassword::createUrlUsing(function ($notifiable, $token) {
             return  url('/')."/password/reset/{$token}";
         });
-        if(env('App_ENV') !== 'local'){
-            URL::forceSchema('https');
-        }
     }
 }
