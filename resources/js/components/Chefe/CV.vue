@@ -9,7 +9,7 @@
       list-type="picture-card"
       class="avatar-uploader"
       :show-upload-list="false"
-      action="/cwqafkxr_eat_in_more/public/api/filePicture"
+      :action="baseUrl+'api/filePicture'"
       :before-upload="beforeUpload"
       @change="handleChange"
     >
@@ -43,7 +43,7 @@
         v-decorator="[
           'summary',
           {initialValue:chefeCV.summary, rules: [{ required: true, message: 'Please input your summary discription!' }] },
-        ]" 
+        ]"
 
         allow-clear
 
@@ -65,7 +65,7 @@
     </a-form-item>
 -->
     <a-form-item >
-      <a-col :xs="{ span: 24, offset: 0}" :lg="{ span: 20, offset: 10}"> 
+      <a-col :xs="{ span: 24, offset: 0}" :lg="{ span: 20, offset: 10}">
           <a-button icon="check-circle"  type="primary" html-type="submit" :disabled="hasErrors(form.getFieldsError())" >
               Save
           </a-button >
@@ -88,6 +88,8 @@ function hasErrors(fieldsError) {
 export default {
   data() {
     return {
+        //baseUrl:'http://localhost/cwqafkxr_eat_in_more/public/',
+        baseUrl:'https://cwqafkxreatinmore.herokuapp.com/',
       loading: false,
       imageUrl: '',
       hasErrors,
@@ -168,9 +170,9 @@ export default {
           if (response.data.errors) {
               //console.log(response.data.errors);
               response.data.errors.forEach(error => { this.openNotification('error', 'Error on Save', error);});
-              
+
           } else {
-              
+
               this.openNotification('success', 'Save', 'You have been store all data successfully');
               //this.$router.push({ name: 'register/result' });
           }

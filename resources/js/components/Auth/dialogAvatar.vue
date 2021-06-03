@@ -20,7 +20,7 @@
                 list-type="picture-card"
                 class="avatar-uploader"
                 :show-upload-list="false"
-                action="/cwqafkxr_eat_in_more/public/api/filePicture"
+                :action="baseUrl+'api/filePicture'"
                 :before-upload="beforeUpload"
                 @change="handleChange"
                 >
@@ -77,6 +77,8 @@ function hasErrors(fieldsError) {
     },
     data() {
         return {
+            //baseUrl:'http://localhost/cwqafkxr_eat_in_more/public/',
+            baseUrl:'https://cwqafkxreatinmore.herokuapp.com/',
             loading: false,
             imageUrl: '',
             hasErrors,

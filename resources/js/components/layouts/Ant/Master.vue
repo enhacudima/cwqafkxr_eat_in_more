@@ -217,20 +217,23 @@
       <v-divider></v-divider>
 
       <v-list>
-        <v-list-item
-          v-for="(linkName, index)  in linksNames"
-          :key="linkName"
-          :to="links[index]"
-          link
-        >
-          <v-list-item-icon>
-            <v-icon>{{ icons[index] }}</v-icon>
-          </v-list-item-icon>
+        <template
+            v-for="(linkName, index)  in linksNames">
+            <v-list-item
+                v-if="$can(can[index])"
+                :key="linkName"
+                :to="links[index]"
+                link
+            >
+            <v-list-item-icon>
+                <v-icon>{{ icons[index] }}</v-icon>
+            </v-list-item-icon>
 
-          <v-list-item-content>
-            <v-list-item-title>{{ linkName }}</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
+            <v-list-item-content>
+                <v-list-item-title>{{ linkName }}</v-list-item-title>
+            </v-list-item-content>
+            </v-list-item>
+        </template>
       </v-list>
     </v-navigation-drawer>
 
@@ -289,6 +292,8 @@
     components: { NprogressContainer,dialogo,dialogoAvatar, CookieLaw, dialogViewCart },
 
     data: () => ({
+        //baseUrl:'http://localhost/cwqafkxr_eat_in_more/public/',
+        baseUrl:'https://cwqafkxreatinmore.herokuapp.com/',
       badgeShow:true,
       showDialogCart:false,
       new_lang:null,
@@ -317,6 +322,13 @@
         'mdi-noodles',
         'mdi-chef-hat',
         'mdi-hammer-screwdriver',
+      ],
+
+      can: [
+        'home',
+        'meal_list',
+        'chef',
+        'admin',
       ],
       states:[],
       drawer: null,

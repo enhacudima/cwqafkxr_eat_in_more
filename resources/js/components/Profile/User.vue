@@ -20,7 +20,7 @@
     <v-main>
         <v-card class="mx-auto" max-width="1000" tile>
             <v-img height="200" :src="baseUrl+'storage/icons/fundo.jpeg'"
-            lazy-src="storage/icons/fundo.jpeg"
+            :lazy-src="baseUrl+'storage/icons/fundo.jpeg'"
             ></v-img>
             <v-row style="margin:2.5%;position:absolute; top: 130px">
 
@@ -212,7 +212,8 @@ import pdf from 'vue-pdf'
     data() {
 
         return {
-            baseUrl:'http://localhost/cwqafkxr_eat_in_more/public/',
+            //baseUrl:'http://localhost/cwqafkxr_eat_in_more/public/',
+            baseUrl:'https://cwqafkxreatinmore.herokuapp.com/',
             drawer:true,
             user:[],
             profile:[],

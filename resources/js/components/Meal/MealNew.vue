@@ -1,7 +1,7 @@
 <template>
 
   <a-form  :form="form" @submit="handleSubmit" :label-col="{ span: 5 }" :wrapper-col="{ span: 18 }" >
-  <a-row> 
+  <a-row>
     <a-form-item label="Picture of meal">
       <div class="dropbox">
     <a-upload
@@ -9,7 +9,7 @@
       list-type="picture-card"
       class="avatar-uploader"
       :show-upload-list="false"
-      action="/cwqafkxr_eat_in_more/public/api/filePicture"
+      :action="baseUrl+'api/filePicture'"
       :before-upload="beforeUpload"
       @change="handleChange"
     >
@@ -50,13 +50,13 @@
     </a-form-item>
 
     <a-form-item label="Details" :validate-status="detailsError() ? 'error' : ''" :help="detailsError() || ''">
-      <a-textarea 
-        placeholder="Details about the meal" 
+      <a-textarea
+        placeholder="Details about the meal"
         :rows="2"
         v-decorator="[
           'details',
           { rules: [{ required: true, message: 'Please input meal details!' }] },
-        ]" 
+        ]"
 
         allow-clear
 
@@ -125,8 +125,8 @@
 
 
     <a-form-item label="Durraction (minutes)"  :validate-status="timeError() ? 'error' : ''" :help="timeError() || ''">
-      
-      <a-input-number  :min="1" :max="1000" style="marginLeft: 16px" 
+
+      <a-input-number  :min="1" :max="1000" style="marginLeft: 16px"
 
       v-decorator="[
       'time',
@@ -148,7 +148,7 @@
          />
       </a-col>
       <a-col :span="4" >
-        <a-input-number  :min="1" :max="1000" style="marginLeft: 16px" 
+        <a-input-number  :min="1" :max="1000" style="marginLeft: 16px"
 
       v-decorator="[
       'people',
@@ -176,7 +176,7 @@
               },
             ]"
           >
-        
+
           <a-select-option v-for="ingredient in ingredients" v-bind:value="ingredient.id" :key="ingredient.id">
             {{ingredient.name}} - {{ingredient.description}}
           </a-select-option>
@@ -184,11 +184,11 @@
       </template>
     </a-form-item>
 
-    
+
 
     <a-form-item label="Options" :validate-status="optionsError() ? 'error' : ''" :help="optionsError() || ''" >
         <template>
-          <a-select mode="tags" style="width: 100%" :token-separators="[',']" @change="handleOptChange"       
+          <a-select mode="tags" style="width: 100%" :token-separators="[',']" @change="handleOptChange"
           v-decorator="[
           'options',
               {
@@ -208,7 +208,7 @@
         <a-checkable-tag
           :key="tag.id"
           :checked="selectedTags.indexOf(tag.id) > -1"
-          @change="checked => handletagChange(tag.id, checked)"  
+          @change="checked => handletagChange(tag.id, checked)"
         >
           {{ tag.name }}
         </a-checkable-tag>
@@ -216,7 +216,7 @@
     </a-form-item>
 
     <a-form-item >
-      <a-col :xs="{ span: 24, offset: 0}" :lg="{ span: 20, offset: 10}"> 
+      <a-col :xs="{ span: 24, offset: 0}" :lg="{ span: 20, offset: 10}">
           <a-button icon="check-circle"  type="primary" html-type="submit" :disabled="hasErrors(form.getFieldsError())" >
               Save Meal
           </a-button >
@@ -239,6 +239,8 @@ function hasErrors(fieldsError) {
 export default {
   data() {
     return {
+        //baseUrl:'http://localhost/cwqafkxr_eat_in_more/public/',
+        baseUrl:'https://cwqafkxreatinmore.herokuapp.com/',
       inputValue: 0,
       inputValue1: 1,
       loading: false,
@@ -322,7 +324,7 @@ export default {
       const { getFieldError, isFieldTouched } = this.form;
       return isFieldTouched('name') && getFieldError('name');
     },
-    
+
     aliasError() {
       const { getFieldError, isFieldTouched } = this.form;
       return isFieldTouched('alias') && getFieldError('alias');
@@ -382,9 +384,9 @@ export default {
           if (response.data.errors) {
               //console.log(response.data.errors);
               response.data.errors.forEach(error => { this.openNotification('error', 'Error on Save', error);});
-              
+
           } else {
-              
+
               this.openNotification('success', 'Save', 'You have been store all data successfully');
               //this.$router.push({ name: 'register/result' });
           }
@@ -423,23 +425,23 @@ export default {
       .then(response => (this.experiences = response.data));
   axios
       .get('getCommonTiming')
-      .then(response => (this.commonTimings = response.data));   
+      .then(response => (this.commonTimings = response.data));
   axios
       .get('getTimeCurrency')
       .then(response => (this.currencys = response.data));
   axios
       .get('getCuisines')
-      .then(response => (this.cuisines = response.data)); 
+      .then(response => (this.cuisines = response.data));
   axios
       .get('getIngredients')
-      .then(response => (this.ingredients = response.data)); 
+      .then(response => (this.ingredients = response.data));
   axios
       .get('getTags/2')
       .then(response => (this.tags = response.data));
 
   axios
       .get('getCVData/'+this.userID)
-      .then(response => (this.chefeCV = response.data));  
+      .then(response => (this.chefeCV = response.data));
   axios
       .get('getOptions')
       .then(response => (this.options = response.data));
