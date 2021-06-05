@@ -27,7 +27,7 @@ class AppServiceProvider extends ServiceProvider
 
 
         if(env('App_ENV') !== 'local'){
-            URL::forceScheme('https');
+            //URL::forceScheme('https');
         }
 
         ResetPassword::createUrlUsing(function ($notifiable, $token) {
