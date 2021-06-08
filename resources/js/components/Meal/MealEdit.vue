@@ -6,8 +6,8 @@
       <v-tab href="#tab-1">This Meal</v-tab>
       <v-tab href="#tab-2">Prices</v-tab>
     </v-tabs>
-    
-    
+
+
 
       <v-tabs-items v-model="tab" class="pt-4">
         <v-tab-item
@@ -16,14 +16,14 @@
         >
         <mealPrices v-bind:codMealId="codMealId"/>
         </v-tab-item>
-        
+
         <v-tab-item
           :key="1"
           :value="'tab-' + 1"
         >
         <template >
           <a-form  :form="form" @submit="handleSubmit" :label-col="{ span: 5 }" :wrapper-col="{ span: 12 }" >
-          <a-row> 
+          <a-row>
             <a-form-item label="Picture of meal">
               <div class="dropbox">
             <a-upload
@@ -31,7 +31,7 @@
               list-type="picture-card"
               class="avatar-uploader"
               :show-upload-list="false"
-              action="/cwqafkxr_eat_in_more/public/api/filePicture"
+              :action="baseUrl+'api/filePicture'"
               :before-upload="beforeUpload"
               @change="handleChange"
             >
@@ -72,13 +72,13 @@
             </a-form-item>
 
             <a-form-item label="Details" :validate-status="detailsError() ? 'error' : ''" :help="detailsError() || ''">
-              <a-textarea 
-                placeholder="Details about the meal" 
+              <a-textarea
+                placeholder="Details about the meal"
                 :rows="2"
                 v-decorator="[
                   'details',
                   { initialValue:this.thisMeal.details,rules: [{ required: true, message: 'Please input meal details!' }] },
-                ]" 
+                ]"
 
                 allow-clear
 
@@ -146,8 +146,8 @@
 
 
             <a-form-item label="Durraction (minutes)"  :validate-status="timeError() ? 'error' : ''" :help="timeError() || ''">
-              
-              <a-input-number  :min="1" :max="1000" style="marginLeft: 16px" 
+
+              <a-input-number  :min="1" :max="1000" style="marginLeft: 16px"
 
               v-decorator="[
               'time',
@@ -164,7 +164,7 @@
 
             <a-row>
               <a-col :span="4" >
-                <a-input-number  :min="1" :max="1000" style="marginLeft: 16px" 
+                <a-input-number  :min="1" :max="1000" style="marginLeft: 16px"
 
               v-decorator="[
               'people',
@@ -192,7 +192,7 @@
                       },
                     ]"
                   >
-                
+
                   <a-select-option v-for="ingredient in ingredients" v-bind:value="ingredient.id" :key="ingredient.id">
                     {{ingredient.name}} - {{ingredient.description}}
                   </a-select-option>
@@ -200,11 +200,11 @@
               </template>
             </a-form-item>
 
-            
+
 
             <a-form-item label="Options" :validate-status="optionsError() ? 'error' : ''" :help="optionsError() || ''" >
                 <template>
-                  <a-select mode="tags" style="width: 100%" :token-separators="[',']" @change="handleOptChange"       
+                  <a-select mode="tags" style="width: 100%" :token-separators="[',']" @change="handleOptChange"
                   v-decorator="[
                   'options',
                       {
@@ -224,7 +224,7 @@
                 <a-checkable-tag
                   :key="tag.id"
                   :checked="selectedTags.indexOf(tag.id) > -1"
-                  @change="checked => handletagChange(tag.id, checked)"  
+                  @change="checked => handletagChange(tag.id, checked)"
                 >
                   {{ tag.name }}
                 </a-checkable-tag>
@@ -232,7 +232,7 @@
             </a-form-item>
 
             <a-form-item >
-              <a-col :xs="{ span: 24, offset: 0}" :lg="{ span: 20, offset: 10}"> 
+              <a-col :xs="{ span: 24, offset: 0}" :lg="{ span: 20, offset: 10}">
                   <a-button icon="check-circle"  type="primary" html-type="submit" :disabled="hasErrors(form.getFieldsError())" >
                       Update
                   </a-button >
@@ -243,7 +243,7 @@
         </template>
         </v-tab-item>
       </v-tabs-items>
-  </div> 
+  </div>
 </template>
 
 <script>
@@ -261,10 +261,12 @@ export default {
   components: { mealPrices},
     props: {
         codMealId: null,
-        
+
     },
   data() {
     return {
+      //baseUrl:'http://localhost/cwqafkxr_eat_in_more/public/',
+      baseUrl:'http://eatinmore.com/',
       tab:null,
       inputValue: 0,
       inputValue1: 1,
@@ -304,7 +306,7 @@ export default {
     },
 
     },
-    
+
   methods: {
     filterOption(input, option) {
       return (
@@ -314,7 +316,7 @@ export default {
     handleingreChange(value) {
       //console.log(`selected ${value}`);
     },
-    
+
     handleIngredients(list){
       var ingredients=[];
         list.map (function(value,key) {
@@ -331,7 +333,7 @@ export default {
 
       this.selectedTags = tags;
     },
-    
+
     handleOptions(list){
       var options=[];
         list.map (function(value,key) {
@@ -387,7 +389,7 @@ export default {
       const { getFieldError, isFieldTouched } = this.form;
       return isFieldTouched('name') && getFieldError('name');
     },
-    
+
     aliasError() {
       const { getFieldError, isFieldTouched } = this.form;
       return isFieldTouched('alias') && getFieldError('alias');
@@ -447,9 +449,9 @@ export default {
           if (response.data.errors) {
               //console.log(response.data.errors);
               response.data.errors.forEach(error => { this.openNotification('error', 'Error on Save', error);});
-              
+
           } else {
-              
+
               this.openNotification('success', 'Save', 'You have been store all data successfully');
               //this.$router.push({ name: 'register/result' });
           }
@@ -484,7 +486,7 @@ export default {
   mounted() {
     const userData = JSON.parse(this.userInfo);
     this.userID = userData.logged_in_user.id;
-    
+
     this.$nextTick(() => {
       // To disabled submit button at the beginning.
       this.form.validateFields();
@@ -495,23 +497,23 @@ export default {
       .then(response => (this.experiences = response.data));
   axios
       .get('getCommonTiming')
-      .then(response => (this.commonTimings = response.data));   
+      .then(response => (this.commonTimings = response.data));
   axios
       .get('getTimeCurrency')
       .then(response => (this.currencys = response.data));
   axios
       .get('getCuisines')
-      .then(response => (this.cuisines = response.data)); 
+      .then(response => (this.cuisines = response.data));
   axios
       .get('getIngredients')
-      .then(response => (this.ingredients = response.data)); 
+      .then(response => (this.ingredients = response.data));
   axios
       .get('getTags/2')
       .then(response => (this.tags = response.data));
   axios
       .get('getCVData/'+this.userID)
       .then(response => (this.chefeCV = response.data));
-      
+
   axios
       .get('getOptions')
       .then(response => (this.options = response.data));
