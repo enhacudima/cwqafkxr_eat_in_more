@@ -213,7 +213,7 @@ import pdf from 'vue-pdf'
 
         return {
             //baseUrl:'http://localhost/cwqafkxr_eat_in_more/public/',
-            baseUrl:'https://cwqafkxreatinmore.herokuapp.com/',
+            baseUrl:'http://eatinmore.com/',
             drawer:true,
             user:[],
             profile:[],
