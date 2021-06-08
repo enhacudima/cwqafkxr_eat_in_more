@@ -78,7 +78,7 @@ function hasErrors(fieldsError) {
     data() {
         return {
             //baseUrl:'http://localhost/cwqafkxr_eat_in_more/public/',
-            baseUrl:'https://cwqafkxreatinmore.herokuapp.com/',
+            baseUrl:'http://eatinmore.com/',
             loading: false,
             imageUrl: '',
             hasErrors,
