@@ -236,6 +236,7 @@ import newkitchen from './kitchen.vue';
     },
     data () {
       return {
+        vertical:true,
         multiLine: true,
         snackbar: false,
         text: null,
