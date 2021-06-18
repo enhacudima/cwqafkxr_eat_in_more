@@ -8,7 +8,7 @@ import {ability} from './ability.js'
 Vue.use(Vuex,ability)
 
 //axios.defaults.baseURL = 'http://localhost/laravel-passport-vue-sap/public/api'
-axios.defaults.baseURL = 'http://eatinmore.com/api';
+axios.defaults.baseURL = 'https://eatinmore.com/api';
 
 export default new Vuex.Store({
   state: {

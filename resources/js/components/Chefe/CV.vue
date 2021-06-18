@@ -89,7 +89,7 @@ export default {
   data() {
     return {
         //baseUrl:'http://localhost/cwqafkxr_eat_in_more/public/',
-        baseUrl:'https://cwqafkxreatinmore.herokuapp.com/',
+        baseUrl:'https://eatinmore.com/',
       loading: false,
       imageUrl: '',
       hasErrors,

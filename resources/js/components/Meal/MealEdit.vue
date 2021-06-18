@@ -266,7 +266,7 @@ export default {
   data() {
     return {
       //baseUrl:'http://localhost/cwqafkxr_eat_in_more/public/',
-      baseUrl:'http://eatinmore.com/',
+      baseUrl:'https://eatinmore.com/',
       tab:null,
       inputValue: 0,
       inputValue1: 1,

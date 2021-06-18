@@ -17,7 +17,7 @@
     </v-row>
     <v-row dense >
       <v-col justify="center" v-for="(file, index) in files" :key="index" class="pb-6 pl-6 pr-6"
-      
+
             xs="12"
             sm="4"
             md="4"
@@ -61,7 +61,7 @@
           </v-card-actions>
         </v-card>
       </v-col>
-      
+
     </v-row>
 
     <v-dialog
@@ -85,7 +85,7 @@
                   :rules="[rules.required]"
                 ></v-text-field>
               </v-col>
-            <v-col cols="12">                     
+            <v-col cols="12">
               <v-autocomplete
                 v-model="formFile.type"
                 :items="fileType"
@@ -102,7 +102,7 @@
                 <a-upload
                   name="file"
                   :multiple="false"
-                  action="/cwqafkxr_eat_in_more/public/api/fileOtherFormat"
+                  :action="baseUrl"
                   :headers="headers"
                   @change="handleChange"
                 >
@@ -165,19 +165,21 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-    
+
   </div>
 </template>
 <script>
   export default {
     props: {
-        
+
     },
     data () {
       return {
         headers: {
           authorization: 'authorization-text',
         },
+        //baseUrl:'http://localhost/cwqafkxr_eat_in_more/public/',
+        baseUrl:'https://eatinmore.com/',
         deleteM:false,
         fileInfo:null,
         tempFile:[],
@@ -249,7 +251,7 @@
     },
     resetValidation() {
       this.$refs.form.resetValidation();
-    },  
+    },
     sendData(data) {
       axios
       .post("chefe/files/new", { data: { fileData: data,fileInfo:this.fileInfo} })
@@ -260,11 +262,11 @@
           if (response.data.errors) {
               //console.log(response.data.errors);
               response.data.errors.forEach(error => { this.openNotification('error', 'Error on Save', error);});
-              
+
           } else {
-              
+
               this.openNotification('success', 'Save', 'You have been store all data successfully');
-              
+
           }
       })
       .catch((error) => {
@@ -281,8 +283,8 @@
           }
       });
   },
-    
-    
+
+
   openNotification: function (type, m, d) {
       this.$notification.config({
           placement: 'topRight',
@@ -299,6 +301,6 @@
     mounted() {
           this.getFiles();
       },
-      
+
   }
 </script>
