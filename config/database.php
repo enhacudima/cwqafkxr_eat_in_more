@@ -62,7 +62,7 @@ return [
                 PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
             ]) : [],
             PDO::ATTR_EMULATE_PREPARES => true,
-            PDO::MYSQL_ATTR_COMPRESS => true,
+            PDO::MYSQL_ATTR_COMPRESS => false,
             ],
         ],
 
