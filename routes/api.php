@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use DB as DBS;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,6 +30,14 @@ Route::get('/create/folder/link', function() {
     Artisan::call('storage:link');
 
     dd("created link");
+
+});
+
+Route::get('/teste/database', function() {
+
+    $id=DBS::table('teste')->insert(['name' => 'checked']);
+
+    dd($id);
 
 });
 

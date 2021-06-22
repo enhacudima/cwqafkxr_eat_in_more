@@ -9,6 +9,8 @@ class MealsAPI2 extends Model
     protected $table = 'meal_v_api2';
     protected $guarded =array();
     public $primaryKey = 'id';
+    protected $connection = 'mysqlView';//via connectio 2
+
 
     public function mealAllergies()
     {
