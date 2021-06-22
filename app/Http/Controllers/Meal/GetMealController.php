@@ -89,19 +89,21 @@ class GetMealController extends Controller
 
         return response()->json($data, 200);
     }
+    public $string;
     public function searchMeals($search)
     {
+        $this->string =$search;
         $currency_id = Auth::guard('api')->user()->currency_id;
 
 
 
 
         $data=MealsAPI2::Where(function($query) {
-                $query->orwhere('meal_name','like',"%".$search."%")
-                    ->orwhere('meal_alias','like',"%".$search."%")
-                    ->orwhere('cuisine','like',"%".$search."%")
-                    ->orwhere('meal_type','like',"%".$search."%")
-                    ->orwhere('common_timing','like',"%".$search."%");
+                $query->orwhere('meal_name','like',"%".$this->string."%")
+                    ->orwhere('meal_alias','like',"%".$this->string."%")
+                    ->orwhere('cuisine','like',"%".$this->string."%")
+                    ->orwhere('meal_type','like',"%".$this->string."%")
+                    ->orwhere('common_timing','like',"%".$this->string."%");
             })
         ->with('mealAllergies.allergiesIngredients','mealTags.tagName','mealOptions');
 
