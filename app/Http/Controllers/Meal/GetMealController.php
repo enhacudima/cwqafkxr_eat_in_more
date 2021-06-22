@@ -93,11 +93,16 @@ class GetMealController extends Controller
     {
         $currency_id = Auth::guard('api')->user()->currency_id;
 
-        $data=MealsAPI2::where('meal_name','like',"%".$search."%")
-        ->orwhere('meal_alias','like',"%".$search."%")
-        ->orwhere('cuisine','like',"%".$search."%")
-        ->orwhere('meal_type','like',"%".$search."%")
-        ->orwhere('common_timing','like',"%".$search."%")
+
+
+
+        $data=MealsAPI2::Where(function($query) {
+                $query->orwhere('meal_name','like',"%".$search."%")
+                    ->orwhere('meal_alias','like',"%".$search."%")
+                    ->orwhere('cuisine','like',"%".$search."%")
+                    ->orwhere('meal_type','like',"%".$search."%")
+                    ->orwhere('common_timing','like',"%".$search."%");
+            })
         ->with('mealAllergies.allergiesIngredients','mealTags.tagName','mealOptions');
 
         $data=$this->selectCurrency($currency_id,$data)
