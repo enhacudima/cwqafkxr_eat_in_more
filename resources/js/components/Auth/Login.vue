@@ -6,17 +6,18 @@
       indeterminate
       color="primary"
     ></v-progress-linear>
-
       <v-card-text class="px-4">
           <v-form ref="loginForm" v-model="valid" lazy-validation @submit.prevent="validate">
               <v-row class="pt-6">
                   <v-col cols="12">
-                      <v-text-field dense outlined autocomplete="off"  v-model="loginEmail" :rules="loginEmailRules" :error-messages="loginError" label="E-mail" required ></v-text-field>
+                      <v-text-field dense outlined  v-model="loginEmail" :rules="loginEmailRules" :error-messages="loginError" label="E-mail" required ></v-text-field>
                   </v-col>
-                  <v-col cols="12"  class="pt-1  pb-1 mb-0">
+                  <v-col cols="12">
                       <v-text-field dense outlined autocomplete="off" v-model="loginPassword" :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'" :rules="[rules.required, rules.min]" :type="show1 ? 'text' : 'password'" name="input-10-1" :label="$t('password')" :hint="$t('at_least_8_characters')"   @click:append="show1 = !show1"></v-text-field>
+                  </v-col>
+                  <v-col class="d-flex" cols="12" >
 
-                        <v-tooltip bottom class="mt-n7">
+                        <v-tooltip bottom class="mt-n1">
                         <template v-slot:activator="{ on }">
                             <a
                             target="_blank"
@@ -31,14 +32,14 @@
                         </v-tooltip>
                   </v-col>
 
-                  <v-col class="d-flex" cols="6" sm="6" xsm="12" align-end>
+                  <v-col class="d-flex" cols="12">
                         <router-link to="/register" class="pt-3">
                             {{$t('register_now')}}
                         </router-link>
                   </v-col>
                   <v-spacer></v-spacer>
-                  <v-col class="d-flex" cols="6" sm="6" xsm="12" align-end>
-                      <v-btn elevation="1"  block  :loading="dialogW" :disabled="dialogW" color="primary" type="submit"> {{$t('login')}} </v-btn>
+                  <v-col class="d-flex" cols="12" sm="12" xsm="12" align-end>
+                      <v-btn elevation="1"  block :loading="dialogW" :disabled="dialogW" color="primary" type="submit"> {{$t('login')}} </v-btn>
                   </v-col>
               </v-row>
           </v-form>
