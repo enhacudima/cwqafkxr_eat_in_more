@@ -14,6 +14,7 @@ use Carbon\Carbon;
 use App\Meals;
 use App\BookingSyncMeal;
 use App\Http\Controllers\Meal\GetMealController;
+use App\CV;
 
 class BookingController extends Controller
 {
@@ -85,6 +86,7 @@ class BookingController extends Controller
     $best_chef = $best_chef['best_chef'];
     $user_id = Auth::user()->id ;
     $key = md5(time());
+    $chef_level = CV::where('user_id',$best_chef)->first();
 
     $booking=Booking::create([
         'cook_start_date' =>$bookingRequest['cook_start_date'],
@@ -94,6 +96,7 @@ class BookingController extends Controller
         'user_id' => $user_id,
         'currency_id' =>Auth::user()->currency_id,
         'chef_id' => $best_chef,
+        'level' => $chef_level->experience,
     ]);
 
     foreach ($mealsRequest['meal_id'] as $key => $meal_id) {

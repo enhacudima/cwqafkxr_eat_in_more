@@ -201,7 +201,8 @@ Route::group(['namespace' => 'Kitchen','middleware' => []], function() {
 Route::group(['namespace' => 'Booking','middleware' => []], function() {
 	Route::post('createBooking','BookingController@createBooking');
     Route::post('cart/get','CartController@cartget');
-
+    Route::get('booking/GetRequests','DashboardController@getInfo');
+    Route::post('booking/confirm-chef-booking','DashboardController@confirm_chef_booking');
 });
 
 Route::group(['namespace' => 'Tags','middleware' => []], function() {

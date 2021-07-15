@@ -29,7 +29,7 @@
             text
             small
             >
-            <v-icon>mdi-login</v-icon>
+            <v-icon>{{icon_home}}</v-icon>
             </v-btn>
 
             </router-link>
@@ -167,12 +167,21 @@ import {i18n} from '../../../i18n.js'
     name: 'locale-changer',
 
     methods: {
-    changeLocale(locale) {
-        i18n.locale = locale;
-    }
+        changeLocale(locale) {
+            i18n.locale = locale;
+        }
+    },
+
+    mounted() {
+        const userData = JSON.parse(this.userInfo);
+        if(userData){
+            this.icon_home ='mdi-home'
+        }
     },
 
     data: () => ({
+      userInfo: localStorage.getItem('user'),
+      icon_home: "mdi-account",
       my_lang:'en',
       langs: ['en', 'pt_BR'] ,
       states:[],

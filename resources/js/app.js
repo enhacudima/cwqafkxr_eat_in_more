@@ -69,13 +69,13 @@ Vue.use(BootstrapVue)
 Vue.use(IconsPlugin)
 Vue.use(abilitiesPlugin, ability);
 
-//axios.defaults.baseURL = 'http://localhost/cwqafkxr_eat_in_more/public/api';
-axios.defaults.baseURL = 'https://eatinmore.com/api';
+axios.defaults.baseURL = 'http://localhost/cwqafkxr_eat_in_more/public/api';
+//axios.defaults.baseURL = 'https://eatinmore.com/api';
 
 const router = new VueRouter({
     mode: 'history',
-    //base: "/cwqafkxr_eat_in_more/public/",
-    base: "/",
+    base: "/cwqafkxr_eat_in_more/public/",
+    //base: "/",
     routes: routes
 });
 

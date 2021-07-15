@@ -121,7 +121,7 @@
             <v-container>
             <v-row>
                 <v-col
-                cols="12"
+                    cols="12"
                 >
                 <v-autocomplete
                     v-model="editedItem.roles"

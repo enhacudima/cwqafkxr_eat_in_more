@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" value="{{ csrf_token() }}"/>
          <link rel="icon" type="image/jpg" href="{{asset('/storage/icons/icon.jpg')}}"/>
-        <link href="{{ mix('css/app.css') }}" type="text/css" rel="stylesheet" />
+        <link href="{{ asset(mix('css/app.css')) }}" type="text/css" rel="stylesheet" />
         <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
         <link href="https://cdn.jsdelivr.net/npm/@mdi/font@4.x/css/materialdesignicons.min.css" rel="stylesheet">
         <title>EatInMore</title>
@@ -14,6 +14,7 @@
         <div id="app">
             <app></app>
         </div>
-        <script src="{{ mix('/js/app.js') }}"></script>
+        <script src="{{ asset(mix('js/app.js')) }}"></script>
+        <script src="https://unpkg.com/hamoni-sync@1.1.1/hamoni.dev.js"></script>
     </body>
 </html>
